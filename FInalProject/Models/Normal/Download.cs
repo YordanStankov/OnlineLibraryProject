@@ -1,0 +1,17 @@
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace FInalProject.Models.Normal
+{
+    public class Download
+    {
+        public int? Amount { get; set; }
+
+        [ForeignKey(nameof(Book))]
+        public int BookId { get; set; }
+        public Book Book { get; set; }
+
+        [ForeignKey(nameof(User))]
+        public string UserName { get; set; }
+        public User User { get; set; }
+    }
+}
