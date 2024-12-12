@@ -11,7 +11,7 @@ namespace FInalProject.Models.Normal
         public Book Book { get; set; }
 
         [ForeignKey(nameof(User))]
-        public string UserName { get; set; }
+        public string UserId { get; set; }
         public User User { get; set; }
     }
 }
