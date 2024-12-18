@@ -10,10 +10,14 @@ namespace FInalProject.Models.Normal
         [Required]
         public string Name { get; set; }
         [Required]
-        [MaxLength(50)]
-        public string Genre { get; set; }
-        [Required]
         public int Pages { get; set; }
+        [ForeignKey(nameof(Author))]
+        public int AuthorId { get; set; }   
+        public Author Author { get; set; }
+        [Required]
+        public DateTime DateTaken { get; set; }
+        [Required]
+        public DateTimeOffset UntillReturn { get; set; }
         [Required]
         public double ReadingTime { get; set; }
         [Required]
@@ -23,6 +27,7 @@ namespace FInalProject.Models.Normal
         [MaxLength(200)]
         public string Description { get; set; }
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
-        public ICollection<Download> Downloads { get; set;} = new List<Download>();
+        public ICollection<Genre> Genres { get; set;} = new List<Genre>();
+        public ICollection<Favourite> Favourites { get; set; } = new List<Favourite>();
     }
 }

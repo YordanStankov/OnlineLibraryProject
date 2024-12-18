@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FInalProject.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241212081237_first")]
-    partial class first
+    [Migration("20241217110902_NewShit")]
+    partial class NewShit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,6 +25,23 @@ namespace FInalProject.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("FInalProject.Models.Normal.Author", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Authors");
+                });
+
             modelBuilder.Entity("FInalProject.Models.Normal.Book", b =>
                 {
                     b.Property<int>("Id")
@@ -33,19 +50,20 @@ namespace FInalProject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CoverImage")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateTaken")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("Genre")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -60,7 +78,12 @@ namespace FInalProject.Migrations
                     b.Property<double>("ReadingTime")
                         .HasColumnType("float");
 
+                    b.Property<DateTimeOffset>("UntillReturn")
+                        .HasColumnType("datetimeoffset");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
 
                     b.ToTable("Books");
                 });
@@ -97,7 +120,7 @@ namespace FInalProject.Migrations
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("FInalProject.Models.Normal.Download", b =>
+            modelBuilder.Entity("FInalProject.Models.Normal.Favourite", b =>
                 {
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -105,14 +128,33 @@ namespace FInalProject.Migrations
                     b.Property<int>("BookId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Amount")
-                        .HasColumnType("int");
-
                     b.HasKey("UserId", "BookId");
 
                     b.HasIndex("BookId");
 
-                    b.ToTable("Downloads");
+                    b.ToTable("Favorites");
+                });
+
+            modelBuilder.Entity("FInalProject.Models.Normal.Genre", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.ToTable("Genres");
                 });
 
             modelBuilder.Entity("FInalProject.Models.Normal.User", b =>
@@ -317,6 +359,17 @@ namespace FInalProject.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("FInalProject.Models.Normal.Book", b =>
+                {
+                    b.HasOne("FInalProject.Models.Normal.Author", "Author")
+                        .WithMany("Books")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+                });
+
             modelBuilder.Entity("FInalProject.Models.Normal.Comment", b =>
                 {
                     b.HasOne("FInalProject.Models.Normal.Book", "Book")
@@ -336,16 +389,16 @@ namespace FInalProject.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("FInalProject.Models.Normal.Download", b =>
+            modelBuilder.Entity("FInalProject.Models.Normal.Favourite", b =>
                 {
                     b.HasOne("FInalProject.Models.Normal.Book", "Book")
-                        .WithMany("Downloads")
+                        .WithMany("Favourites")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("FInalProject.Models.Normal.User", "User")
-                        .WithMany("Downloads")
+                        .WithMany("Favourites")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -353,6 +406,17 @@ namespace FInalProject.Migrations
                     b.Navigation("Book");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("FInalProject.Models.Normal.Genre", b =>
+                {
+                    b.HasOne("FInalProject.Models.Normal.Book", "Book")
+                        .WithMany("Genres")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Book");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -406,18 +470,25 @@ namespace FInalProject.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("FInalProject.Models.Normal.Author", b =>
+                {
+                    b.Navigation("Books");
+                });
+
             modelBuilder.Entity("FInalProject.Models.Normal.Book", b =>
                 {
                     b.Navigation("Comments");
 
-                    b.Navigation("Downloads");
+                    b.Navigation("Favourites");
+
+                    b.Navigation("Genres");
                 });
 
             modelBuilder.Entity("FInalProject.Models.Normal.User", b =>
                 {
                     b.Navigation("Comments");
 
-                    b.Navigation("Downloads");
+                    b.Navigation("Favourites");
                 });
 #pragma warning restore 612, 618
         }
