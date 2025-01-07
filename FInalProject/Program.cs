@@ -1,5 +1,5 @@
 using FInalProject.Data;
-using FInalProject.Models.Normal;
+using FInalProject.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

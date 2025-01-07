@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FInalProject.Models.Normal
+namespace FInalProject.Models
 {
     public class Author
     {

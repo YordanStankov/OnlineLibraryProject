@@ -1,4 +1,4 @@
-﻿using FInalProject.Models.Normal;
+﻿using FInalProject.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -14,7 +14,6 @@ namespace FInalProject.Data
         public DbSet<Book> Books { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Author> Authors { get; set; }
-        public DbSet<Genre> Genres { get; set; }
         public DbSet<Favourite > Favorites { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -23,10 +22,7 @@ namespace FInalProject.Data
             { 
                 c.HasOne(c => c.Book).WithMany(c => c.Comments).OnDelete(DeleteBehavior.Restrict);
             });
-            modelBuilder.Entity<Genre>(c =>
-            {
-                c.HasOne(c => c.Book).WithMany(c => c.Genres).OnDelete(DeleteBehavior.Restrict);
-            });
+          
             modelBuilder.Entity<Book>(c =>
             {
                 c.HasOne(c => c.Author).WithMany(c => c.Books).OnDelete(DeleteBehavior.Restrict);

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace FInalProject.Models.Normal
+namespace FInalProject.Models
 {
     public class Favourite
     {
@@ -8,7 +8,7 @@ namespace FInalProject.Models.Normal
         public string UserId { get; set; }
         public User User { get; set; }
         [ForeignKey(nameof(Book))]
-        public int BookId {  get; set; }
+        public int BookId { get; set; }
         public Book Book { get; set; }
     }
 }

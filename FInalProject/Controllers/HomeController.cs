@@ -1,6 +1,8 @@
 using FInalProject.Models;
+using FInalProject.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using FInalProject.Data; 
 
 namespace FInalProject.Controllers
 {
@@ -12,11 +14,10 @@ namespace FInalProject.Controllers
         {
             _logger = logger;
         }
-
         public IActionResult Index()
         {
             return View();
-        }
+        } 
 
         public IActionResult Privacy()
         {
