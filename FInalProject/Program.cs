@@ -1,7 +1,8 @@
 using FInalProject.Data;
-using FInalProject.Models.Normal;
+using FInalProject.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using FInalProject; 
 
 namespace FInalProject
 {
@@ -34,7 +35,7 @@ namespace FInalProject
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FInalProject.Models.Normal
+namespace FInalProject.Models
 {
     public class Author
     {
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
-        public ICollection<Book> Books { get; set; } = new List<Book>();
+        public ICollection<Book>? Books { get; set; } = new List<Book>();
     }
 }
