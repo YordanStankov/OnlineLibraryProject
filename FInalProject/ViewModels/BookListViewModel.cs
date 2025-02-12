@@ -10,6 +10,6 @@ namespace FInalProject.ViewModels
         public string Name { get; set; }
         public string? AuthorName { get; set; }
         public double? Pages { get; set; }
-        public HashSet<Genre> Genres { get; set; } = new HashSet<Genre>();
+    
     }
 }

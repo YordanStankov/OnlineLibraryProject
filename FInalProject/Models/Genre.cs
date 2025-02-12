@@ -1,27 +1,14 @@
-﻿namespace FInalProject.Models
-{
-    public enum Genre
-    {
-        Action,
-        Adventure,
-        Comedy,
-        Drama,
-        Fantasy,
-        Horror,
-        Mystery,
-        Romance,
-        Science,
-        Fiction,
-        Thriller,
-        Western,
-        Historical,
-        Crime,
-        Musical,
-        War,
-        Biography,
-        Superhero,
-        Animation,
-        Documentary,
+﻿using System.ComponentModel.DataAnnotations;
 
+namespace FInalProject.Models
+{
+    public class Genre
+    {
+        [Key]
+        public int Id { get; set; }
+        [Required]
+        [StringLength(50)]  
+        public string Name { get; set; }
+        public ICollection<BookGenre>? BookGenres { get; set; } = new List<BookGenre>(); 
     }
 }

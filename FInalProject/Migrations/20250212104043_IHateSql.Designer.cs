@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FInalProject.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241217110902_NewShit")]
-    partial class NewShit
+    [Migration("20250212104043_IHateSql")]
+    partial class IHateSql
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace FInalProject.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("FInalProject.Models.Normal.Author", b =>
+            modelBuilder.Entity("FInalProject.Models.Author", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -42,7 +42,7 @@ namespace FInalProject.Migrations
                     b.ToTable("Authors");
                 });
 
-            modelBuilder.Entity("FInalProject.Models.Normal.Book", b =>
+            modelBuilder.Entity("FInalProject.Models.Book", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -72,9 +72,6 @@ namespace FInalProject.Migrations
                     b.Property<int>("Pages")
                         .HasColumnType("int");
 
-                    b.Property<double?>("Rating")
-                        .HasColumnType("float");
-
                     b.Property<double>("ReadingTime")
                         .HasColumnType("float");
 
@@ -88,7 +85,22 @@ namespace FInalProject.Migrations
                     b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("FInalProject.Models.Normal.Comment", b =>
+            modelBuilder.Entity("FInalProject.Models.BookGenre", b =>
+                {
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GenreId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BookId", "GenreId");
+
+                    b.HasIndex("GenreId");
+
+                    b.ToTable("BookGenres");
+                });
+
+            modelBuilder.Entity("FInalProject.Models.Comment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -99,13 +111,13 @@ namespace FInalProject.Migrations
                     b.Property<int>("BookId")
                         .HasColumnType("int");
 
+                    b.Property<double>("BookRating")
+                        .HasColumnType("float");
+
                     b.Property<string>("CommentContent")
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
-
-                    b.Property<double>("Rating")
-                        .HasColumnType("float");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -120,7 +132,7 @@ namespace FInalProject.Migrations
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("FInalProject.Models.Normal.Favourite", b =>
+            modelBuilder.Entity("FInalProject.Models.Favourite", b =>
                 {
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -128,14 +140,17 @@ namespace FInalProject.Migrations
                     b.Property<int>("BookId")
                         .HasColumnType("int");
 
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
                     b.HasKey("UserId", "BookId");
 
                     b.HasIndex("BookId");
 
-                    b.ToTable("Favorites");
+                    b.ToTable("Favourites");
                 });
 
-            modelBuilder.Entity("FInalProject.Models.Normal.Genre", b =>
+            modelBuilder.Entity("FInalProject.Models.Genre", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -143,21 +158,17 @@ namespace FInalProject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BookId");
 
                     b.ToTable("Genres");
                 });
 
-            modelBuilder.Entity("FInalProject.Models.Normal.User", b =>
+            modelBuilder.Entity("FInalProject.Models.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -359,9 +370,9 @@ namespace FInalProject.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("FInalProject.Models.Normal.Book", b =>
+            modelBuilder.Entity("FInalProject.Models.Book", b =>
                 {
-                    b.HasOne("FInalProject.Models.Normal.Author", "Author")
+                    b.HasOne("FInalProject.Models.Author", "Author")
                         .WithMany("Books")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -370,15 +381,34 @@ namespace FInalProject.Migrations
                     b.Navigation("Author");
                 });
 
-            modelBuilder.Entity("FInalProject.Models.Normal.Comment", b =>
+            modelBuilder.Entity("FInalProject.Models.BookGenre", b =>
                 {
-                    b.HasOne("FInalProject.Models.Normal.Book", "Book")
+                    b.HasOne("FInalProject.Models.Book", "Book")
+                        .WithMany("BookGenres")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("FInalProject.Models.Genre", "Genre")
+                        .WithMany("BookGenres")
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("Genre");
+                });
+
+            modelBuilder.Entity("FInalProject.Models.Comment", b =>
+                {
+                    b.HasOne("FInalProject.Models.Book", "Book")
                         .WithMany("Comments")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("FInalProject.Models.Normal.User", "User")
+                    b.HasOne("FInalProject.Models.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -389,15 +419,15 @@ namespace FInalProject.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("FInalProject.Models.Normal.Favourite", b =>
+            modelBuilder.Entity("FInalProject.Models.Favourite", b =>
                 {
-                    b.HasOne("FInalProject.Models.Normal.Book", "Book")
+                    b.HasOne("FInalProject.Models.Book", "Book")
                         .WithMany("Favourites")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FInalProject.Models.Normal.User", "User")
+                    b.HasOne("FInalProject.Models.User", "User")
                         .WithMany("Favourites")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -406,17 +436,6 @@ namespace FInalProject.Migrations
                     b.Navigation("Book");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("FInalProject.Models.Normal.Genre", b =>
-                {
-                    b.HasOne("FInalProject.Models.Normal.Book", "Book")
-                        .WithMany("Genres")
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Book");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -430,7 +449,7 @@ namespace FInalProject.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("FInalProject.Models.Normal.User", null)
+                    b.HasOne("FInalProject.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -439,7 +458,7 @@ namespace FInalProject.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("FInalProject.Models.Normal.User", null)
+                    b.HasOne("FInalProject.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -454,7 +473,7 @@ namespace FInalProject.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FInalProject.Models.Normal.User", null)
+                    b.HasOne("FInalProject.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -463,28 +482,33 @@ namespace FInalProject.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("FInalProject.Models.Normal.User", null)
+                    b.HasOne("FInalProject.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FInalProject.Models.Normal.Author", b =>
+            modelBuilder.Entity("FInalProject.Models.Author", b =>
                 {
                     b.Navigation("Books");
                 });
 
-            modelBuilder.Entity("FInalProject.Models.Normal.Book", b =>
+            modelBuilder.Entity("FInalProject.Models.Book", b =>
                 {
+                    b.Navigation("BookGenres");
+
                     b.Navigation("Comments");
 
                     b.Navigation("Favourites");
-
-                    b.Navigation("Genres");
                 });
 
-            modelBuilder.Entity("FInalProject.Models.Normal.User", b =>
+            modelBuilder.Entity("FInalProject.Models.Genre", b =>
+                {
+                    b.Navigation("BookGenres");
+                });
+
+            modelBuilder.Entity("FInalProject.Models.User", b =>
                 {
                     b.Navigation("Comments");
 
