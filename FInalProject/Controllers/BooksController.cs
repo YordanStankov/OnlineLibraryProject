@@ -5,6 +5,7 @@ using FInalProject.Data;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace FInalProject.Controllers
@@ -26,7 +27,19 @@ namespace FInalProject.Controllers
         }
         public IActionResult AllBooks()
         {
-            return View();
+            var books = _context.Books
+                .Include(a => a.Author)
+                .Include(bg => bg.BookGenres)
+                .ThenInclude(g => g.Genre)
+                .Select(n => new BookListViewModel()
+                    {
+                        Name = n.Name,
+                        Pages = n.Pages,
+                        AuthorName = n.Author.Name,
+                        CoverImage = n.CoverImage,
+                        Genres = n.BookGenres.Select(bg => bg.Genre.Name).ToList(),
+                }).ToList();
+            return View(books);
         }
         public IActionResult BookCreation()
         {

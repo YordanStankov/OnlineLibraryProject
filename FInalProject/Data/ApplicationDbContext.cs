@@ -1,4 +1,5 @@
 ﻿using FInalProject.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -19,7 +20,6 @@ namespace FInalProject.Data
         public DbSet<BookGenre> BookGenres { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             //normal tables
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Comment>(c => 

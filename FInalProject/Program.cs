@@ -22,6 +22,7 @@ namespace FInalProject
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedEmail = false)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             builder.Services.AddControllersWithViews();
@@ -40,7 +41,7 @@ namespace FInalProject
                 app.UseHsts();
             }
             app.Seeding();
-            
+            app.SeedRolesAndAdminAsync();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -52,6 +53,10 @@ namespace FInalProject
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
+            using (var scope = app.Services.CreateScope())
+            {
+               
+            }
 
             app.Run();
         }
