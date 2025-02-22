@@ -1,5 +1,56 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using FInalProject.ViewModels
+@model List<BookListViewModel>
 @{
+    ViewBag.Title = "All Books"; 
+}
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+@if (User.IsInRole("Librarian"))
+{
+    <p1>YOU ARE THE SHIT</p1>
+}
+@if (Model.Count() > 0)
+{
+    <div class="row">
+        @foreach(var book in Model)
+        {
+            <div class="card">
+                <blockquote>
+                    <p>
+                        Name:@book.Name
+                        <hr />
+                    </p>
+                    <p>
+                        Pages:@book.Pages
+                        <hr />
+                    </p>
+                    <p>
+                        Author:@book.AuthorName
+                        <hr />
+                    </p>
+                    <p>
+                        Cover:@book.CoverImage
+                        <hr />
+                    </p>
+                    <p>
+                        @if (!book.Genres.Any())
+                        {
+                            <p>Falls under no genres wow amazing</p>
+                        }
+                        else {
+                            @foreach (var genre in book.Genres)
+                            {
+                                <p>@genre</p>
+                            }
+                        }
+                       
+                    </p>
+                </blockquote>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <h2>The library is temporairly closed</h2>
 }

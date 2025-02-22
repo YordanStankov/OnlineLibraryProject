@@ -5,14 +5,15 @@ using FInalProject.Data;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace FInalProject.Controllers
 {
     public class BooksController : Controller
     {
-        private ApplicationDbContext _context;
-        private UserManager<User> _userManager;
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
 
         public BooksController(ApplicationDbContext context, UserManager<User> userManager)
         {
@@ -24,9 +25,40 @@ namespace FInalProject.Controllers
         {
             return View();
         }
+
+        public IActionResult AddGenre()
+        {
+            return PartialView();
+        }
+
+        [HttpPost]
+        public IActionResult AddingAGenre(AddGenreViewModel viewGenre)
+        {
+           
+            Genre GenreFloat = new Genre()
+            {
+                Name = viewGenre.Name
+            };
+            _context.Add(GenreFloat);
+            _context.SaveChanges(); 
+            return RedirectToAction();
+        }
+       
         public IActionResult AllBooks()
         {
-            return View();
+            var books = _context.Books
+                .Include(a => a.Author)
+                .Include(bg => bg.BookGenres)
+                .ThenInclude(g => g.Genre)
+                .Select(n => new BookListViewModel()
+                    {
+                        Name = n.Name,
+                        Pages = n.Pages,
+                        AuthorName = n.Author.Name,
+                        CoverImage = n.CoverImage,
+                        Genres = n.BookGenres.Select(bg => bg.Genre.Name).ToList(),
+                }).ToList();
+            return View(books);
         }
         public IActionResult BookCreation()
         {
@@ -38,17 +70,15 @@ namespace FInalProject.Controllers
             Book BookFloat = new Book()
             {
                 Name = Book.Name,
-                UserId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? throw new Exception("couldn't find UserId"),
                 Author = Book.Author,
                 Description = Book.Description,
                 ReadingTime = Book.ReadingTime,
                 CoverImage = Book.CoverImage,
-                Genres = Book.Genres,
                 Pages = Book.Pages
             };
             _context.Add(BookFloat);
             _context.SaveChanges();
-            return RedirectToAction("Index"); 
+            return RedirectToAction("AllBooks"); 
         }
     }
 }
