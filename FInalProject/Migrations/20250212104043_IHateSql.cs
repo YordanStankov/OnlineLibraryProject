@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FInalProject.Migrations
 {
     /// <inheritdoc />
-    public partial class NewShit : Migration
+    public partial class IHateSql : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -61,6 +61,19 @@ namespace FInalProject.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Authors", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Genres",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Genres", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -176,13 +189,12 @@ namespace FInalProject.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ReadingTime = table.Column<double>(type: "float", nullable: false),
                     Pages = table.Column<int>(type: "int", nullable: false),
                     AuthorId = table.Column<int>(type: "int", nullable: false),
                     DateTaken = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UntillReturn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    ReadingTime = table.Column<double>(type: "float", nullable: false),
                     CoverImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Rating = table.Column<double>(type: "float", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
                 },
                 constraints: table =>
@@ -197,12 +209,36 @@ namespace FInalProject.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BookGenres",
+                columns: table => new
+                {
+                    BookId = table.Column<int>(type: "int", nullable: false),
+                    GenreId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookGenres", x => new { x.BookId, x.GenreId });
+                    table.ForeignKey(
+                        name: "FK_BookGenres_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_BookGenres_Genres_GenreId",
+                        column: x => x.GenreId,
+                        principalTable: "Genres",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Comments",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Rating = table.Column<double>(type: "float", nullable: false),
+                    BookRating = table.Column<double>(type: "float", nullable: false),
                     CommentContent = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     BookId = table.Column<int>(type: "int", nullable: false)
@@ -225,47 +261,28 @@ namespace FInalProject.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Favorites",
+                name: "Favourites",
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    BookId = table.Column<int>(type: "int", nullable: false)
+                    BookId = table.Column<int>(type: "int", nullable: false),
+                    Amount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Favorites", x => new { x.UserId, x.BookId });
+                    table.PrimaryKey("PK_Favourites", x => new { x.UserId, x.BookId });
                     table.ForeignKey(
-                        name: "FK_Favorites_AspNetUsers_UserId",
+                        name: "FK_Favourites_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Favorites_Books_BookId",
+                        name: "FK_Favourites_Books_BookId",
                         column: x => x.BookId,
                         principalTable: "Books",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Genres",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BookId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Genres", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Genres_Books_BookId",
-                        column: x => x.BookId,
-                        principalTable: "Books",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -308,6 +325,11 @@ namespace FInalProject.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BookGenres_GenreId",
+                table: "BookGenres",
+                column: "GenreId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Books_AuthorId",
                 table: "Books",
                 column: "AuthorId");
@@ -323,13 +345,8 @@ namespace FInalProject.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Favorites_BookId",
-                table: "Favorites",
-                column: "BookId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Genres_BookId",
-                table: "Genres",
+                name: "IX_Favourites_BookId",
+                table: "Favourites",
                 column: "BookId");
         }
 
@@ -352,16 +369,19 @@ namespace FInalProject.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "BookGenres");
+
+            migrationBuilder.DropTable(
                 name: "Comments");
 
             migrationBuilder.DropTable(
-                name: "Favorites");
-
-            migrationBuilder.DropTable(
-                name: "Genres");
+                name: "Favourites");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Genres");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

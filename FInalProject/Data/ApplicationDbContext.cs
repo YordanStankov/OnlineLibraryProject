@@ -1,4 +1,5 @@
-﻿using FInalProject.Models.Normal;
+﻿using FInalProject.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -14,24 +15,24 @@ namespace FInalProject.Data
         public DbSet<Book> Books { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Author> Authors { get; set; }
+        public DbSet<Favourite > Favourites { get; set; }
         public DbSet<Genre> Genres { get; set; }
-        public DbSet<Favourite > Favorites { get; set; }
+        public DbSet<BookGenre> BookGenres { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //normal tables
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Comment>(c => 
             { 
                 c.HasOne(c => c.Book).WithMany(c => c.Comments).OnDelete(DeleteBehavior.Restrict);
             });
-            modelBuilder.Entity<Genre>(c =>
-            {
-                c.HasOne(c => c.Book).WithMany(c => c.Genres).OnDelete(DeleteBehavior.Restrict);
-            });
+          
             modelBuilder.Entity<Book>(c =>
             {
                 c.HasOne(c => c.Author).WithMany(c => c.Books).OnDelete(DeleteBehavior.Restrict);
             });
 
+            //mapping tables
             modelBuilder.Entity<Favourite>(c => {
                 c.HasKey(x => new { x.UserId, x.BookId });
 
@@ -45,8 +46,20 @@ namespace FInalProject.Data
                     .HasForeignKey(u => u.BookId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
-            
 
+            modelBuilder.Entity<BookGenre>(c => {
+                c.HasKey(x => new { x.BookId, x.GenreId });
+
+                c.HasOne(u => u.Book)
+                  .WithMany(u => u.BookGenres)
+                  .HasForeignKey(u => u.BookId)
+                  .OnDelete(DeleteBehavior.Restrict);
+
+                c.HasOne(u => u.Genre)
+                    .WithMany(fm => fm.BookGenres)
+                    .HasForeignKey(u => u.GenreId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
         }
     }
 }
