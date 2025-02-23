@@ -25,7 +25,6 @@ namespace FInalProject.Controllers
         {
             return View();
         }
-
         public IActionResult AddGenre()
         {
             return PartialView();
@@ -42,8 +41,7 @@ namespace FInalProject.Controllers
             _context.Add(GenreFloat);
             _context.SaveChanges(); 
             return RedirectToAction();
-        }
-       
+        
         public IActionResult AllBooks()
         {
             var books = _context.Books
@@ -61,6 +59,7 @@ namespace FInalProject.Controllers
                 }).ToList();
             return View(books);
         }
+        
         public IActionResult BookCreation()
         {
             return View();
@@ -107,6 +106,7 @@ namespace FInalProject.Controllers
                 genres = currBook.BookGenres.Select(bg => bg.Genre).ToList()
             };
             return View(bigBook);
+           
         }
     }
 }
