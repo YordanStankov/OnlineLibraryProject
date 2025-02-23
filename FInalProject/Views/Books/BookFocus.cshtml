@@ -1,0 +1,26 @@
+﻿@using FInalProject.ViewModels;
+@model BookFocusViewModel;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewBag.Title = "Book Focus";
+}
+<center>
+    <h2>Book</h2>
+    <hr />
+    <div class="card">
+        <h3>@Model.BookName</h3>
+        <h3>@Model.Description</h3>
+        <h3>@Model.BookAuthorName</h3>
+        <h3>@Model.BookCover</h3>
+        <h3>@Model.BookReadingTime</h3>
+        <h3>@Model.BookPages</h3>
+        <h3>@Model.DateTaken</h3>
+        <h3>@Model.UntillReturn</h3>
+        @foreach(var genre in Model.genres)
+        {
+            <h4>@genre.Name</h4>
+        }
+    </div>
+</center>

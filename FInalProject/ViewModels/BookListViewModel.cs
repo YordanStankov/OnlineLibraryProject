@@ -6,6 +6,7 @@ namespace FInalProject.ViewModels
 {
     public class BookListViewModel
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string? AuthorName { get; set; }
         public double? Pages { get; set; }

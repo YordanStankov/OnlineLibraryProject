@@ -10,6 +10,7 @@ namespace FInalProject.ViewModels
         public double ReadingTime { get; set; }
         public string CoverImage { get; set; }
         public string Description { get; set; }
-        public ICollection<BookGenre> BookGenres { get; set; } = new List<BookGenre>(); 
+
+        public ICollection<Genre> Genres { get; set; } = new List<Genre>();
     }
 }
