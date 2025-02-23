@@ -17,7 +17,7 @@
     <br />
 
     <label for="BookGenres">Genres</label>
-    <select asp-for="Genres" id='genres' multiple="multiple" class="form-control">
+    <select asp-for="Genres" id='genres' multiple="multiple" class="form-control"></select>>
         @foreach(var genre in Model.Genres)
         {
             <option value="genre.Id">@genre.Name</option>

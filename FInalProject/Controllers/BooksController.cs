@@ -33,14 +33,15 @@ namespace FInalProject.Controllers
         [HttpPost]
         public IActionResult AddingAGenre(AddGenreViewModel viewGenre)
         {
-           
+
             Genre GenreFloat = new Genre()
             {
                 Name = viewGenre.Name
             };
             _context.Add(GenreFloat);
-            _context.SaveChanges(); 
+            _context.SaveChanges();
             return RedirectToAction();
+        }
         
         public IActionResult AllBooks()
         {
