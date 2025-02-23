@@ -25,6 +25,23 @@ namespace FInalProject.Controllers
         {
             return View();
         }
+        public IActionResult AddGenre()
+        {
+            return PartialView();
+        }
+
+        [HttpPost]
+        public IActionResult AddingAGenre(AddGenreViewModel viewGenre)
+        {
+           
+            Genre GenreFloat = new Genre()
+            {
+                Name = viewGenre.Name
+            };
+            _context.Add(GenreFloat);
+            _context.SaveChanges(); 
+            return RedirectToAction();
+        
         public IActionResult AllBooks()
         {
             var books = _context.Books
@@ -33,6 +50,7 @@ namespace FInalProject.Controllers
                 .ThenInclude(g => g.Genre)
                 .Select(n => new BookListViewModel()
                     {
+                        Id = n.Id,
                         Name = n.Name,
                         Pages = n.Pages,
                         AuthorName = n.Author.Name,
@@ -41,6 +59,7 @@ namespace FInalProject.Controllers
                 }).ToList();
             return View(books);
         }
+        
         public IActionResult BookCreation()
         {
             return View();
@@ -59,7 +78,35 @@ namespace FInalProject.Controllers
             };
             _context.Add(BookFloat);
             _context.SaveChanges();
-            return RedirectToAction("Index"); 
+            return RedirectToAction("AllBooks"); 
+        }
+        public async Task<IActionResult> BookFocus(int id)
+        {
+            var currBook = await _context.Books
+                .Include(b => b.Author)
+                .Include(b => b.BookGenres)
+                .ThenInclude(b => b.Genre)
+                .FirstOrDefaultAsync(b => b.Id == id); 
+                
+            if(currBook == null)
+            {
+                return NotFound();
+            }
+            var bigBook = new BookFocusViewModel
+            {
+                BookCover = currBook.CoverImage,
+                BookId = currBook.Id,
+                BookName = currBook.Name,
+                BookPages = currBook.Pages,
+                BookAuthorName = currBook.Author.Name,
+                BookReadingTime = currBook.ReadingTime,
+                Description = currBook.Description,
+                DateTaken = DateTime.Today,
+                UntillReturn = new DateTimeOffset(DateTime.Today),
+                genres = currBook.BookGenres.Select(bg => bg.Genre).ToList()
+            };
+            return View(bigBook);
+           
         }
     }
 }

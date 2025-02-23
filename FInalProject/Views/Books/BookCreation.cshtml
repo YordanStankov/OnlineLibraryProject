@@ -1,5 +1,4 @@
-﻿
-﻿@using FInalProject.ViewModels
+@using FInalProject.ViewModels
 @model BookCreationViewModel
 @{
     ViewData["Title"] = "Book Creation";
@@ -7,7 +6,9 @@
 <header>
     <h1>Book creation</h1>
 </header>
-<form asp-controller="Books" asp-action="BookCreation">
+
+<form asp-controller="Books" asp-action="CreateABook">
+
     <div asp-validation-summary="ModelOnly" class="text-danger">
     </div>
     <label for="BookName">Name</label>
@@ -15,12 +16,12 @@
     <span asp-validation-for="Name" class="text-danger"></span>
     <br />
 
-    <select asp-for="BookGenres" id="genres">
-        <option value="Action">Action</option>
-        <option value="Adventure">Adventure</option>
-        <option value="Comedy">Comedy</option>
-    </select>
-
+    <label for="BookGenres">Genres</label>
+    <select asp-for="Genres" id='genres' multiple="multiple" class="form-control">
+        @foreach(var genre in Model.Genres)
+        {
+            <option value="genre.Id">@genre.Name</option>
+        }
     <label for="BookAuthor">Author</label>
     <input asp-for="Author" type="text" id="BookAuthor" />
     <span asp-validation-for="Author" class="text-danger"></span>
@@ -52,4 +53,5 @@
 </form>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
 }
