@@ -32,7 +32,10 @@ namespace FInalProject
                 await userManager.AddToRoleAsync(adminUser, "Librarian"); 
                 throw new Exception("Admin not present in db");
             }
-
+            else
+            {
+                await userManager.AddToRoleAsync(adminUser, "Librarian"); 
+            }
         }
     }
 }

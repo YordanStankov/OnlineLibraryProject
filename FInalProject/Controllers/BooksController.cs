@@ -46,9 +46,15 @@ namespace FInalProject.Controllers
         }
        
         //fetches all books and provdes the view
-        public IActionResult AllBooks()
+        public async Task<IActionResult> AllBooks()
         {
-            var books = _context.Books
+            var user = await _userManager.GetUserAsync(User);
+            var userRoles = await _userManager.GetRolesAsync(user);
+            if (!userRoles.Contains("Librarian") || userRoles == null)
+            {
+                await _userManager.AddToRoleAsync(user, "User");
+            }
+            var books =  _context.Books
                 .Include(a => a.Author)
                 .Include(bg => bg.BookGenres)
                 .ThenInclude(g => g.Genre)
