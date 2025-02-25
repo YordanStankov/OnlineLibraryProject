@@ -12,6 +12,5 @@ namespace FInalProject.ViewModels
         public string Description { get; set; }
 
         public ICollection<Genre> Genres { get; set; } = new List<Genre>();
-
     }
 }

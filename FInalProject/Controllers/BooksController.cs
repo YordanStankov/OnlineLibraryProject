@@ -25,10 +25,12 @@ namespace FInalProject.Controllers
         {
             return View();
         }
+
         public IActionResult AddGenre()
         {
             return PartialView();
         }
+
 
         [HttpPost]
         public IActionResult AddingAGenre(AddGenreViewModel viewGenre)
@@ -41,7 +43,9 @@ namespace FInalProject.Controllers
             _context.Add(GenreFloat);
             _context.SaveChanges(); 
             return RedirectToAction();
-        
+        }
+       
+        //fetches all books and provdes the view
         public IActionResult AllBooks()
         {
             var books = _context.Books
@@ -59,11 +63,14 @@ namespace FInalProject.Controllers
                 }).ToList();
             return View(books);
         }
-        
+
+        //fetches the book creatiion view
         public IActionResult BookCreation()
         {
             return View();
         }
+
+        //actually creates the book
         [HttpPost]
         public IActionResult CreateABook(BookCreationViewModel Book)
         {
@@ -80,15 +87,20 @@ namespace FInalProject.Controllers
             _context.SaveChanges();
             return RedirectToAction("AllBooks"); 
         }
+
+        //fetches the book focus view and gives it data
         public async Task<IActionResult> BookFocus(int id)
         {
             var currBook = await _context.Books
+                .Include(b => b.Favourites)
                 .Include(b => b.Author)
+                .Include(b => b.Comments)
+                .ThenInclude(c => c.User)
                 .Include(b => b.BookGenres)
                 .ThenInclude(b => b.Genre)
-                .FirstOrDefaultAsync(b => b.Id == id); 
-                
-            if(currBook == null)
+                .FirstOrDefaultAsync(b => b.Id == id);
+
+            if (currBook == null)
             {
                 return NotFound();
             }
@@ -103,10 +115,16 @@ namespace FInalProject.Controllers
                 Description = currBook.Description,
                 DateTaken = DateTime.Today,
                 UntillReturn = new DateTimeOffset(DateTime.Today),
-                genres = currBook.BookGenres.Select(bg => bg.Genre).ToList()
+                genres = currBook.BookGenres.Select(bg => bg.Genre).ToList(),
+                comments = currBook.Comments.Select(c => new CommentViewModel
+                {
+                    UserName = c.User.UserName ?? "Unknown User",
+                    Description = c.CommentContent ?? string.Empty
+                }).ToList()
             };
             return View(bigBook);
-           
         }
+
+
     }
 }
