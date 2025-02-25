@@ -35,13 +35,13 @@ namespace FInalProject.Controllers
         [HttpPost]
         public IActionResult AddingAGenre(AddGenreViewModel viewGenre)
         {
-
+           
             Genre GenreFloat = new Genre()
             {
                 Name = viewGenre.Name
             };
             _context.Add(GenreFloat);
-            _context.SaveChanges();
+            _context.SaveChanges(); 
             return RedirectToAction();
         }
        
@@ -49,12 +49,16 @@ namespace FInalProject.Controllers
         public async Task<IActionResult> AllBooks()
         {
             var user = await _userManager.GetUserAsync(User);
-            var userRoles = await _userManager.GetRolesAsync(user);
-            if (!userRoles.Contains("Librarian") || userRoles == null)
+            if(user == null)
+            {
+                return RedirectToAction("LoginPlease", "UserErrors");
+            }
+            else if(user != null && await _userManager.GetRolesAsync(user) == null)
             {
                 await _userManager.AddToRoleAsync(user, "User");
             }
-            var books =  _context.Books
+           
+            var books =  await _context.Books
                 .Include(a => a.Author)
                 .Include(bg => bg.BookGenres)
                 .ThenInclude(g => g.Genre)
@@ -66,7 +70,7 @@ namespace FInalProject.Controllers
                         AuthorName = n.Author.Name,
                         CoverImage = n.CoverImage,
                         Genres = n.BookGenres.Select(bg => bg.Genre.Name).ToList(),
-                }).ToList();
+                }).ToListAsync();
             return View(books);
         }
 
@@ -110,6 +114,7 @@ namespace FInalProject.Controllers
             {
                 return NotFound();
             }
+
             var bigBook = new BookFocusViewModel
             {
                 BookCover = currBook.CoverImage,
@@ -122,7 +127,7 @@ namespace FInalProject.Controllers
                 DateTaken = DateTime.Today,
                 UntillReturn = new DateTimeOffset(DateTime.Today),
                 genres = currBook.BookGenres.Select(bg => bg.Genre).ToList(),
-                comments = currBook.Comments.Select(c => new CommentViewModel
+                comments =  currBook.Comments.Select(c => new CommentViewModel
                 {
                     UserName = c.User.UserName ?? "Unknown User",
                     Description = c.CommentContent ?? string.Empty
