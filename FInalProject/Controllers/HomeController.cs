@@ -26,10 +26,7 @@ namespace FInalProject.Controllers
 
         public async Task<IActionResult> Privacy()
         {
-            var user = await _userManager.GetUserAsync(User);
-
-            await _userManager.AddToRoleAsync(user, "User");
-
+          
             return View();
         }
 

@@ -22,5 +22,32 @@
         {
             <h4>@genre.Name</h4>
         }
+        @if (User.IsInRole("Librarian"))
+        {
+            <a href="@Url.Action("DeleteBook", "BookOperations", new {doomedId = Model.BookId})" class="btn-primary">Delete</a>
+        }
+        <h3>Comment Section</h3>
+        <hr />
+        @{
+            await Html.RenderPartialAsync("_CreateComment", new FInalProject.ViewModels.CreateCommentViewModel
+            {
+                BookId = Model.BookId
+            });
+        }
+        <hr />
+
+        @if(Model.comments == null)
+        {
+            <h2>No comments yet</h2>
+        }
+        else
+        {
+            @foreach(var comment in Model.comments)
+            {
+                <label for="UserName">User name:</label>
+                <h4 class="UserName">@comment.UserName</h4>
+                <h4 class="Description">@comment.Description</h4>
+            }
+        }
     </div>
 </center>

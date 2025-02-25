@@ -24,12 +24,12 @@ namespace FInalProject.Data
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Comment>(c => 
             { 
-                c.HasOne(c => c.Book).WithMany(c => c.Comments).OnDelete(DeleteBehavior.Restrict);
+                c.HasOne(c => c.Book).WithMany(c => c.Comments).OnDelete(DeleteBehavior.Cascade);
             });
           
             modelBuilder.Entity<Book>(c =>
             {
-                c.HasOne(c => c.Author).WithMany(c => c.Books).OnDelete(DeleteBehavior.Restrict);
+                c.HasOne(c => c.Author).WithMany(c => c.Books).OnDelete(DeleteBehavior.Cascade);
             });
 
             //mapping tables
@@ -39,7 +39,7 @@ namespace FInalProject.Data
                 c.HasOne(u => u.User)
                   .WithMany(u => u.Favourites)
                   .HasForeignKey(u => u.UserId)
-                  .OnDelete(DeleteBehavior.Restrict);
+                  .OnDelete(DeleteBehavior.Cascade);
 
                 c.HasOne(u => u.Book)
                     .WithMany(fm => fm.Favourites)
@@ -53,12 +53,12 @@ namespace FInalProject.Data
                 c.HasOne(u => u.Book)
                   .WithMany(u => u.BookGenres)
                   .HasForeignKey(u => u.BookId)
-                  .OnDelete(DeleteBehavior.Restrict);
+                  .OnDelete(DeleteBehavior.Cascade);
 
                 c.HasOne(u => u.Genre)
                     .WithMany(fm => fm.BookGenres)
                     .HasForeignKey(u => u.GenreId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .OnDelete(DeleteBehavior.Cascade);
             });
         }
     }
