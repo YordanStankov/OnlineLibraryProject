@@ -25,26 +25,7 @@ namespace FInalProject.Controllers
         {
             return View();
         }
-
-        public IActionResult AddGenre()
-        {
-            return PartialView();
-        }
-
-
-        [HttpPost]
-        public IActionResult AddingAGenre(AddGenreViewModel viewGenre)
-        {
-           
-            Genre GenreFloat = new Genre()
-            {
-                Name = viewGenre.Name
-            };
-            _context.Add(GenreFloat);
-            _context.SaveChanges(); 
-            return RedirectToAction();
-        }
-       
+      
         //fetches all books and provdes the view
         public async Task<IActionResult> AllBooks()
         {
@@ -82,20 +63,24 @@ namespace FInalProject.Controllers
 
         //actually creates the book
         [HttpPost]
-        public IActionResult CreateABook(BookCreationViewModel Book)
+        public async Task<IActionResult> CreateABook(BookCreationViewModel Book)
         {
             Book BookFloat = new Book()
             {
+                Id = Book.Id,
                 Name = Book.Name,
-                Author = Book.Author,
+                Author = new Author()
+                {
+                    Name = Book.AuthorName    
+                },
                 Description = Book.Description,
                 ReadingTime = Book.ReadingTime,
                 CoverImage = Book.CoverImage,
                 Pages = Book.Pages
             };
-            _context.Add(BookFloat);
-            _context.SaveChanges();
-            return RedirectToAction("AllBooks"); 
+             _context.Add(BookFloat);
+             _context.SaveChanges();
+            return RedirectToAction("BookFocus","Books", new {Id = BookFloat.Id}); 
         }
 
         //fetches the book focus view and gives it data

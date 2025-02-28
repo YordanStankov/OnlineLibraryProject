@@ -47,5 +47,13 @@ namespace FInalProject.Controllers
             _context.SaveChanges(); 
             return RedirectToAction("BookFocus", "Books", new {Id = commentFloat.BookId}); 
         }
+        public async Task<IActionResult> AddGenre(AddGenreViewModel addGenreViewModel)
+        {
+            Genre genreFloat = new Genre()
+            {
+                Name = addGenreViewModel.Name, 
+            };
+            return View(); 
+        }
     }
 }
