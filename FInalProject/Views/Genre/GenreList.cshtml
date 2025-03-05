@@ -1,0 +1,20 @@
+﻿@using FInalProject.Models;
+@model List<Genre>; 
+@{
+    ViewBag.Title = "GenreList";
+}
+<h1>Genre List</h1>
+@foreach( var genre in Model)
+{
+    <h5>@genre.Name</h5>
+    <hr />
+}
+@if (User.IsInRole("Librarian"))
+{
+    await Html.RenderPartialAsync("_AddGenre");
+
+}
+
+      
+
+        

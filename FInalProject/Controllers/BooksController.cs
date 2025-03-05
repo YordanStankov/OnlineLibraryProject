@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 
 namespace FInalProject.Controllers
@@ -26,7 +27,7 @@ namespace FInalProject.Controllers
             return View();
         }
       
-        //fetches all books and provdes the view
+        //fetches all books and provides the view
         public async Task<IActionResult> AllBooks()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -65,6 +66,8 @@ namespace FInalProject.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateABook(BookCreationViewModel Book)
         {
+            ICollection<Genre> currentlyAll = await _context.Genres.ToListAsync(); 
+
             Book BookFloat = new Book()
             {
                 Id = Book.Id,
@@ -73,6 +76,7 @@ namespace FInalProject.Controllers
                 {
                     Name = Book.AuthorName    
                 },
+                
                 Description = Book.Description,
                 ReadingTime = Book.ReadingTime,
                 CoverImage = Book.CoverImage,
@@ -120,7 +124,7 @@ namespace FInalProject.Controllers
             };
             return View(bigBook);
         }
-
+       
 
     }
 }

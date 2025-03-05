@@ -20,6 +20,8 @@ namespace FInalProject.Controllers
             _context = context;
             _userManager = userManager; 
         }
+
+        [HttpDelete]
         public async Task<IActionResult> DeleteBook(int doomedId)
         {
             var doomedBook = await _context.Books
@@ -35,6 +37,7 @@ namespace FInalProject.Controllers
             return RedirectToAction("AllBooks", "Books");
         }
 
+        [HttpPost]
         public async Task<IActionResult> CreateComment(CreateCommentViewModel comment)
         {
             Comment commentFloat = new Comment()
@@ -47,13 +50,6 @@ namespace FInalProject.Controllers
             _context.SaveChanges(); 
             return RedirectToAction("BookFocus", "Books", new {Id = commentFloat.BookId}); 
         }
-        public async Task<IActionResult> AddGenre(AddGenreViewModel addGenreViewModel)
-        {
-            Genre genreFloat = new Genre()
-            {
-                Name = addGenreViewModel.Name, 
-            };
-            return View(); 
-        }
+        
     }
 }
