@@ -18,7 +18,15 @@
     <input asp-for="AuthorName" type="text" id="AuthorName" />
     <span asp-validation-for="AuthorName" class="text-danger"></span>
     <br />
-    
+
+    <label for="SelectedGenreIds">Genres:</label>
+    <select asp-for="SelectedGenreIds" class="form-select" multiple="multiple">
+        @foreach(var genre in Model.GenreOptions)
+        {
+            <option value="@genre.Id">@genre.Name</option>
+        }
+    </select>
+
     <label for="BookDescription">Description</label>
     <input asp-for="Description" type="text" id="BookDescription" />
     <span asp-validation-for="Description" class="text-danger"></span>

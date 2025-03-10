@@ -7,6 +7,7 @@ using System.Security.Claims;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 
 namespace FInalProject.Controllers
@@ -57,35 +58,58 @@ namespace FInalProject.Controllers
         }
 
         //fetches the book creatiion view
-        public IActionResult BookCreation()
+        public async Task<IActionResult> BookCreation()
         {
-            return View();
-        }
+            var genres = await _context.Genres.ToListAsync(); // Fetch genres from the database
 
-        //actually creates the book
-        [HttpPost]
-        public async Task<IActionResult> CreateABook(BookCreationViewModel Book)
-        {
-            ICollection<Genre> currentlyAll = await _context.Genres.ToListAsync(); 
-
-            Book BookFloat = new Book()
+            var model = new BookCreationViewModel
             {
-                Id = Book.Id,
-                Name = Book.Name,
-                Author = new Author()
-                {
-                    Name = Book.AuthorName    
-                },
-                
-                Description = Book.Description,
-                ReadingTime = Book.ReadingTime,
-                CoverImage = Book.CoverImage,
-                Pages = Book.Pages
+                GenreOptions = genres // Populate available genres
             };
-             _context.Add(BookFloat);
-             _context.SaveChanges();
-            return RedirectToAction("BookFocus","Books", new {Id = BookFloat.Id}); 
+
+            return View(model);
         }
+
+        public async Task<IActionResult> CreateABook(BookCreationViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                var genres = await _context.Genres.ToListAsync();
+                return View("Books", genres);
+            }
+            var existingAuthor = await _context.Authors.FirstOrDefaultAsync(a => a.Name == model.AuthorName);
+
+            var correctAuthor = existingAuthor ?? new Author { Name = model.AuthorName };
+            var newBook = new Book
+            {
+                Name = model.Name,
+                ReadingTime = model.ReadingTime,
+                Pages = model.Pages,
+                Author = correctAuthor, 
+                DateTaken = DateTime.Now,
+                UntillReturn = DateTimeOffset.Now.AddDays(14), 
+                CoverImage = model.CoverImage,
+                Description = model.Description
+            };
+
+            _context.Books.Add(newBook);
+            await _context.SaveChangesAsync();
+
+            foreach (var genreId in model.SelectedGenreIds)
+            {
+                var bookGenre = new BookGenre
+                {
+                    BookId = newBook.Id,
+                    GenreId = genreId
+                };
+                _context.BookGenres.Add(bookGenre);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("BookFocus", "Books", new { Id = newBook.Id });
+        }
+
 
         //fetches the book focus view and gives it data
         public async Task<IActionResult> BookFocus(int id)
@@ -113,8 +137,8 @@ namespace FInalProject.Controllers
                 BookAuthorName = currBook.Author.Name,
                 BookReadingTime = currBook.ReadingTime,
                 Description = currBook.Description,
-                DateTaken = DateTime.Today,
-                UntillReturn = new DateTimeOffset(DateTime.Today),
+                DateTaken = currBook.DateTaken,
+                UntillReturn = currBook.UntillReturn,
                 genres = currBook.BookGenres.Select(bg => bg.Genre).ToList(),
                 comments =  currBook.Comments.Select(c => new CommentViewModel
                 {
