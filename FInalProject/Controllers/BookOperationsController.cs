@@ -21,20 +21,24 @@ namespace FInalProject.Controllers
             _userManager = userManager; 
         }
 
-        [HttpDelete]
+        [HttpGet]
         public async Task<IActionResult> DeleteBook(int doomedId)
         {
-            var doomedBook = await _context.Books
+            var doomedBook =  await _context.Books
                 .Include(b => b.Comments)
-                .Include(b => b.Favourites)
                 .Include(b => b.BookGenres)
+                .Include(b => b.Favourites)
                 .FirstOrDefaultAsync(b => b.Id == doomedId);
-            if(doomedBook is not null)
+            if(doomedBook is null)
             {
-                _context.Remove(doomedBook); 
+                throw new ArgumentException("Id is null here you can't delete this book");  
             }
-            await _context.SaveChangesAsync();
-            return RedirectToAction("AllBooks", "Books");
+            else
+            {
+                _context.Remove(doomedBook);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("AllBooks", "Books");
+            }
         }
 
         [HttpPost]
