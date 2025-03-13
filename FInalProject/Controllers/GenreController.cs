@@ -30,6 +30,7 @@ namespace FInalProject.Controllers
             return RedirectToAction("GenreList", "Genre");
         }
 
+        [HttpGet]
         public async Task<IActionResult> GenreList()
         {
             var Genres = await _context.Genres.ToListAsync(); 

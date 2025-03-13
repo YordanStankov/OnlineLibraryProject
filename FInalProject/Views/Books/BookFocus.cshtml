@@ -24,7 +24,9 @@
         }
         @if (User.IsInRole("Librarian"))
         {
-            <a href="@Url.Action("DeleteBook", "BookOperations", new {doomedId = Model.BookId})" class="btn-primary">Delete</a>
+            //<a href="@Url.Action("DeleteBook", "BookOperations", new {doomedId = Model.BookId})" class="btn-primary">Delete</a>
+            <a href="javascript:void(0)" onclick="DeleteBook(@Model.BookId)" class="btn-primary">Delete</a>
+           
         }
         <h3>Comment Section</h3>
         <hr />
@@ -51,3 +53,6 @@
         }
     </div>
 </center>
+@section Scripts {
+    <script src="~/js/site.js"></script>
+}

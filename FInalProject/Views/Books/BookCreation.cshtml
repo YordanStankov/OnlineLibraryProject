@@ -6,7 +6,7 @@
 <header>
     <h1>Book creation</h1>
 </header>
-<form asp-controller="Books" asp-action="CreateABook">
+<form asp-controller="Books" asp-action="CreateABook" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger">
     </div>
     <label for="BookName">Name</label>

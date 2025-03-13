@@ -27,8 +27,8 @@ namespace FInalProject.Controllers
         {
             return View();
         }
-      
-        //fetches all books and provides the view
+
+        [HttpGet]
         public async Task<IActionResult> AllBooks()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -57,7 +57,8 @@ namespace FInalProject.Controllers
             return View(books);
         }
 
-        //fetches the book creatiion view
+
+        [HttpGet]
         public async Task<IActionResult> BookCreation()
         {
             var genres = await _context.Genres.ToListAsync(); // Fetch genres from the database
@@ -70,6 +71,7 @@ namespace FInalProject.Controllers
             return View(model);
         }
 
+        [HttpPost]
         public async Task<IActionResult> CreateABook(BookCreationViewModel model)
         {
             if (!ModelState.IsValid)
@@ -112,6 +114,7 @@ namespace FInalProject.Controllers
 
 
         //fetches the book focus view and gives it data
+        [HttpGet]
         public async Task<IActionResult> BookFocus(int id)
         {
             var currBook = await _context.Books

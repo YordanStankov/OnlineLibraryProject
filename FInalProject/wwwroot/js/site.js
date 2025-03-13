@@ -1,4 +1,19 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿    function DeleteBook(bookId){
+                    if (confirm("Are you sure you want to delete this")){
+        fetch(`/BookOperations/DeleteBook?doomedId=${bookId}`,{
+        method:"DELETE"
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.succes) {
+                    alert("Book has been deleted");
+                    window.location.href = data.redirectUrl;
+                }
+                else {
+                    alert("Womp womp didn't delete" + data.message)
+                }
+            })
+            .catch(error => console.error("Error: ", error))
+        }
+    }
 
-// Write your JavaScript code.

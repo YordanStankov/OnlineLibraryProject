@@ -21,7 +21,7 @@ namespace FInalProject.Controllers
             _userManager = userManager; 
         }
 
-        [HttpGet]
+        /*[HttpGet]
         public async Task<IActionResult> DeleteBook(int doomedId)
         {
             var doomedBook =  await _context.Books
@@ -40,7 +40,25 @@ namespace FInalProject.Controllers
                 return RedirectToAction("AllBooks", "Books");
             }
         }
+        */
+        [HttpDelete]
+        public JsonResult DeleteBook(int doomedId)
+        {
+            var doomedBook =  _context.Books
+                .Include(b => b.Comments)
+                .Include(b => b.BookGenres)
+                .Include(b => b.Favourites)
+                .FirstOrDefault(b => b.Id == doomedId);
 
+            if(doomedBook != null)
+            {
+                _context.Remove(doomedBook);
+                _context.SaveChanges();
+                return Json(new { succes = true, redirectUrl = Url.Action("AllBooks", "Books") });
+            }
+            return Json(new { succes = false, message = "Book not found" });
+
+        }
         [HttpPost]
         public async Task<IActionResult> CreateComment(CreateCommentViewModel comment)
         {
