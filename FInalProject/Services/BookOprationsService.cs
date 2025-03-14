@@ -1,0 +1,64 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using FInalProject.Models;
+using FInalProject.ViewModels;
+using FInalProject.Data;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore;
+using SQLitePCL;
+
+namespace FInalProject.Services
+{
+    public interface IBookOprationsService
+    {
+        Task<bool> DeleteBookAsync(int doomedId);
+        Task<int> CreateCommentAsync(CreateCommentViewModel model, ClaimsPrincipal user);
+    }
+    public class BookOprationsService : IBookOprationsService
+    {
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
+
+        public BookOprationsService(ApplicationDbContext context, UserManager<User> userManager)
+        {
+            _context = context;
+            _userManager = userManager;
+        }
+
+        public async Task<int> CreateCommentAsync(CreateCommentViewModel model, ClaimsPrincipal user)
+        {
+            var userId = _userManager.GetUserId(user);
+            if(userId == null)
+            {
+                return -1; 
+            }
+            var comment = new Comment
+            {
+                UserId = userId, 
+                BookId = model.BookId,
+                CommentContent = model.Description
+            };
+            _context.Comments.Add(comment);
+            await _context.SaveChangesAsync();
+
+            return comment.BookId;
+        }
+
+        public async Task<bool> DeleteBookAsync(int doomedId)
+        {
+            var doomedBook = await _context.Books.
+                Include(b => b.Comments)
+                .Include(b => b.BookGenres)
+                .Include(b => b.Favourites)
+                .FirstOrDefaultAsync(b => b.Id == doomedId); 
+            if(doomedBook != null)
+            {
+                _context.Remove(doomedBook);
+                await _context.SaveChangesAsync();
+                return true; 
+            }
+            return false;
+        }
+    }
+}

@@ -4,37 +4,36 @@ using FInalProject.Models;
 using FInalProject.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using FInalProject.Services;
 
 namespace FInalProject.Controllers
 {
     public class GenreController : Controller
     {
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<User> _userManager;
+        private readonly IGenreService _genreService;
 
-        public GenreController(ApplicationDbContext context, UserManager<User> userManager)
+        public GenreController(IGenreService genreService)
         {
-            _context = context;
-            _userManager = userManager;
+            _genreService = genreService;
         }
 
         [HttpPost]
         public async Task<IActionResult> AddGenre(string Name)
         {
-            Genre genreFloat = new Genre()
+            int response = await _genreService.AddGenreAsync(Name);
+            if(response == 2)
             {
-                Name = Name,
-            };
-            _context.Add(genreFloat);
-            _context.SaveChanges();
+                throw new ArgumentException("couldn't add genre");
+            }
             return RedirectToAction("GenreList", "Genre");
         }
 
         [HttpGet]
         public async Task<IActionResult> GenreList()
         {
-            var Genres = await _context.Genres.ToListAsync(); 
-            return View(Genres);
+            var response = await _genreService.GetGenreListAsync();
+            return View(response);
+            
         }
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using FInalProject;
 using SQLitePCL;
+using FInalProject.Services;
 
 namespace FInalProject
 {
@@ -21,11 +22,18 @@ namespace FInalProject
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+            //registers the roles
             builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedEmail = false)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             builder.Services.AddControllersWithViews();
+
+            //Registering the services
+            builder.Services.AddScoped<IBooksService, BooksService>();
+            builder.Services.AddScoped<IBookOprationsService, BookOprationsService>();
+            builder.Services.AddScoped<IGenreService, GenreService>();
+           
 
             var app = builder.Build();
 
@@ -44,6 +52,8 @@ namespace FInalProject
             app.SeedRolesAndAdminAsync();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+           
 
             app.UseRouting();
 

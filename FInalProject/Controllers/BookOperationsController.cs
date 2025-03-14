@@ -7,70 +7,39 @@ using System.Security.Claims;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
+using FInalProject.Services; 
 
 namespace FInalProject.Controllers
 {
     public class BookOperationsController : Controller
     {
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<User> _userManager;
-        
-        public BookOperationsController(ApplicationDbContext context, UserManager<User> userManager)
+        private readonly IBookOprationsService _bookOprationsService;
+
+        public BookOperationsController(IBookOprationsService bookOprationsService)
         {
-            _context = context;
-            _userManager = userManager; 
+            _bookOprationsService = bookOprationsService;
         }
 
-        /*[HttpGet]
-        public async Task<IActionResult> DeleteBook(int doomedId)
-        {
-            var doomedBook =  await _context.Books
-                .Include(b => b.Comments)
-                .Include(b => b.BookGenres)
-                .Include(b => b.Favourites)
-                .FirstOrDefaultAsync(b => b.Id == doomedId);
-            if(doomedBook is null)
-            {
-                throw new ArgumentException("Id is null here you can't delete this book");  
-            }
-            else
-            {
-                _context.Remove(doomedBook);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("AllBooks", "Books");
-            }
-        }
-        */
         [HttpDelete]
-        public JsonResult DeleteBook(int doomedId)
+        public async Task<JsonResult> DeleteBook(int doomedId)
         {
-            var doomedBook =  _context.Books
-                .Include(b => b.Comments)
-                .Include(b => b.BookGenres)
-                .Include(b => b.Favourites)
-                .FirstOrDefault(b => b.Id == doomedId);
-
-            if(doomedBook != null)
+            bool succes = await _bookOprationsService.DeleteBookAsync(doomedId);
+            if(succes == true)
             {
-                _context.Remove(doomedBook);
-                _context.SaveChanges();
                 return Json(new { succes = true, redirectUrl = Url.Action("AllBooks", "Books") });
             }
-            return Json(new { succes = false, message = "Book not found" });
+            return Json(new { succes = false, message = "Book not found" }); 
 
         }
         [HttpPost]
         public async Task<IActionResult> CreateComment(CreateCommentViewModel comment)
         {
-            Comment commentFloat = new Comment()
+            int response = await _bookOprationsService.CreateCommentAsync(comment, User);
+            if(response == -1)
             {
-                UserId = _userManager.GetUserId(User),
-                BookId = comment.BookId,
-                CommentContent = comment.Description
-            };
-            _context.Add(commentFloat);
-            _context.SaveChanges(); 
-            return RedirectToAction("BookFocus", "Books", new {Id = commentFloat.BookId}); 
+                return Unauthorized();
+            }
+            return RedirectToAction("BookFocus", "Books", new {Id = response}); 
         }
         
     }
