@@ -6,7 +6,7 @@
 <h1>Genre List</h1>
 @foreach( var genre in Model)
 {
-    <h5>@genre.Name</h5>
+    <a href="@Url.Action("SpecificGenreList", "Genre", new {genreId = genre.Id})" class="btn btn-primary">@genre.Name</a>
     <hr />
 }
 @if (User.IsInRole("Librarian"))

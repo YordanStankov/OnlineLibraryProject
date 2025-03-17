@@ -33,7 +33,16 @@ namespace FInalProject.Controllers
         {
             var response = await _genreService.GetGenreListAsync();
             return View(response);
-            
+        }
+        public async Task<IActionResult> SpecificGenreList(int genreId)
+        {
+            var result = await _genreService.GetAllBooksOfCertainGenre(genreId);
+            if(result == null)
+            {
+                throw new ArgumentException("No books associated with the genre");
+            }
+
+                return View(result);
         }
     }
 }
