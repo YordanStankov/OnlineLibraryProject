@@ -3,16 +3,18 @@
 @{
     ViewBag.Title = "GenreList";
 }
-<h1>Genre List</h1>
+<header>
+    <h1>Genre List</h1>
+    @if (User.IsInRole("Librarian"))
+    {
+        await Html.RenderPartialAsync("_AddGenre");
+    }
+</header>
+<hr />
 @foreach( var genre in Model)
 {
     <a href="@Url.Action("SpecificGenreList", "Genre", new {genreId = genre.Id})" class="btn btn-primary">@genre.Name</a>
     <hr />
-}
-@if (User.IsInRole("Librarian"))
-{
-    await Html.RenderPartialAsync("_AddGenre");
-
 }
 
       

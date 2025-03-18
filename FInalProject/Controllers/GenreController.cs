@@ -31,9 +31,11 @@ namespace FInalProject.Controllers
         [HttpGet]
         public async Task<IActionResult> GenreList()
         {
-            var response = await _genreService.GetGenreListAsync();
-            return View(response);
+            var genres = await _genreService.GetGenreListAsync();
+            return View(genres);
         }
+
+        [HttpGet]
         public async Task<IActionResult> SpecificGenreList(int genreId)
         {
             var result = await _genreService.GetAllBooksOfCertainGenre(genreId);
@@ -41,7 +43,6 @@ namespace FInalProject.Controllers
             {
                 throw new ArgumentException("No books associated with the genre");
             }
-
                 return View(result);
         }
     }

@@ -7,7 +7,8 @@ using System.Security.Claims;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
-using FInalProject.Services; 
+using FInalProject.Services;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FInalProject.Controllers
 {
@@ -41,6 +42,5 @@ namespace FInalProject.Controllers
             }
             return RedirectToAction("BookFocus", "Books", new {Id = response}); 
         }
-        
     }
 }

@@ -1,22 +1,15 @@
 ﻿@using FInalProject.ViewModels
 @model List<BookListViewModel>
 @{
-    ViewBag.Title = "All Books";
+    ViewBag.Tile = "Seached book list";
 }
-
 <header>
-    <h2 class="text-center">@ViewBag.Title</h2>
-    <hr />
-   @if (User.IsInRole("Librarian"))
-    {
-        await Html.RenderPartialAsync("_SearchBarPartial");
-    }
+    <h2>Search results</h2>
 </header>
-
 @if (Model.Count() > 0)
 {
     <div class="row">
-        @foreach(var book in Model)
+        @foreach (var book in Model)
         {
             <div class="card">
                 <blockquote>
@@ -39,12 +32,13 @@
                     <p>
                         @if (!book.Genres.Any())
                         {
-                            <p>Falls under no genres wow amazing</p>
+                        <p>Falls under no genres wow amazing</p>
                         }
-                        else {
+                        else
+                        {
                             @foreach (var genre in book.Genres)
                             {
-                                <p>@genre</p>
+                            <p>@genre</p>
                             }
                         }
                     </p>
@@ -56,5 +50,6 @@
 }
 else
 {
-    <h2>The library is temporairly closed</h2>
+    <h2>No such books were found</h2>
 }
+

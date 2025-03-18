@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using FInalProject.Services;
+using Newtonsoft.Json;
 
 namespace FInalProject.Controllers
 {
@@ -50,6 +51,17 @@ namespace FInalProject.Controllers
             return RedirectToAction("BookFocus", "Books", new { Id = bookId });
         }
 
+        [HttpGet]
+        public async Task<IActionResult> SearchedBookList()
+        {
+            var booksJson = TempData["Books"] as string;
+            List<BookListViewModel> books = new List<BookListViewModel>();
+            if(booksJson != null)
+            {
+                books = JsonConvert.DeserializeObject<List<BookListViewModel>>(booksJson);
+            }
+            return View(books); 
+        }
         
         [HttpGet]
         public async Task<IActionResult> BookFocus(int id)
@@ -60,6 +72,18 @@ namespace FInalProject.Controllers
                 throw new ArgumentException("Book not found"); 
             }
           return View(focusedBook);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Search(string searchedString)
+        {
+            if(searchedString == null)
+            {
+                return RedirectToAction("AllBooks");
+            }
+            var books = await _booksService.ReturnSearchResultsAync(searchedString);
+            TempData["Books"] = JsonConvert.SerializeObject(books); 
+            return RedirectToAction("SearchedBookList"); 
         }
     }
 }

@@ -9,6 +9,7 @@ namespace FInalProject.Services
 {
     public interface IBooksService
     {
+        Task<List<BookListViewModel>> ReturnSearchResultsAync(string searchedString);
         Task<List<BookListViewModel>> GetAllBooksAsync(ClaimsPrincipal user);
         Task<BookFocusViewModel> GetBookFocusAsync(int id);
         Task<BookCreationViewModel> GetBookCreationViewModelAsync();
@@ -134,7 +135,26 @@ namespace FInalProject.Services
                     Description = c.CommentContent ?? string.Empty
                 }).ToList()
             };
-            
+        }
+        public async Task<List<BookListViewModel>> ReturnSearchResultsAync(string searchedString)
+        {
+            string loweredSearch = searchedString.ToLower();
+            return await _context.Books
+                .Include(b => b.Author)
+                .Include(b => b.BookGenres)
+                .ThenInclude(b => b.Genre)
+                .Where(b => b.Author.Name.ToLower().Contains(loweredSearch)
+                || b.Name.ToLower().Contains(loweredSearch))
+                .Select(b => new BookListViewModel()
+                {
+                    Id = b.Id,
+                    Name = b.Name,
+                    Pages = b.Pages,
+                    AuthorName = b.Author.Name,
+                    CoverImage = b.CoverImage,
+                    Genres = b.BookGenres.Select(bg => bg.Genre.Name).ToList(),
+                })
+                .ToListAsync();
         }
     }
 }

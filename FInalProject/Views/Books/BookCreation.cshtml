@@ -13,11 +13,12 @@
     <input asp-for="Name" type="text" id="BookName" />
     <span asp-validation-for="Name" class="text-danger"></span>
     <br />
-
+    <hr />
     <label for="BookAuthor">Author</label>
     <input asp-for="AuthorName" type="text" id="AuthorName" />
     <span asp-validation-for="AuthorName" class="text-danger"></span>
     <br />
+    <hr />
 
     <label for="SelectedGenreIds">Genres:</label>
     <select asp-for="SelectedGenreIds" class="form-select" multiple="multiple">
@@ -26,27 +27,32 @@
             <option value="@genre.Id">@genre.Name</option>
         }
     </select>
+    <hr />
 
     <label for="BookDescription">Description</label>
     <input asp-for="Description" type="text" id="BookDescription" />
     <span asp-validation-for="Description" class="text-danger"></span>
     <br />
+    <hr />
 
     <label for="BookReadingTime">Reading time</label>
     <input asp-for="ReadingTime" type="text" id="BookReadingTime" />
     <span asp-validation-for="ReadingTime" class="text-danger"></span>
     <br />
+    <hr />
 
     <label for="BookCoverImage">Cover</label>
     <input asp-for="CoverImage" type="text" id="BookCoverIamge" />
     <span asp-validation-for="CoverImage" class="text-danger"></span>
     <br />
+    <hr />
 
     <label for="BookPages">Pages</label>
     <input asp-for="Pages" type="text" id="BookPages" />
     <span asp-validation-for="Pages" class="text-danger"></span>
     <br />
-    
+    <hr />
+
     <br />
 
     <input type="submit" value="Submit" />

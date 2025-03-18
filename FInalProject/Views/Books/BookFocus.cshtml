@@ -24,7 +24,6 @@
         }
         @if (User.IsInRole("Librarian"))
         {
-            //<a href="@Url.Action("DeleteBook", "BookOperations", new {doomedId = Model.BookId})" class="btn-primary">Delete</a>
             <a href="javascript:void(0)" onclick="DeleteBook(@Model.BookId)" class="btn-primary">Delete</a>
            
         }

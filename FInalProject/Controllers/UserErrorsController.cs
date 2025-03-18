@@ -4,11 +4,11 @@ namespace FInalProject.Controllers
 {
     public class UserErrorsController : Controller
     {
-        public IActionResult Index()
+        public IActionResult LoginPlease()
         {
             return View();
         }
-        public IActionResult LoginPlease()
+        public IActionResult EmptySearch()
         {
             return View();
         }

@@ -7,6 +7,7 @@ using System.Security.Claims;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
+using System.Linq;
 
 namespace FInalProject.Services
 {
@@ -60,5 +61,6 @@ namespace FInalProject.Services
             }
             return false;
         }
+
     }
 }
