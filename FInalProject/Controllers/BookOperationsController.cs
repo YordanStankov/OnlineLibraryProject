@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
 using FInalProject.Services;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 
 namespace FInalProject.Controllers
 {
@@ -41,6 +42,17 @@ namespace FInalProject.Controllers
                 return Unauthorized();
             }
             return RedirectToAction("BookFocus", "Books", new {Id = response}); 
+        }
+        [HttpGet]
+        public async Task<IActionResult> Search(string searchedString)
+        {
+            if (searchedString == null)
+            {
+                return RedirectToAction("AllBooks", "Books");
+            }
+            var books = await _bookOprationsService.ReturnSearchResultsAync(searchedString);
+            TempData["Books"] = JsonConvert.SerializeObject(books);
+            return RedirectToAction("SearchedBookList", "Books");
         }
     }
 }

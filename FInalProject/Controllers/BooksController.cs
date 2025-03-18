@@ -62,28 +62,16 @@ namespace FInalProject.Controllers
             }
             return View(books); 
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> BookFocus(int id)
         {
             var focusedBook = await _booksService.GetBookFocusAsync(id);
-            if(focusedBook == null)
+            if (focusedBook == null)
             {
-                throw new ArgumentException("Book not found"); 
+                throw new ArgumentException("Book not found");
             }
-          return View(focusedBook);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Search(string searchedString)
-        {
-            if(searchedString == null)
-            {
-                return RedirectToAction("AllBooks");
-            }
-            var books = await _booksService.ReturnSearchResultsAync(searchedString);
-            TempData["Books"] = JsonConvert.SerializeObject(books); 
-            return RedirectToAction("SearchedBookList"); 
+            return View(focusedBook);
         }
     }
 }
