@@ -73,5 +73,10 @@ namespace FInalProject.Controllers
             }
             return View(focusedBook);
         }
+        public async Task<IActionResult> EditBook(int editId)
+        {
+            var model = await _booksService.getBookEditViewModelAsync(editId);
+            return View(model);
+        }
     }
 }

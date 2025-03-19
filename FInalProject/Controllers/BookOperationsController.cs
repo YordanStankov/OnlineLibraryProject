@@ -54,5 +54,9 @@ namespace FInalProject.Controllers
             TempData["Books"] = JsonConvert.SerializeObject(books);
             return RedirectToAction("SearchedBookList", "Books");
         }
+        public async Task<IActionResult> Edit(int editId)
+        {
+            throw new ArgumentException("fuck you");
+        }
     }
 }

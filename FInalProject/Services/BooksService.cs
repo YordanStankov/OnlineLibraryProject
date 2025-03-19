@@ -9,6 +9,7 @@ namespace FInalProject.Services
 {
     public interface IBooksService
     {
+        Task<BookCreationViewModel> getBookEditViewModelAsync(int editId);
         Task<List<BookListViewModel>> GetAllBooksAsync(ClaimsPrincipal user);
         Task<BookFocusViewModel> GetBookFocusAsync(int id);
         Task<BookCreationViewModel> GetBookCreationViewModelAsync();
@@ -134,6 +135,27 @@ namespace FInalProject.Services
                 }).ToList()
             };
         }
-       
+
+        public async Task<BookCreationViewModel> getBookEditViewModelAsync(int editId)
+        {
+            var book = await _context.Books
+                .Include(b => b.Author)
+                .Include(b => b.BookGenres)
+                .ThenInclude(b => b.Genre)
+                .FirstOrDefaultAsync(b => b.Id == editId);
+            var genres = await _context.Genres.ToListAsync();
+
+            return new BookCreationViewModel
+            {
+                Name = book.Name, 
+                AuthorName = book.Author.Name,
+                AmountInStock = book.AmountInStock, 
+                CoverImage = book.CoverImage,
+                Description = book.Description,
+                Pages = book.Pages, 
+                ReadingTime = book.ReadingTime,
+                GenreOptions = genres
+            };
+        }
     }
 }

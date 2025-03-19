@@ -62,6 +62,9 @@ namespace FInalProject.Services
             }
             return false;
         }
+
+        
+
         public async Task<List<BookListViewModel>> ReturnSearchResultsAync(string searchedString)
         {
             string loweredSearch = searchedString.ToLower();
@@ -82,5 +85,7 @@ namespace FInalProject.Services
                 })
                 .ToListAsync();
         }
+
+       
     }
 }
