@@ -8,8 +8,9 @@ namespace FInalProject.Services
 {
     public interface IGenreService 
     {
+        Task<bool> DeleteGenreAsync(int doomedGenreId);
         Task<List<BookListViewModel>> GetAllBooksOfCertainGenre(int genreId);
-        Task<int> AddGenreAsync(string Name);
+        Task<bool> AddGenreAsync(string Name);
         Task<List<Genre>> GetGenreListAsync();
     }
 
@@ -25,11 +26,8 @@ namespace FInalProject.Services
             _userManager = userManager;
         }
 
-        public async Task<int> AddGenreAsync(string Name)
+        public async Task<bool> AddGenreAsync(string Name)
         {
-            int newAuthorAdded = 0;
-            int authorAlreadyExists = 1;
-            int authorNotAdded = 2; 
             var existingGenre = await _context.Genres.FirstOrDefaultAsync(g => g.Name == Name);
             if (existingGenre == null)
             {
@@ -39,13 +37,21 @@ namespace FInalProject.Services
                 };
                 _context.Genres.Add(genre);
                 await _context.SaveChangesAsync();
-                return 0;
+                return true;
             }
-            if(existingGenre != null)
+            return false;
+        }
+
+        public async Task<bool> DeleteGenreAsync(int doomedGenreId)
+        {
+            var doomedGenre = await _context.Genres.FirstOrDefaultAsync(g => g.Id == doomedGenreId);
+            if(doomedGenre != null)
             {
-                return 1;
+                _context.Remove(doomedGenre);
+                await _context.SaveChangesAsync();
+                return true;
             }
-            return 2; 
+            return false; 
         }
 
         public async Task<List<BookListViewModel>> GetAllBooksOfCertainGenre(int genreId)

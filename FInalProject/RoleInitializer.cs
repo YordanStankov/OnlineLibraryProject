@@ -13,10 +13,10 @@ namespace FInalProject
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
 
-            string LibrarianEmail = "Librarian2108@gmail.com";
-            string LibrarianPassword = "Librarian2107$";
+            string AdminEmail = "Admin2108@gmail.com";
+            string AdminPassword = "Admin2107$";
 
-            string[] roles = { "Librarian", "User" }; 
+            string[] roles = { "Librarian", "User", "Admin"}; 
             foreach (var role in roles)
             {
                 if(!await roleManager.RoleExistsAsync(role)) 
@@ -24,17 +24,17 @@ namespace FInalProject
                     await roleManager.CreateAsync(new IdentityRole(role));
                 }
             }
-            var adminUser = await userManager.FindByEmailAsync(LibrarianEmail);
+            var adminUser = await userManager.FindByEmailAsync(AdminEmail);
             if (adminUser == null)
             {
-                adminUser = new User { UserName = LibrarianEmail, Email = LibrarianEmail};
-                await userManager.CreateAsync(adminUser, LibrarianPassword);
-                await userManager.AddToRoleAsync(adminUser, "Librarian"); 
+                adminUser = new User { UserName = AdminEmail, Email = AdminEmail};
+                await userManager.CreateAsync(adminUser, AdminPassword);
+                await userManager.AddToRoleAsync(adminUser, "Admin"); 
                 throw new Exception("Admin not present in db");
             }
             else
             {
-                await userManager.AddToRoleAsync(adminUser, "Librarian"); 
+                await userManager.AddToRoleAsync(adminUser, "Admin"); 
             }
         }
     }

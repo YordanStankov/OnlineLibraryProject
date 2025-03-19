@@ -10,19 +10,18 @@
     <h2>Book</h2>
     <hr />
     <div class="card">
-        <h3>@Model.BookName</h3>
-        <h3>@Model.Description</h3>
-        <h3>@Model.BookAuthorName</h3>
+        <h3>Title: @Model.BookName</h3>
+        <h3>Description: @Model.Description</h3>
+        <h3>Author: @Model.BookAuthorName</h3>
         <h3>@Model.BookCover</h3>
-        <h3>@Model.BookReadingTime</h3>
-        <h3>@Model.BookPages</h3>
-        <h3>@Model.DateTaken</h3>
-        <h3>@Model.UntillReturn</h3>
+        <h3>Reading time: @Model.BookReadingTime</h3>
+        <h3>Pages: @Model.BookPages</h3>
+        <h3>Left in stock: @Model.AmountInStock</h3>
         @foreach(var genre in Model.genres)
         {
             <h4>@genre.Name</h4>
         }
-        @if (User.IsInRole("Librarian"))
+        @if (User.IsInRole("Admin"))
         {
             <a href="javascript:void(0)" onclick="DeleteBook(@Model.BookId)" class="btn-primary">Delete</a>
            

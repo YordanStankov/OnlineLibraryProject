@@ -67,8 +67,7 @@ namespace FInalProject.Services
                 ReadingTime = model.ReadingTime,
                 Pages = model.Pages,
                 Author = correctAuthor,
-                DateTaken = DateTime.Now,
-                UntillReturn = DateTimeOffset.Now.AddDays(14),
+                AmountInStock = model.AmountInStock,
                 CoverImage = model.CoverImage,
                 Description = model.Description
             };
@@ -123,10 +122,10 @@ namespace FInalProject.Services
                 BookName = currBook.Name,
                 BookPages = currBook.Pages,
                 BookAuthorName = currBook.Author.Name,
+                AmountInStock = currBook.AmountInStock,
                 BookReadingTime = currBook.ReadingTime,
                 Description = currBook.Description,
-                DateTaken = currBook.DateTaken,
-                UntillReturn = currBook.UntillReturn,
+                
                 genres = currBook.BookGenres.Select(bg => bg.Genre).ToList(),
                 comments = currBook.Comments.Select(c => new CommentViewModel
                 {

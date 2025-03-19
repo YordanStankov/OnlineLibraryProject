@@ -11,7 +11,7 @@ namespace FInalProject.ViewModels
         public double ReadingTime { get; set; }
         public string CoverImage { get; set; }
         public string Description { get; set; }
-
+        public int AmountInStock { get; set; }
         public ICollection<Genre>? GenreOptions { get; set; } = new List<Genre>();
         public ICollection<int> SelectedGenreIds { get; set; } = new List<int>();
     }

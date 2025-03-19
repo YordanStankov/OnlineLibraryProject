@@ -41,6 +41,12 @@
     <br />
     <hr />
 
+    <label for="AmountInStock">Amount avaible: </label>
+    <input asp-for="AmountInStock" type="text" id="AmountInStock" />
+    <span asp-validation-for="AmountInStock" class="text-danger"></span>
+    <br />
+    <hr />
+
     <label for="BookCoverImage">Cover</label>
     <input asp-for="CoverImage" type="text" id="BookCoverIamge" />
     <span asp-validation-for="CoverImage" class="text-danger"></span>

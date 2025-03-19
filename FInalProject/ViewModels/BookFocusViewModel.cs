@@ -9,8 +9,7 @@ namespace FInalProject.ViewModels
         public double BookReadingTime { get; set; }
         public string BookAuthorName { get; set; }
         public string BookCover { get; set; }
-        public DateTime DateTaken { get; set; }
-        public DateTimeOffset UntillReturn { get; set; }
+        public int AmountInStock { get; set; }
         public string Description { get; set; }
 
         public ICollection<Genre> genres { get; set; }

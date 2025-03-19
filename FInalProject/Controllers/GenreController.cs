@@ -5,6 +5,7 @@ using FInalProject.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using FInalProject.Services;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace FInalProject.Controllers
 {
@@ -20,12 +21,12 @@ namespace FInalProject.Controllers
         [HttpPost]
         public async Task<IActionResult> AddGenre(string Name)
         {
-            int response = await _genreService.AddGenreAsync(Name);
-            if(response == 2)
+            bool response = await _genreService.AddGenreAsync(Name);
+            if (response == false)
             {
-                throw new ArgumentException("couldn't add genre");
+                throw new ArgumentException("already exists dumbass");
             }
-            return RedirectToAction("GenreList", "Genre");
+            return RedirectToAction("GenreList");
         }
 
         [HttpGet]
@@ -44,6 +45,21 @@ namespace FInalProject.Controllers
                 throw new ArgumentException("No books associated with the genre");
             }
                 return View(result);
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteGenre(int doomedGenreId)
+        {
+            bool succes = await _genreService.DeleteGenreAsync(doomedGenreId); 
+            if(succes == true)
+            {
+                return RedirectToAction("GenreList");
+            }
+            throw new ArgumentException("couldn't delete genre");
+        }
+        
+        public async Task<IActionResult> EditGenre()
+        {
+            return RedirectToAction("GenreList");
         }
     }
 }

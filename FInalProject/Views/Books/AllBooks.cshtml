@@ -7,10 +7,9 @@
 <header>
     <h2 class="text-center">@ViewBag.Title</h2>
     <hr />
-   @if (User.IsInRole("Librarian"))
-    {
-        await Html.RenderPartialAsync("_SearchBarPartial");
-    }
+   
+    @await Html.PartialAsync("_SearchBarPartial");
+    
 </header>
 
 @if (Model.Count() > 0)
