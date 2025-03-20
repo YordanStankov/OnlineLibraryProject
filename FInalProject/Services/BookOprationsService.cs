@@ -13,6 +13,7 @@ namespace FInalProject.Services
 {
     public interface IBookOprationsService
     {
+        Task<bool> EditBookAsync(BookCreationViewModel model);
         Task<List<BookListViewModel>> ReturnSearchResultsAync(string searchedString);
         Task<bool> DeleteBookAsync(int doomedId);
         Task<int> CreateCommentAsync(CreateCommentViewModel model, ClaimsPrincipal user);
@@ -63,7 +64,42 @@ namespace FInalProject.Services
             return false;
         }
 
-        
+        public async Task<bool> EditBookAsync(BookCreationViewModel model)
+        {
+            var bookToEdit = await _context.Books
+                .Include(bte => bte.Author)
+                .Include(bte => bte.BookGenres)
+                .ThenInclude(bte => bte.Genre)
+                .FirstOrDefaultAsync(bte => bte.Id == model.Id);
+            
+            if(model == null || model.SelectedGenreIds == null)
+            {
+                return false;
+            }
+
+            bookToEdit.Name = model.Name;
+            bookToEdit.AmountInStock = model.AmountInStock;
+            bookToEdit.Pages = model.Pages;
+            bookToEdit.Description = model.Description;
+            bookToEdit.CoverImage = model.CoverImage;
+            bookToEdit.ReadingTime = model.ReadingTime;
+            var searchedAuthor = await _context.Authors.FirstOrDefaultAsync(a => a.Id == bookToEdit.Author.Id);
+            bookToEdit.Author = searchedAuthor ?? new Author { Name = model.AuthorName };
+
+            var existingGenreIds = bookToEdit.BookGenres.Select(bg => bg.GenreId).ToList();
+            var newGenres = model.SelectedGenreIds.Except(existingGenreIds);
+            var removedGenres = existingGenreIds.Except(model.SelectedGenreIds);
+
+            bookToEdit.BookGenres = bookToEdit.BookGenres.Where(bg => !removedGenres.Contains(bg.GenreId)).ToList();
+
+            foreach (var genreId in newGenres)
+            {
+                _context.BookGenres.Add(new BookGenre { BookId = bookToEdit.Id, GenreId = genreId });
+            }
+
+            await _context.SaveChangesAsync();
+            return true; 
+        }
 
         public async Task<List<BookListViewModel>> ReturnSearchResultsAync(string searchedString)
         {

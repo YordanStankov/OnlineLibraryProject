@@ -9,6 +9,7 @@
 <form asp-controller="BookOperations" asp-action="Edit" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger">
     </div>
+    <input type="hidden" asp-for="Id" />
     <label for="BookName">Name</label>
     <input asp-for="Name" type="text" id="BookName" placeholder="@Model.Name"/>
     <span asp-validation-for="Name" class="text-danger"></span>

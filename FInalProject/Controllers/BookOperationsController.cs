@@ -54,9 +54,15 @@ namespace FInalProject.Controllers
             TempData["Books"] = JsonConvert.SerializeObject(books);
             return RedirectToAction("SearchedBookList", "Books");
         }
-        public async Task<IActionResult> Edit(int editId)
+        [HttpPost]
+        public async Task<IActionResult> Edit(BookCreationViewModel model)
         {
-            throw new ArgumentException("fuck you");
+            var result = await _bookOprationsService.EditBookAsync(model);
+            if(result != true)
+            {
+                ModelState.AddModelError("", "Failed to update book");
+            }
+                return RedirectToAction("AllBooks", "Books");
         }
     }
 }

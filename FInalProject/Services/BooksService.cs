@@ -85,7 +85,7 @@ namespace FInalProject.Services
                 };
                 _context.BookGenres.Add(bookGenre);
             }
-
+            newBook.Author.Books.Add(newBook);
             await _context.SaveChangesAsync();
             return newBook.Id;
         }
@@ -147,6 +147,7 @@ namespace FInalProject.Services
 
             return new BookCreationViewModel
             {
+                Id = book.Id,
                 Name = book.Name, 
                 AuthorName = book.Author.Name,
                 AmountInStock = book.AmountInStock, 
@@ -154,7 +155,7 @@ namespace FInalProject.Services
                 Description = book.Description,
                 Pages = book.Pages, 
                 ReadingTime = book.ReadingTime,
-                GenreOptions = genres
+                GenreOptions = genres,
             };
         }
     }
