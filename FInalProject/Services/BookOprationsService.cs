@@ -80,6 +80,7 @@ namespace FInalProject.Services
             bookToEdit.Name = model.Name;
             bookToEdit.AmountInStock = model.AmountInStock;
             bookToEdit.Pages = model.Pages;
+            bookToEdit.Category = model.Category;
             bookToEdit.Description = model.Description;
             bookToEdit.CoverImage = model.CoverImage;
             bookToEdit.ReadingTime = model.ReadingTime;

@@ -69,6 +69,7 @@ namespace FInalProject.Services
                 Pages = model.Pages,
                 Author = correctAuthor,
                 AmountInStock = model.AmountInStock,
+                Category = model.Category,
                 CoverImage = model.CoverImage,
                 Description = model.Description
             };
@@ -122,6 +123,7 @@ namespace FInalProject.Services
                 BookId = currBook.Id,
                 BookName = currBook.Name,
                 BookPages = currBook.Pages,
+                Category = currBook.Category,
                 BookAuthorName = currBook.Author.Name,
                 AmountInStock = currBook.AmountInStock,
                 BookReadingTime = currBook.ReadingTime,
@@ -149,6 +151,7 @@ namespace FInalProject.Services
             {
                 Id = book.Id,
                 Name = book.Name, 
+                Category = book.Category,
                 AuthorName = book.Author.Name,
                 AmountInStock = book.AmountInStock, 
                 CoverImage = book.CoverImage,

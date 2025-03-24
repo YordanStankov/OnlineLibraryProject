@@ -12,6 +12,7 @@ namespace FInalProject.ViewModels
         public string CoverImage { get; set; }
         public string Description { get; set; }
         public int AmountInStock { get; set; }
+        public Category Category { get; set; }
         public ICollection<Genre>? GenreOptions { get; set; } 
         public ICollection<int> SelectedGenreIds { get; set; } 
     }

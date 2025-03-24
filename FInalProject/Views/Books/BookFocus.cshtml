@@ -17,6 +17,7 @@
         <h3>Reading time: @Model.BookReadingTime</h3>
         <h3>Pages: @Model.BookPages</h3>
         <h3>Left in stock: @Model.AmountInStock</h3>
+        <h3>Category: @Model.Category</h3>
         @foreach(var genre in Model.genres)
         {
             <h4>@genre.Name</h4>

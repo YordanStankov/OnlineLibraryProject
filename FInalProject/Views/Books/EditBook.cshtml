@@ -29,6 +29,16 @@
     </select>
     <hr />
 
+    <label for="Category">Pick a category:</label>
+    <select asp-for="Category" class="form-select" multiple="multiple">
+        <option value="Educational">Education</option>
+        <option value="Comics">Comics</option>
+        <option value="Newspaper">Newspaper</option>
+        <option value="Magazine">Magazine</option>
+        <option value="Books">Book</option>
+    </select>
+    <hr />
+
     <label for="BookDescription">Description</label>
     <input asp-for="Description" type="text" id="BookDescription" placeholder="@Model.Description" />
     <span asp-validation-for="Description" class="text-danger"></span>
