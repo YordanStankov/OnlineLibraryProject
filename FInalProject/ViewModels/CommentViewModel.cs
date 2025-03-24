@@ -1,4 +1,4 @@
-﻿using FInalProject.Models;
+﻿using FInalProject.Data.Models;
 
 namespace FInalProject.ViewModels
 {

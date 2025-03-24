@@ -1,4 +1,4 @@
-﻿using FInalProject.Models;
+﻿using FInalProject.Data.Models;
 using Microsoft.AspNetCore.Routing.Constraints;
 using System.ComponentModel.DataAnnotations;
 
@@ -11,7 +11,7 @@ namespace FInalProject.ViewModels
         public string? AuthorName { get; set; }
         public double? Pages { get; set; }
         public string CoverImage { get; set; }
-        public List<string>? Genres { get; set; } = new List<string>();
+        public List<string>? Genres { get; set; } 
 
 
     }

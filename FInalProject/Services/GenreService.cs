@@ -1,5 +1,5 @@
 ﻿using FInalProject.Data;
-using FInalProject.Models;
+using FInalProject.Data.Models;
 using FInalProject.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -78,6 +78,7 @@ namespace FInalProject.Services
                 return correctBooks; 
             }
         }
+
 
         public async Task<List<Genre>> GetGenreListAsync()
         {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using FInalProject.Models;
+using FInalProject.Data.Models;
 using FInalProject.ViewModels;
 using FInalProject.Data;
 using Microsoft.AspNetCore.Identity;
@@ -73,10 +73,12 @@ namespace FInalProject.Controllers
             }
             return View(focusedBook);
         }
+
+        [HttpGet]
         public async Task<IActionResult> EditBook(int editId)
         {
-            var model = await _booksService.getBookEditViewModelAsync(editId);
-            return View(model);
+            var info = await _booksService.getBookInfoAsync(editId);
+            return View(info);
         }
     }
 }

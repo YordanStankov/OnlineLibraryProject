@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using FInalProject.ViewModels;
-using FInalProject.Models;
+using FInalProject.Data.Models;
 using FInalProject.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

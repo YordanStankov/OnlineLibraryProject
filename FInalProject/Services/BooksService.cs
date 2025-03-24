@@ -1,5 +1,5 @@
 ﻿using FInalProject.Data;
-using FInalProject.Models;
+using FInalProject.Data.Models;
 using FInalProject.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +9,7 @@ namespace FInalProject.Services
 {
     public interface IBooksService
     {
-        Task<BookCreationViewModel> getBookEditViewModelAsync(int editId);
+        Task<BookCreationViewModel> getBookInfoAsync(int editId);
         Task<List<BookListViewModel>> GetAllBooksAsync(ClaimsPrincipal user);
         Task<BookFocusViewModel> GetBookFocusAsync(int id);
         Task<BookCreationViewModel> GetBookCreationViewModelAsync();
@@ -136,7 +136,7 @@ namespace FInalProject.Services
             };
         }
 
-        public async Task<BookCreationViewModel> getBookEditViewModelAsync(int editId)
+        public async Task<BookCreationViewModel> getBookInfoAsync(int editId)
         {
             var book = await _context.Books
                 .Include(b => b.Author)

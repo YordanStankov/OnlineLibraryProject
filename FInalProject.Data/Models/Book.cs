@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace FInalProject.Models
+namespace FInalProject.Data.Models
 {
     public class Book
     {
@@ -23,6 +23,7 @@ namespace FInalProject.Models
 
         public DateTime DateTaken { get; set; }
         public DateTimeOffset UntillReturn { get; set; }
+        public Category Category { get; set; }
         
         [Required]
         public string CoverImage { get; set; }
@@ -34,9 +35,9 @@ namespace FInalProject.Models
         [Required]
         public int AmountInStock { get; set; }
 
-        public ICollection<Comment>? Comments { get; set; } = new List<Comment>();
-        public ICollection<BookGenre>? BookGenres { get; set; } = new List<BookGenre>();
-        public ICollection<Favourite>? Favourites { get; set; } = new List<Favourite>();
-        public ICollection<BorrowedBook> BorrowedBooks { get; set; } = new List<BorrowedBook>();
+        public ICollection<Comment>? Comments { get; set; } 
+        public ICollection<BookGenre>? BookGenres { get; set; } 
+        public ICollection<Favourite>? Favourites { get; set; }
+        public ICollection<BorrowedBook> BorrowedBooks { get; set; } 
     }
 }

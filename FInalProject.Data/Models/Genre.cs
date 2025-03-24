@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FInalProject.Models
+namespace FInalProject.Data.Models
 {
     public class Genre
     {

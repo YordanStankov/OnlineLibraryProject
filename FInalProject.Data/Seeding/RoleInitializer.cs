@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using FInalProject.Models;
+using FInalProject.Data.Models;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace FInalProject
+namespace FInalProject.Data.Seeding
 {
     public static class RoleInitializer
     {

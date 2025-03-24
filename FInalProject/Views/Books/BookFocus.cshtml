@@ -28,7 +28,7 @@
         }
         @if (User.IsInRole("Admin"))
         {
-            <a href="@Url.Action("EditBook", "Books", new {editId = Model.BookId})" class="btn btn-primary">Edit</a>
+            <a href="@Url.Action("EditBook", "Books", new {editId = Model.BookId}) class="btn btn-primary">Edit</a>
         }
         <h3>Comment Section</h3>
         <hr />

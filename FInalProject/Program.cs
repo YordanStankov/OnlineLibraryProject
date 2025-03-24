@@ -1,10 +1,11 @@
-using FInalProject.Data;
-using FInalProject.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using FInalProject;
-using SQLitePCL;
 using FInalProject.Services;
+using FInalProject.Data;
+using FInalProject.Data.Seeding;
+using FInalProject.Data.Models;
+
 
 namespace FInalProject
 {

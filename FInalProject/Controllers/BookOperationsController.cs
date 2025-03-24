@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using FInalProject.Models;
+using FInalProject.Data.Models;
 using FInalProject.ViewModels;
 using FInalProject.Data;
 using Microsoft.AspNetCore.Identity;

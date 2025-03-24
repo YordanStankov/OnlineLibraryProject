@@ -1,4 +1,4 @@
-using FInalProject.Models;
+using FInalProject.Data.Models;
 using FInalProject.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -21,7 +21,7 @@ namespace FInalProject.Controllers
         }
         public IActionResult Index()
         {
-            return View(User);
+            return View();
         } 
 
         public async Task<IActionResult> Privacy()

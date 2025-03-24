@@ -1,7 +1,10 @@
 ﻿using FInalProject;
 using FInalProject.Data;
-using FInalProject.Models;
-namespace FInalProject
+using FInalProject.Data.Models;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace FInalProject.Data.Seeding
 {
     public static class SeedDatabase
     {
