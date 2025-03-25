@@ -12,5 +12,9 @@ namespace FInalProject.Controllers
         {
             return View();
         }
+        public IActionResult NoneFromCategory()
+        {
+            return View();
+        }
     }
 }

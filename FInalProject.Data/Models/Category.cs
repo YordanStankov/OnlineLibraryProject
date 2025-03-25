@@ -2,6 +2,7 @@
 {
     public enum Category
     {
+        All,
         Magazine, 
         Newspaper,
         Comics,

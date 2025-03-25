@@ -23,14 +23,25 @@ namespace FInalProject.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> AllBooks()
+        public async Task<IActionResult> AllBooks(int modifier)
         {
-            var books = await _booksService.GetAllBooksAsync(User);
-            if(books == null)
+            if(modifier == 0)
             {
-                return RedirectToAction("LoginPlease", "UserErrors");
+                var books = await _booksService.GetAllBooksAsync(User);
+                if (books == null)
+                {
+                    return RedirectToAction("LoginPlease", "UserErrors");
+                }
+                return View(books);
             }
-            return View(books);
+
+            var specificBooks = await _booksService.GetAllBooksFromSpecificCategoryAsync(modifier);
+            if(specificBooks == null)
+                {
+                    return RedirectToAction("NoneFromCategory", "UserErrors");
+                }
+            return View(specificBooks);
+            
         }
 
         [HttpGet]
