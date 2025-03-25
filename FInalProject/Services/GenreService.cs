@@ -56,7 +56,6 @@ namespace FInalProject.Services
 
         public async Task<List<BookListViewModel>> GetAllBooksOfCertainGenre(int genreId)
         {
-            //var certainBooks = await _context.BookGenres.Select(bg => bg.GenreId == genreId).ToListAsync(); 
             var correctBooks = await _context.BookGenres
                 .AsNoTracking()
                 .Where(bg => bg.GenreId == genreId)
@@ -82,7 +81,7 @@ namespace FInalProject.Services
 
         public async Task<List<Genre>> GetGenreListAsync()
         {
-            var genreList = await _context.Genres.ToListAsync();
+            var genreList = await _context.Genres.AsNoTracking().ToListAsync();
             return genreList;
         }
     }

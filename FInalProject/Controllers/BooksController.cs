@@ -54,10 +54,7 @@ namespace FInalProject.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateABook(BookCreationViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return View("Books", await _booksService.GetBookCreationViewModelAsync());
-            }
+           
             int bookId = await _booksService.CreateBookAsync(model);
             return RedirectToAction("BookFocus", "Books", new { Id = bookId });
         }

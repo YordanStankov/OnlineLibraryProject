@@ -40,6 +40,7 @@ namespace FInalProject.Services
             }
 
             return await _context.Books
+                .AsNoTracking()
                 .Include(a => a.Author)
                 .Include(bg => bg.BookGenres)
                 .ThenInclude(g => g.Genre)
@@ -48,6 +49,7 @@ namespace FInalProject.Services
                     Id = n.Id,
                     Name = n.Name,
                     Pages = n.Pages,
+                    Category = n.Category,
                     AuthorName = n.Author.Name,
                     CoverImage = n.CoverImage,
                     Genres = n.BookGenres.Select(bg => bg.Genre.Name).ToList(),
@@ -95,7 +97,7 @@ namespace FInalProject.Services
         
         public async Task<BookCreationViewModel> GetBookCreationViewModelAsync()
         {
-            var genres = await _context.Genres.ToListAsync();
+            var genres = await _context.Genres.AsNoTracking().ToListAsync();
             return new BookCreationViewModel
             {
                 GenreOptions = genres
@@ -105,6 +107,7 @@ namespace FInalProject.Services
         public async Task<BookFocusViewModel> GetBookFocusAsync(int id)
         {
             var currBook = await _context.Books
+               .AsNoTracking()
               .Include(b => b.Favourites)
               .Include(b => b.Author)
               .Include(b => b.Comments)
@@ -142,6 +145,7 @@ namespace FInalProject.Services
         public async Task<BookCreationViewModel> getBookInfoAsync(int editId)
         {
             var book = await _context.Books
+                .AsNoTracking()
                 .Include(b => b.Author)
                 .Include(b => b.BookGenres)
                 .ThenInclude(b => b.Genre)
@@ -166,6 +170,7 @@ namespace FInalProject.Services
         public async Task<List<BookListViewModel>> GetAllBooksFromSpecificCategoryAsync(int modifier)
         {
             var specificBooks = await _context.Books
+                .AsNoTracking()
                 .Include(a => a.Author)
                 .Include(bg => bg.BookGenres)
                 .ThenInclude(g => g.Genre)
@@ -176,6 +181,7 @@ namespace FInalProject.Services
                     Name = n.Name,
                     Pages = n.Pages,
                     AuthorName = n.Author.Name,
+                    Category = n.Category,
                     CoverImage = n.CoverImage,
                     Genres = n.BookGenres.Select(bg => bg.Genre.Name).ToList(),
                 }).ToListAsync();
