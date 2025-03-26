@@ -1,46 +1,59 @@
 ﻿@using FInalProject.Data.Models;
-@model List<Genre>; 
+@model List<Genre>;
+
 @{
-    ViewBag.Title = "GenreList";
+    ViewBag.Title = "Genre List";
 }
-<header>
-    <h1>Genre List</h1>
+
+<div class="container mt-4">
+    <header class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bold">Genres</h1>
+    </header>
+    <hr />
     @if (User.IsInRole("Admin"))
     {
         await Html.RenderPartialAsync("_AddGenre");
     }
-</header>
-<hr />
-@foreach( var genre in Model)
-{
-    <div class="card p-3 mb-3">
-        <div class="d-flex justify-content-between align-items-center">
-            <a href="@Url.Action("SpecificGenreList", "Genre", new { genreId = genre.Id })" class="btn btn-primary">
-                @genre.Name
-            </a>
+    <div class="row">
+        @foreach (var genre in Model)
+        {
+            <div class="col-md-6 col-lg-4">
+                <div class="card shadow-sm border-0 rounded p-3 mb-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="@Url.Action("SpecificGenreList", "Genre", new { genreId = genre.Id })"
+                           class="btn btn-outline-primary fw-bold px-4 py-2 w-100 text-center">
+                            @genre.Name
+                        </a>
 
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton-@genre.Id" data-bs-toggle="dropdown" aria-expanded="false">
-                    ⋮ 
-                </button>
-                @if (User.IsInRole("Admin"))
-                {
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton-@genre.Id">
-                        <li>
-                            <a class="dropdown-item" href="@Url.Action("EditGenre", "Genre", new { editId = genre.Id })">Edit</a>
-                        </li>
-                        <li>
-                            <form method="post" action="@Url.Action("DeleteGenre", "Genre", new { doomedGenreId = genre.Id })" onsubmit="return confirm('Are you sure you want to delete this genre?');">
-                                <button type="submit" class="dropdown-item text-danger">Delete</button>
-                            </form>
-                        </li>
-                    </ul>
-                }
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <div class="dropdown ms-2">
+                                <button class="btn btn-light border dropdown-toggle" type="button" id="dropdownMenuButton-@genre.Id" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-three-dots-vertical"></i>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton-@genre.Id">
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("EditGenre", "Genre", new { editId = genre.Id })">
+                                            <i class="bi bi-pencil-square me-2"></i>Edit
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <form method="post" action="@Url.Action("DeleteGenre", "Genre", new { doomedGenreId = genre.Id })"
+                                              onsubmit="return confirm('Are you sure you want to delete this genre?');">
+                                            <button type="submit" class="dropdown-item text-danger">
+                                                <i class="bi bi-trash3-fill me-2"></i>Delete
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                    </div>
+                </div>
             </div>
-        </div>
+        }
     </div>
-}
+</div>
 
-      
-
-        
+<!-- Ensure Bootstrap Icons is included -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">

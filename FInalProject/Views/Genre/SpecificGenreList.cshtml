@@ -1,58 +1,57 @@
-﻿@using FInalProject.ViewModels; 
+﻿@using FInalProject.ViewModels
 @model List<BookListViewModel>
 @{
-    ViewBag.Title = "Certain Genre List";
+    ViewBag.Title = "Certain genre list";
 }
 
-@if (Model.Count() > 0)
+<header>
+    <h2 class="text-center">@ViewBag.Title</h2>
+    <hr />
+    @await Html.PartialAsync("_SearchBarPartial")
+</header>
+
+@if (Model.Count > 0)
 {
-    <header>
-        <h2>
-            @ViewBag.Title
-        </h2>
-    </header>
-    <div class="row">
-        @foreach (var book in Model)
-        {
-            <div class="card">
-                <blockquote>
-                    <p>
-                        Name:@book.Name
-                        <hr />
-                    </p>
-                    <p>
-                        Pages:@book.Pages
-                        <hr />
-                    </p>
-                    <p>
-                        Author:@book.AuthorName
-                        <hr />
-                    </p>
-                    <p>
-                        Cover:@book.CoverImage
-                        <hr />
-                    </p>
-                    <p>
-                        @if (!book.Genres.Any())
-                        {
-                        <p>Falls under no genres wow amazing</p>
-                        }
-                        else
-                        {
-                            @foreach (var genre in book.Genres)
-                            {
-                            <p>@genre</p>
-                            }
-                        }
-                    </p>
-                    <a href="@Url.Action("BookFocus", "Books", new {id = book.Id})" class="btn btn-primary">See more</a>
-                </blockquote>
-            </div>
-        }
+    <div class="container mt-4">
+        <div class="row">
+            @foreach (var book in Model)
+            {
+                <div class="col-md-6 mb-4">
+                    <div class="card p-3 shadow">
+                        <div class="row g-0 align-items-center">
+                            <!-- Image Section -->
+                            <div class="col-md-4 text-center">
+                                <img src="@book.CoverImage" class="img-fluid rounded" alt="Book Cover" style="width: 18rem; height: 16rem; object-fit: cover;">
+                            </div>
+
+                            <!-- Text Content Section -->
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">@book.Name</h5>
+                                    <p class="card-text"><strong>Pages:</strong> @book.Pages</p>
+                                    <p class="card-text"><strong>Author:</strong> @book.AuthorName</p>
+                                    <p class="card-text"><strong>Category:</strong> @book.Category</p>
+                                    <p class="card-text">
+                                        <strong>Genres:</strong>
+                                        @if (!book.Genres.Any())
+                                        {
+                                            <span>Falls under no genres wow amazing</span>
+                                        }
+                                        else
+                                        {
+                                            @foreach (var genre in book.Genres)
+                                            {
+                                                <span class="badge bg-secondary">@genre</span>
+                                            }
+                                        }
+                                    </p>
+                                    <a href="@Url.Action("BookFocus", "Books", new {id = book.Id})" class="btn btn-primary">See more</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
     </div>
 }
-else
-{
-    <h2>The library is temporairly closed</h2>
-}
-

@@ -1,61 +1,87 @@
 ﻿@using FInalProject.ViewModels;
 @model BookFocusViewModel;
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+
 @{
     ViewBag.Title = "Book Focus";
 }
-<center>
-    <h2>Book</h2>
+
+<div class="container mt-4">
+    <h2 class="text-center">Book Details</h2>
     <hr />
-    <div class="card">
-        <h3>Title: @Model.BookName</h3>
-        <h3>Description: @Model.Description</h3>
-        <h3>Author: @Model.BookAuthorName</h3>
-        <h3>@Model.BookCover</h3>
-        <h3>Reading time: @Model.BookReadingTime</h3>
-        <h3>Pages: @Model.BookPages</h3>
-        <h3>Left in stock: @Model.AmountInStock</h3>
-        <h3>Category: @Model.Category</h3>
-        @foreach(var genre in Model.genres)
-        {
-            <h4>@genre.Name</h4>
-        }
-        @if (User.IsInRole("Admin"))
-        {
-            <a href="javascript:void(0)" onclick="DeleteBook(@Model.BookId)" class="btn-primary">Delete</a>
-           
-        }
-       @if (User.IsInRole("Admin"))
-        {
-            <a href="@Url.Action("EditBook", "Books", new {editId = Model.BookId})" class="btn btn-primary">Edit</a>
-        }
+
+    <div class="card p-4 shadow">
+        <div class="row g-0 align-items-center">
+            <!-- Book Cover Image -->
+            <div class="col-md-4 text-center">
+                <img src="@Model.BookCover" class="img-fluid rounded" alt="Book Cover" style="width: 18rem; height: 18rem; object-fit: cover;">
+            </div>
+
+            <!-- Book Details -->
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h3 class="card-title">@Model.BookName</h3>
+                    <p class="card-text"><strong>Description:</strong> @Model.Description</p>
+                    <p class="card-text"><strong>Author:</strong> @Model.BookAuthorName</p>
+                    <p class="card-text"><strong>Reading Time:</strong> @Model.BookReadingTime</p>
+                    <p class="card-text"><strong>Pages:</strong> @Model.BookPages</p>
+                    <p class="card-text"><strong>Stock Left:</strong> @Model.AmountInStock</p>
+                    <p class="card-text"><strong>Category:</strong> @Model.Category</p>
+
+                    <!-- Display Genres -->
+                    <p class="card-text">
+                        <strong>Genres:</strong>
+                        @if (!Model.genres.Any())
+                        {
+                            <span>No genres listed.</span>
+                        }
+                        else
+                        {
+                            @foreach (var genre in Model.genres)
+                            {
+                                <span class="badge bg-secondary">@genre.Name</span>
+                            }
+                        }
+                    </p>
+
+                    <!-- Admin Actions -->
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a href="javascript:void(0)" onclick="DeleteBook(@Model.BookId)" class="btn btn-danger me-2">Delete</a>
+                        <a href="@Url.Action("EditBook", "Books", new {editId = Model.BookId})" class="btn btn-primary">Edit</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comment Section -->
+    <div class="card mt-4 p-4 shadow">
         <h3>Comment Section</h3>
         <hr />
-        @{
-            await Html.RenderPartialAsync("_CreateComment", new FInalProject.ViewModels.CreateCommentViewModel
-            {
-                BookId = Model.BookId
-            });
-        }
-        <hr />
 
-        @if(Model.comments == null)
+        @await Html.PartialAsync("_CreateComment", new FInalProject.ViewModels.CreateCommentViewModel
+   {
+       BookId = Model.BookId
+   })
+
+        <hr />
+        @if (Model.comments == null || !Model.comments.Any())
         {
-            <h2>No comments yet</h2>
+            <h4 class="text-muted">No comments yet</h4>
         }
         else
         {
-            @foreach(var comment in Model.comments)
+            @foreach (var comment in Model.comments)
             {
-                <label for="UserName">User name:</label>
-                <h4 class="UserName">@comment.UserName</h4>
-                <h4 class="Description">@comment.Description</h4>
+                <div class="border-bottom py-2">
+                    <h5 class="fw-bold">@comment.UserName</h5>
+                    <p>@comment.Description</p>
+                </div>
             }
         }
     </div>
-</center>
+</div>
+
 @section Scripts {
     <script src="~/js/site.js"></script>
 }

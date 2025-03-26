@@ -1,78 +1,91 @@
-﻿﻿@using FInalProject.ViewModels
+﻿@using FInalProject.ViewModels
 @model BookCreationViewModel
+
 @{
     ViewData["Title"] = "Book Creation";
 }
-<header>
-    <h1>Book creation</h1>
-</header>
-<form asp-controller="Books" asp-action="CreateABook" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger">
-    </div>
-    <label for="BookName">Name</label>
-    <input asp-for="Name" type="text" id="BookName" />
-    <span asp-validation-for="Name" class="text-danger"></span>
-    <br />
-    <hr />
-    <label for="BookAuthor">Author</label>
-    <input asp-for="AuthorName" type="text" id="AuthorName" />
-    <span asp-validation-for="AuthorName" class="text-danger"></span>
-    <br />
-    <hr />
 
-    <label for="SelectedGenreIds">Genres:</label>
-    <select asp-for="SelectedGenreIds" class="form-select" multiple="multiple">
-        @foreach(var genre in Model.GenreOptions)
-        {
-            <option value="@genre.Id">@genre.Name</option>
-        }
-    </select>
-    <hr />
-    <label for="Category">Pick a category:</label>
-    <select asp-for="Category" class="form-select">
-        <option value="Education">Education</option>
-        <option value="Comics">Comics</option>
-        <option value="Newspaper">Newspaper</option>
-        <option value="Magazine">Magazine</option>
-        <option value="Books">Book</option>
-    </select>
-    <hr />
+<div class="container mt-4">
+    <header class="text-center mb-4">
+        <h1 class="fw-bold">Create a New Book</h1>
+    </header>
 
-    <label for="BookDescription">Description</label>
-    <input asp-for="Description" type="text" id="BookDescription" />
-    <span asp-validation-for="Description" class="text-danger"></span>
-    <br />
-    <hr />
+    <form asp-controller="Books" asp-action="CreateABook" method="post" class="border p-4 rounded shadow bg-white">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-    <label for="BookReadingTime">Reading time</label>
-    <input asp-for="ReadingTime" type="text" id="BookReadingTime" />
-    <span asp-validation-for="ReadingTime" class="text-danger"></span>
-    <br />
-    <hr />
+        <div class="mb-3">
+            <label for="BookName" class="form-label">Book Name</label>
+            <input asp-for="Name" type="text" id="BookName" class="form-control" placeholder="Enter book name..." />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
 
-    <label for="AmountInStock">Amount avaible: </label>
-    <input asp-for="AmountInStock" type="text" id="AmountInStock" />
-    <span asp-validation-for="AmountInStock" class="text-danger"></span>
-    <br />
-    <hr />
+        <div class="mb-3">
+            <label for="BookAuthor" class="form-label">Author</label>
+            <input asp-for="AuthorName" type="text" id="BookAuthor" class="form-control" placeholder="Enter author's name..." />
+            <span asp-validation-for="AuthorName" class="text-danger"></span>
+        </div>
 
-    <label for="BookCoverImage">Cover</label>
-    <input asp-for="CoverImage" type="text" id="BookCoverIamge" />
-    <span asp-validation-for="CoverImage" class="text-danger"></span>
-    <br />
-    <hr />
+        <div class="mb-3">
+            <label for="SelectedGenreIds" class="form-label">Genres</label>
+            <select asp-for="SelectedGenreIds" class="form-select" multiple>
+                @foreach (var genre in Model.GenreOptions)
+                {
+                    <option value="@genre.Id">@genre.Name</option>
+                }
+            </select>
+        </div>
 
-    <label for="BookPages">Pages</label>
-    <input asp-for="Pages" type="text" id="BookPages" />
-    <span asp-validation-for="Pages" class="text-danger"></span>
-    <br />
-    <hr />
+        <div class="mb-3">
+            <label for="Category" class="form-label">Pick a Category</label>
+            <select asp-for="Category" class="form-select">
+                <option value="Education">Education</option>
+                <option value="Comics">Comics</option>
+                <option value="Newspaper">Newspaper</option>
+                <option value="Magazine">Magazine</option>
+                <option value="Books">Book</option>
+            </select>
+        </div>
 
-    <br />
+        <div class="mb-3">
+            <label for="BookDescription" class="form-label">Description</label>
+            <textarea asp-for="Description" id="BookDescription" class="form-control" placeholder="Write a short description..." rows="3"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
 
-    <input type="submit" value="Submit" />
-</form>
+        <div class="mb-3">
+            <label for="BookPages" class="form-label">Pages</label>
+            <input asp-for="Pages" type="text" id="BookPages" class="form-control" placeholder="Number of pages..." />
+            <span asp-validation-for="Pages" class="text-danger"></span>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="BookReadingTime" class="form-label">Reading Time (hours)</label>
+                <input asp-for="ReadingTime" type="text" id="BookReadingTime" class="form-control" />
+                <span asp-validation-for="ReadingTime" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label for="AmountInStock" class="form-label">Amount Available</label>
+                <input asp-for="AmountInStock" type="text" id="AmountInStock" class="form-control" />
+                <span asp-validation-for="AmountInStock" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="BookCoverImage" class="form-label">Cover Image URL</label>
+            <input asp-for="CoverImage" type="text" id="BookCoverImage" class="form-control" placeholder="Enter cover image URL..." />
+            <span asp-validation-for="CoverImage" class="text-danger"></span>
+        </div>
+
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary px-5 py-2 fw-bold">
+                <i class="bi bi-plus-circle me-2"></i> Submit
+            </button>
+        </div>
+    </form>
+</div>
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    
 }

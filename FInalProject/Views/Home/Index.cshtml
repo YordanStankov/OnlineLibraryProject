@@ -9,10 +9,25 @@
         <p>login or register to use the library</p>
     }
 </div>
-<div>
-    <a href="@Url.Action("AllBooks", "Books", new {modifier = 1})" class="btn btn-primary">Magazine</a>
-    <a href="@Url.Action("AllBooks", "Books", new {modifier = 2})" class="btn btn-primary">Newspaper</a>
-    <a href="@Url.Action("AllBooks", "Books", new {modifier = 3})" class="btn btn-primary">Comics</a>
-    <a href="@Url.Action("AllBooks", "Books", new {modifier = 4})" class="btn btn-primary">Educational books</a>
-    <a href="@Url.Action("AllBooks", "Books", new {modifier = 5})" class="btn btn-primary">Books</a>
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="row justify-content-center">
+        @foreach (var category in new[]
+        {
+        new { Name = "Magazine", Modifier = 1 },
+        new { Name = "Newspaper", Modifier = 2 },
+        new { Name = "Comics", Modifier = 3 },
+        new { Name = "Educational Books", Modifier = 4 },
+        new { Name = "Books", Modifier = 5 }
+        })
+        {
+            <div class="col-md-6 col-lg-4 mb-4 d-flex justify-content-center">
+                <div class="card text-center shadow-lg" style="width: 18rem; height: 12rem;">
+                    <div class="card-body d-flex flex-column justify-content-center">
+                        <h5 class="card-title">@category.Name</h5>
+                        <a href="@Url.Action("AllBooks", "Books", new {modifier = category.Modifier})" class="btn btn-primary mt-2">Browse</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
