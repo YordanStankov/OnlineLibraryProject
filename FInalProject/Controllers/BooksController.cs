@@ -27,7 +27,7 @@ namespace FInalProject.Controllers
         {
             if(modifier == 0)
             {
-                var books = await _booksService.GetAllBooksAsync(User);
+                var books = await _booksService.GetAllBooksAsync();
                 if (books == null)
                 {
                     return RedirectToAction("LoginPlease", "UserErrors");

@@ -11,16 +11,33 @@ namespace FInalProject.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<User> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;    
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public HomeController(ILogger<HomeController> logger, UserManager<User> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext context)
         {
             _logger = logger;
             _userManager = userManager;
             _roleManager = roleManager;
+            _context = context; 
+
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var currUser = await _userManager.GetUserAsync(User);
+            if (currUser == null)
+            {
+                return View();
+            }
+            var roles = await _userManager.GetRolesAsync(currUser);
+            if(currUser != null)
+            {
+                if (roles == null)
+                {
+                    await _userManager.AddToRoleAsync(currUser, "User");
+                    await _context.SaveChangesAsync();
+                }
+            }
             return View();
         } 
 

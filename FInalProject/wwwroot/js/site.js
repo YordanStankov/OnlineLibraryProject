@@ -16,3 +16,20 @@
             .catch(error => console.error("Error: ", error))
         }
     }
+
+function BorrowBook(borrowedId) {
+        fetch(`/BookOperations/BorrowBook?borrowedId=${borrowedId}`, {
+            method: "POST"
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.succes) {
+                    alert("Book borrowed check your account");
+                    window.location.href = data.redirectUrl;
+                }
+                else {
+                    alert("Womp womp didn't borrow" + data.message)
+                }
+            })
+            .catch(error => console.error("Error: ", error))
+    }

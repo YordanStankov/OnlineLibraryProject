@@ -11,7 +11,7 @@ namespace FInalProject.Services
     {
         Task<List<BookListViewModel>> GetAllBooksFromSpecificCategoryAsync(int modifier);
         Task<BookCreationViewModel> getBookInfoAsync(int editId);
-        Task<List<BookListViewModel>> GetAllBooksAsync(ClaimsPrincipal user);
+        Task<List<BookListViewModel>> GetAllBooksAsync();
         Task<BookFocusViewModel> GetBookFocusAsync(int id);
         Task<BookCreationViewModel> GetBookCreationViewModelAsync();
         Task<int> CreateBookAsync(BookCreationViewModel model);
@@ -27,18 +27,8 @@ namespace FInalProject.Services
             _userManager = userManager;
         }
 
-        public async Task<List<BookListViewModel>> GetAllBooksAsync(ClaimsPrincipal user)
+        public async Task<List<BookListViewModel>> GetAllBooksAsync()
         {
-            var currUser = await _userManager.GetUserAsync(user);
-            if (currUser == null)
-            {
-                return null;
-            }
-            else if (await _userManager.GetRolesAsync(currUser) == null)
-            {
-                await _userManager.AddToRoleAsync(currUser, "User");
-            }
-
             return await _context.Books
                 .AsNoTracking()
                 .Include(a => a.Author)

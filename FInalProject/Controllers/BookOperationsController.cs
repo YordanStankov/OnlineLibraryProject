@@ -64,5 +64,15 @@ namespace FInalProject.Controllers
             }
                 return RedirectToAction("AllBooks", "Books");
         }
+        [HttpPost]
+        public async Task<IActionResult> BorrowBook(int borrowedId)
+        {
+            var response = await _bookOprationsService.BorrowBookAsync(borrowedId, User);
+            if(response == true)
+            {
+                return Json(new { succes = true, redirectUrl = Url.Action("AllBooks", "Books") });
+            }
+            return Json(new { succes = false, message = "Book not found" });
+        }
     }
 }

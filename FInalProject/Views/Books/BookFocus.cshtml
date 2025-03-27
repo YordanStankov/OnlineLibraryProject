@@ -49,6 +49,10 @@
                         <a href="javascript:void(0)" onclick="DeleteBook(@Model.BookId)" class="btn btn-danger me-2">Delete</a>
                         <a href="@Url.Action("EditBook", "Books", new {editId = Model.BookId})" class="btn btn-primary">Edit</a>
                     }
+                    @if (User.IsInRole("User"))
+                    {
+                        <a href="javascript:void(0)" onclick="BorrowBook(@Model.BookId)" class="btn btn-primary">Borrow</a>
+                    }
                 </div>
             </div>
         </div>
