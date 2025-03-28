@@ -30,14 +30,10 @@ namespace FInalProject.Controllers
                 return View();
             }
             var roles = await _userManager.GetRolesAsync(currUser);
-            if(currUser != null)
-            {
-                if (roles == null)
+                if (!roles.Contains("User") && !roles.Contains("Admin"))
                 {
                     await _userManager.AddToRoleAsync(currUser, "User");
-                    await _context.SaveChangesAsync();
                 }
-            }
             return View();
         } 
 

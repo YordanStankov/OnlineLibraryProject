@@ -1,8 +1,11 @@
-﻿@using FInalProject.ViewModels;
+﻿@using FInalProject.ViewModels
+@using Microsoft.AspNetCore.Identity
 @model BookFocusViewModel;
-
+@inject UserManager<User> userManager
 @{
     ViewBag.Title = "Book Focus";
+    var currUser = await userManager.GetUserAsync(User);
+   
 }
 
 <div class="container mt-4">
@@ -49,7 +52,7 @@
                         <a href="javascript:void(0)" onclick="DeleteBook(@Model.BookId)" class="btn btn-danger me-2">Delete</a>
                         <a href="@Url.Action("EditBook", "Books", new {editId = Model.BookId})" class="btn btn-primary">Edit</a>
                     }
-                    @if (User.IsInRole("User"))
+                    @if (await userManager.IsInRoleAsync(currUser, "User"))
                     {
                         <a href="javascript:void(0)" onclick="BorrowBook(@Model.BookId)" class="btn btn-primary">Borrow</a>
                     }

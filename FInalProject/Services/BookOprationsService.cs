@@ -13,7 +13,7 @@ namespace FInalProject.Services
 {
     public interface IBookOprationsService
     {
-        Task<bool> BorrowBookAsync(int borrowId, ClaimsPrincipal User);
+        Task<bool> BorrowBookAsync(int borrowId, ClaimsPrincipal Use);
         Task<bool> EditBookAsync(BookCreationViewModel model);
         Task<List<BookListViewModel>> ReturnSearchResultsAync(string searchedString);
         Task<bool> DeleteBookAsync(int doomedId);
@@ -33,6 +33,8 @@ namespace FInalProject.Services
         public async Task<bool> BorrowBookAsync(int borrowedId, ClaimsPrincipal user)
         {
             var book = await _context.Books.FirstOrDefaultAsync(b => b.Id == borrowedId);
+            book.DateTaken = DateTime.Now;
+            book.UntillReturn = DateTime.Now.AddDays(14);
             book.AmountInStock -= 1;
             var userId = _userManager.GetUserId(user);
             var borrowedBook = new BorrowedBook

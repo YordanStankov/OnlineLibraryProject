@@ -16,15 +16,21 @@ namespace FInalProject.Controllers
     public class BooksController : Controller
     {
         private readonly IBooksService _booksService;
+        private readonly UserManager<User> _userManager;
 
-        public BooksController(IBooksService bookService)
+       
+
+        public BooksController(IBooksService bookService, UserManager<User> userManager)
         {
             _booksService = bookService;
+            _userManager = userManager;
         }
 
         [HttpGet]
         public async Task<IActionResult> AllBooks(int modifier)
         {
+            var viewUser = await _userManager.GetUserAsync(User);
+            ViewBag.User = viewUser;  
             if(modifier == 0)
             {
                 var books = await _booksService.GetAllBooksAsync();

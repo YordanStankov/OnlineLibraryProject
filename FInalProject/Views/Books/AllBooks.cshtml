@@ -9,6 +9,10 @@
     <hr />
     @await Html.PartialAsync("_SearchBarPartial")
 </header>
+@if (User.IsInRole("User"))
+{
+    <h1>Please</h1>
+}
 
 @if (Model.Count > 0)
 {
