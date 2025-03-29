@@ -29,8 +29,7 @@ namespace FInalProject.Controllers
         [HttpGet]
         public async Task<IActionResult> AllBooks(int modifier)
         {
-            var viewUser = await _userManager.GetUserAsync(User);
-            ViewBag.User = viewUser;  
+              
             if(modifier == 0)
             {
                 var books = await _booksService.GetAllBooksAsync();
@@ -80,7 +79,17 @@ namespace FInalProject.Controllers
         [HttpGet]
         public async Task<IActionResult> BookFocus(int id)
         {
-            var focusedBook = await _booksService.GetBookFocusAsync(id);
+            var viewUser = await _userManager.GetUserAsync(User);
+            if(await _userManager.IsInRoleAsync(viewUser, "User"))
+            {
+                ViewBag.IsHe = true; 
+            }
+            else
+            {
+                ViewBag.IsHe = false;  
+            }
+
+                var focusedBook = await _booksService.GetBookFocusAsync(id);
             if (focusedBook == null)
             {
                 throw new ArgumentException("Book not found");

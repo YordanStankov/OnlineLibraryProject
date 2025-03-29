@@ -32,6 +32,7 @@ namespace FInalProject
 
             //Registering the services
             builder.Services.AddScoped<IBooksService, BooksService>();
+            builder.Services.AddScoped<IHomeService, HomeService>();
             builder.Services.AddScoped<IBookOprationsService, BookOprationsService>();
             builder.Services.AddScoped<IGenreService, GenreService>();
            

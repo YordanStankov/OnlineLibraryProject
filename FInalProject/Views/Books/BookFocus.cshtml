@@ -1,11 +1,8 @@
 ﻿@using FInalProject.ViewModels
-@using Microsoft.AspNetCore.Identity
-@model BookFocusViewModel;
-@inject UserManager<User> userManager
+@model BookFocusViewModel
+
 @{
     ViewBag.Title = "Book Focus";
-    var currUser = await userManager.GetUserAsync(User);
-   
 }
 
 <div class="container mt-4">
@@ -52,7 +49,7 @@
                         <a href="javascript:void(0)" onclick="DeleteBook(@Model.BookId)" class="btn btn-danger me-2">Delete</a>
                         <a href="@Url.Action("EditBook", "Books", new {editId = Model.BookId})" class="btn btn-primary">Edit</a>
                     }
-                    @if (await userManager.IsInRoleAsync(currUser, "User"))
+                    @if (ViewBag.IsHe == true)
                     {
                         <a href="javascript:void(0)" onclick="BorrowBook(@Model.BookId)" class="btn btn-primary">Borrow</a>
                     }

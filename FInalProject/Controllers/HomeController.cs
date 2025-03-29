@@ -4,36 +4,21 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using FInalProject.Data;
 using Microsoft.AspNetCore.Identity;
+using FInalProject.Services;
 
 namespace FInalProject.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-        private readonly UserManager<User> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly ApplicationDbContext _context;
-
-        public HomeController(ILogger<HomeController> logger, UserManager<User> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext context)
+        private readonly IHomeService _homeService;
+        public HomeController(IHomeService homeService)
         {
-            _logger = logger;
-            _userManager = userManager;
-            _roleManager = roleManager;
-            _context = context; 
-
+            _homeService = homeService;
         }
+
         public async Task<IActionResult> Index()
         {
-            var currUser = await _userManager.GetUserAsync(User);
-            if (currUser == null)
-            {
-                return View();
-            }
-            var roles = await _userManager.GetRolesAsync(currUser);
-                if (!roles.Contains("User") && !roles.Contains("Admin"))
-                {
-                    await _userManager.AddToRoleAsync(currUser, "User");
-                }
+            var assigned = await _homeService.AssignRoleAsync(User);
             return View();
         } 
 
