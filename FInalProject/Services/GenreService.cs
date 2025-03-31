@@ -12,6 +12,7 @@ namespace FInalProject.Services
         Task<List<BookListViewModel>> GetAllBooksOfCertainGenre(int genreId);
         Task<bool> AddGenreAsync(string Name);
         Task<List<Genre>> GetGenreListAsync();
+        Task<Genre> EditGenreAsync(int genreEditId);
     }
 
 
@@ -59,6 +60,11 @@ namespace FInalProject.Services
                 return true;
             }
             return false; 
+        }
+
+        public Task<Genre> EditGenreAsync(int genreEditId)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<List<BookListViewModel>> GetAllBooksOfCertainGenre(int genreId)

@@ -57,9 +57,9 @@ namespace FInalProject.Controllers
             throw new ArgumentException("couldn't delete genre");
         }
         
-        public async Task<IActionResult> EditGenre()
+        public async Task<IActionResult> EditGenre(int genreEditId)
         {
-            return RedirectToAction("GenreList");
+            
         }
     }
 }

@@ -41,7 +41,7 @@
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton-@genre.Id">
                                             <li>
-                                                <a class="dropdown-item" href="@Url.Action("EditGenre", "Genre", new { editId = genre.Id })">
+                                                <a class="dropdown-item" onclick="RenderEditPartial()" href="@Url.Action("EditGenre", "Genre", new { genreEditId = genre.Id })">
                                                     <i class="bi bi-pencil-square me-2"></i>Edit
                                                 </a>
                                             </li>

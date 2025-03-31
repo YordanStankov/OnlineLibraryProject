@@ -3,4 +3,18 @@
 @{
     ViewBag.Title = "Edit Genre Partial";
 }
+<form action="@Url.Action("EditGenre", "Genre")" method="post" class="p-3 border rounded shadow-sm bg-white">
+    <div class="mb-3">
+        <input type="text" id="genreName" name="name" class="form-control" placeholder="Correct genre name..." required />
+    </div>
 
+    <div class="text-end">
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-plus-circle me-2"></i> Add Genre
+        </button>
+    </div>
+</form>
+
+@section scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

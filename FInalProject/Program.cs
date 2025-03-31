@@ -35,8 +35,9 @@ namespace FInalProject
             builder.Services.AddScoped<IHomeService, HomeService>();
             builder.Services.AddScoped<IBookOprationsService, BookOprationsService>();
             builder.Services.AddScoped<IGenreService, GenreService>();
-           
+            builder.Services.AddScoped<IUserOperationsService, UserOperationsService>();
 
+            //the app gets built
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -50,8 +51,11 @@ namespace FInalProject
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            //calling the seeding methods in case of empty db
             app.Seeding();
             app.SeedRolesAndAdminAsync();
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
