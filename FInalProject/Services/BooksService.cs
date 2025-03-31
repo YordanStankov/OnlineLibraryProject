@@ -18,17 +18,20 @@ namespace FInalProject.Services
     }
     public class BooksService : IBooksService
     {
+        public readonly ILogger<BooksService> _logger;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager; 
 
-        public BooksService(ApplicationDbContext context, UserManager<User> userManager)
+        public BooksService(ApplicationDbContext context, UserManager<User> userManager, ILogger<BooksService> logger)
         {
             _context = context;
             _userManager = userManager;
+            _logger = logger;
         }
 
         public async Task<List<BookListViewModel>> GetAllBooksAsync()
         {
+            _logger.LogInformation("GETTING ALL BOOKS");
             return await _context.Books
                 .AsNoTracking()
                 .Include(a => a.Author)
@@ -45,10 +48,9 @@ namespace FInalProject.Services
                     Genres = n.BookGenres.Select(bg => bg.Genre.Name).ToList(),
                 }).ToListAsync();
         }
-
-
         public async Task<int> CreateBookAsync(BookCreationViewModel model)
         {
+            _logger.LogDebug("LOG DEBUG CREATING BOOK ASYNC");
             if(model == null || model.SelectedGenreIds == null)
             {
                 throw new ArgumentException("Invalid book data or no selected genres");
@@ -87,6 +89,7 @@ namespace FInalProject.Services
         
         public async Task<BookCreationViewModel> GetBookCreationViewModelAsync()
         {
+            _logger.LogInformation("FILLING THE VIEW WITH GENRE OPTIONS");
             var genres = await _context.Genres.AsNoTracking().ToListAsync();
             return new BookCreationViewModel
             {
@@ -96,6 +99,7 @@ namespace FInalProject.Services
 
         public async Task<BookFocusViewModel> GetBookFocusAsync(int id)
         {
+            _logger.LogInformation("GETTING BOOK FOCUS FILLING THE VIEW");
             var currBook = await _context.Books
                .AsNoTracking()
               .Include(b => b.Favourites)
@@ -159,6 +163,7 @@ namespace FInalProject.Services
 
         public async Task<List<BookListViewModel>> GetAllBooksFromSpecificCategoryAsync(int modifier)
         {
+            _logger.LogInformation("GETTING ALL BOOKS FROM A CERTAIN GENRE FILLING THE VIEW");
             var specificBooks = await _context.Books
                 .AsNoTracking()
                 .Include(a => a.Author)

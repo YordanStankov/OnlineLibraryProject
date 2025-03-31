@@ -21,17 +21,20 @@ namespace FInalProject.Services
     }
     public class BookOprationsService : IBookOprationsService
     {
+        private readonly ILogger<BookOprationsService> _logger;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
 
-        public BookOprationsService(ApplicationDbContext context, UserManager<User> userManager)
+        public BookOprationsService(ApplicationDbContext context, UserManager<User> userManager, ILogger<BookOprationsService> logger)
         {
             _context = context;
             _userManager = userManager;
+            _logger = logger;
         }
 
         public async Task<bool> BorrowBookAsync(int borrowedId, ClaimsPrincipal user)
         {
+            _logger.LogInformation("BORROWING BOOK");
             var book = await _context.Books.FirstOrDefaultAsync(b => b.Id == borrowedId);
             book.DateTaken = DateTime.Now;
             book.UntillReturn = DateTime.Now.AddDays(14);
@@ -49,6 +52,7 @@ namespace FInalProject.Services
 
         public async Task<int> CreateCommentAsync(CreateCommentViewModel model, ClaimsPrincipal user)
         {
+            _logger.LogInformation("CREATING COMMENT");
             var userId = _userManager.GetUserId(user);
             if(userId == null)
             {
@@ -68,6 +72,7 @@ namespace FInalProject.Services
 
         public async Task<bool> DeleteBookAsync(int doomedId)
         {
+            _logger.LogInformation("DELETING BOOK");
             var doomedBook = await _context.Books.
                 Include(b => b.Comments)
                 .Include(b => b.BookGenres)
@@ -77,13 +82,15 @@ namespace FInalProject.Services
             {
                 _context.Remove(doomedBook);
                 await _context.SaveChangesAsync();
-                return true; 
+                return true;
+                _logger.LogInformation("BLITZED THE BOOK");
             }
             return false;
         }
 
         public async Task<bool> EditBookAsync(BookCreationViewModel model)
         {
+            _logger.LogInformation("EDITING BOOK");
             var bookToEdit = await _context.Books
                 .Include(bte => bte.Author)
                 .Include(bte => bte.BookGenres)
@@ -93,6 +100,7 @@ namespace FInalProject.Services
             if(model == null || model.SelectedGenreIds == null)
             {
                 return false;
+                _logger.LogError("AN ERROR OCCURED IN EDITING BOOKS");
             }
 
             bookToEdit.Name = model.Name;
@@ -117,11 +125,13 @@ namespace FInalProject.Services
             }
 
             await _context.SaveChangesAsync();
+            _logger.LogInformation("EDITED BOOK");
             return true; 
         }
 
         public async Task<List<BookListViewModel>> ReturnSearchResultsAync(string searchedString)
         {
+            _logger.LogInformation("SEARCHING FOR BOOKS"); 
             string loweredSearch = searchedString.ToLower();
             return await _context.Books
                 .Include(b => b.Author)
