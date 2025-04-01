@@ -56,10 +56,19 @@ namespace FInalProject.Controllers
             }
             throw new ArgumentException("couldn't delete genre");
         }
-        
+
+        [HttpGet]
         public async Task<IActionResult> EditGenre(int genreEditId)
         {
-            
+            var model = await _genreService.ProvideGenreForPartialAsync(genreEditId);
+            return PartialView("_EditGenre", model); 
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveChangesToGenre(GenreEditViewModel model)
+        {
+            var succes = await _genreService.SaveChangesToGenreAsync(model);
+            return RedirectToAction("GenreList"); 
         }
     }
 }

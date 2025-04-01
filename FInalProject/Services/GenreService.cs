@@ -9,10 +9,13 @@ namespace FInalProject.Services
     public interface IGenreService 
     {
         Task<bool> DeleteGenreAsync(int doomedGenreId);
-        Task<List<BookListViewModel>> GetAllBooksOfCertainGenre(int genreId);
         Task<bool> AddGenreAsync(string Name);
+
+        Task<List<BookListViewModel>> GetAllBooksOfCertainGenre(int genreId);
         Task<List<Genre>> GetGenreListAsync();
-        Task<Genre> EditGenreAsync(int genreEditId);
+
+        Task<GenreEditViewModel> ProvideGenreForPartialAsync(int genreEditId);
+        Task<bool> SaveChangesToGenreAsync(GenreEditViewModel model);
     }
 
 
@@ -29,6 +32,7 @@ namespace FInalProject.Services
             _logger = logger;
         }
 
+        //Adding and deleting genres
         public async Task<bool> AddGenreAsync(string Name)
         {
             _logger.LogInformation("ADDING GENRE METHOD");
@@ -52,19 +56,22 @@ namespace FInalProject.Services
         {
             _logger.LogInformation("DELETE GENRE METHOD");
             var doomedGenre = await _context.Genres.FirstOrDefaultAsync(g => g.Id == doomedGenreId);
-            if(doomedGenre != null)
+            if (doomedGenre != null)
             {
                 _context.Remove(doomedGenre);
                 await _context.SaveChangesAsync();
                 _logger.LogInformation("REMOVED THE GENRE");
                 return true;
             }
-            return false; 
+            return false;
         }
 
-        public Task<Genre> EditGenreAsync(int genreEditId)
+        //Providing lists of genres
+        public async Task<List<Genre>> GetGenreListAsync()
         {
-            throw new NotImplementedException();
+            _logger.LogInformation("GETING ALL GENRES METHOD");
+            var genreList = await _context.Genres.AsNoTracking().ToListAsync();
+            return genreList;
         }
 
         public async Task<List<BookListViewModel>> GetAllBooksOfCertainGenre(int genreId)
@@ -80,26 +87,45 @@ namespace FInalProject.Services
                     CoverImage = bg.Book.CoverImage,
                     Pages = bg.Book.Pages,
                     Name = bg.Book.Name,
-                    Genres = new List<string> { bg.Genre.Name}
+                    Genres = new List<string> { bg.Genre.Name }
                 }).ToListAsync();
-            if(correctBooks == null)
+            if (correctBooks == null)
             {
                 _logger.LogInformation("NO BOOKS FROM THIS GENRE");
-                return null; 
+                return null;
             }
             else
             {
                 _logger.LogInformation("ALL BOOKS FROM THE CORRECT GENRE RETURNED");
-                return correctBooks; 
+                return correctBooks;
             }
         }
 
+        
 
-        public async Task<List<Genre>> GetGenreListAsync()
+        //Genre editing
+        public async Task<GenreEditViewModel> ProvideGenreForPartialAsync(int genreEditId)
         {
-            _logger.LogInformation("GETING ALL GENRES METHOD");
-            var genreList = await _context.Genres.AsNoTracking().ToListAsync();
-            return genreList;
+            var selectedGenre = await _context.Genres.FirstOrDefaultAsync(g => g.Id == genreEditId);
+            return new GenreEditViewModel
+            {
+                Id = selectedGenre.Id,
+                Name = selectedGenre.Name
+            };
+        }
+
+        public async Task<bool> SaveChangesToGenreAsync(GenreEditViewModel model)
+        {
+            var genreNeedsEdit = await _context.Genres.FirstOrDefaultAsync(g => g.Id == model.Id);
+            if(genreNeedsEdit != null)
+            {
+                genreNeedsEdit.Name = model.Name;
+                _logger.LogInformation("CHANGED THE NAME OF THE GENRE WOOOOOOOOOOOO");
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            _logger.LogError("COULDNT FIND GENRE WHEN SAVING THE CHANGES TO IT");
+            return false;
         }
     }
 }

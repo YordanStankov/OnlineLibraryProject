@@ -5,8 +5,6 @@
     ViewBag.Title = "Genre List";
 }
 
-
-
 <div class="container mt-4">
     <header class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="fw-bold">Genres</h1>
@@ -18,55 +16,92 @@
     }
     @if (!User.Identity.IsAuthenticated)
     {
-       <h2>Login to use the library</h2> 
+        <h2>Login to use the library</h2>
     }
-    
-        else if(Model.Count > 0){
-            <div class="row">
-                @foreach (var genre in Model)
-                {
-                    <div class="col-md-6 col-lg-4">
-                        <div class="card shadow-sm border-0 rounded p-3 mb-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <a href="@Url.Action("SpecificGenreList", "Genre", new { genreId = genre.Id })"
-                                class="btn btn-outline-primary fw-bold px-4 py-2 w-100 text-center">
-                                    @genre.Name
-                                </a>
+    else if (Model.Count > 0)
+    {
+        <div class="row">
+            @foreach (var genre in Model)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="card shadow-sm border-0 rounded p-3 mb-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="@Url.Action("SpecificGenreList", "Genre", new { genreId = genre.Id })"
+                               class="btn btn-outline-primary fw-bold px-4 py-2 w-100 text-center">
+                                @genre.Name
+                            </a>
 
-                                @if (User.IsInRole("Admin"))
-                                {
-                                    <div class="dropdown ms-2">
-                                        <button class="btn btn-light border dropdown-toggle" type="button" id="dropdownMenuButton-@genre.Id" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="bi bi-three-dots-vertical"></i>
-                                        </button>
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton-@genre.Id">
-                                            <li>
-                                                <a class="dropdown-item" onclick="RenderEditPartial()" href="@Url.Action("EditGenre", "Genre", new { genreEditId = genre.Id })">
-                                                    <i class="bi bi-pencil-square me-2"></i>Edit
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <form method="post" action="@Url.Action("DeleteGenre", "Genre", new { doomedGenreId = genre.Id })"
-                                                onsubmit="return confirm('Are you sure you want to delete this genre?');">
-                                                    <button type="submit" class="dropdown-item text-danger">
-                                                        <i class="bi bi-trash3-fill me-2"></i>Delete
-                                                    </button>
-                                                </form>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                }
-                            </div>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <div class="dropdown ms-2">
+                                    <button class="btn btn-light border dropdown-toggle" type="button" id="dropdownMenuButton-@genre.Id" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton-@genre.Id">
+                                        <li>
+                                            <a class="dropdown-item edit-genre" href="#" onclick="loadEditGenre(@genre.Id)">
+                                                <i class="bi bi-pencil-square me-2"></i>Edit
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <form method="post" action="@Url.Action("DeleteGenre", "Genre", new { doomedGenreId = genre.Id })"
+                                                  onsubmit="return confirm('Are you sure you want to delete this genre?');">
+                                                <button type="submit" class="dropdown-item text-danger">
+                                                    <i class="bi bi-trash3-fill me-2"></i>Delete
+                                                </button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
+                            }
                         </div>
                     </div>
-                }
-            </div>
-        }
+                </div>
+            }
+        </div>
+    }
     else
     {
-     <h2>Currently no existing genres</h2>   
+        <h2>Currently no existing genres</h2>
     }
 </div>
 
-<!-- Ensure Bootstrap Icons is included -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+<!-- Modal HTML (must be included in this view) -->
+<div id="editGenreModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div id="modalBody"></div> <!-- Partial will load here -->
+    </div>
+</div>
+
+<!-- CSS for Modal -->
+<style>
+    .modal {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 20px;
+        box-shadow: 0px 0px 10px gray;
+        z-index: 1000;
+    }
+
+    .modal-content {
+        position: relative;
+    }
+
+    .close {
+        position: absolute;
+        top: 5px;
+        right: 10px;
+        cursor: pointer;
+        font-size: 20px;
+    }
+</style>
+
+@section Scripts {
+    <script src="~/js/site.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+}
