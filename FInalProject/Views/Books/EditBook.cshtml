@@ -1,79 +1,111 @@
-﻿﻿@using FInalProject.ViewModels
+﻿@using FInalProject.ViewModels
 @model BookCreationViewModel
+
 @{
-    ViewData["Title"] = "Edit book";
+    ViewData["Title"] = "Edit Book";
 }
-<header>
-    <h1>Edit Book</h1>
-</header>
-<form asp-controller="BookOperations" asp-action="Edit" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger">
+
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h2 class="text-center mb-0"><i class="fas fa-edit"></i> Edit Book</h2>
+        </div>
+
+        <div class="card-body">
+            <form asp-controller="BookOperations" asp-action="Edit" method="post">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <input type="hidden" asp-for="Id" />
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input asp-for="Name" type="text" class="form-control" id="BookName" placeholder="Enter book name">
+                            <label for="BookName">Book Name</label>
+                        </div>
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input asp-for="AuthorName" type="text" class="form-control" id="AuthorName" placeholder="Enter author name">
+                            <label for="AuthorName">Author</label>
+                        </div>
+                        <span asp-validation-for="AuthorName" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="SelectedGenreIds" class="form-label">Genres</label>
+                        <select asp-for="SelectedGenreIds" class="form-select" multiple>
+                            @foreach (var genre in Model.GenreOptions)
+                            {
+                                <option value="@genre.Id">@genre.Name</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="Category" class="form-label">Category</label>
+                        <select asp-for="Category" class="form-select">
+                            <option value="Education">Education</option>
+                            <option value="Comics">Comics</option>
+                            <option value="Newspaper">Newspaper</option>
+                            <option value="Magazine">Magazine</option>
+                            <option value="Books">Book</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-floating">
+                            <textarea asp-for="Description" class="form-control" id="BookDescription" placeholder="Enter book description"></textarea>
+                            <label for="BookDescription">Description</label>
+                        </div>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                            <input asp-for="ReadingTime" type="text" class="form-control" id="BookReadingTime" placeholder="Reading Time">
+                            <label for="BookReadingTime">Reading Time</label>
+                        </div>
+                        <span asp-validation-for="ReadingTime" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                            <input asp-for="AmountInStock" type="number" class="form-control" id="AmountInStock" placeholder="Stock">
+                            <label for="AmountInStock">Amount Available</label>
+                        </div>
+                        <span asp-validation-for="AmountInStock" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                            <input asp-for="Pages" type="number" class="form-control" id="BookPages" placeholder="Pages">
+                            <label for="BookPages">Pages</label>
+                        </div>
+                        <span asp-validation-for="Pages" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-floating">
+                            <input asp-for="CoverImage" type="text" class="form-control" id="BookCoverImage" placeholder="Enter image URL">
+                            <label for="BookCoverImage">Cover Image URL</label>
+                        </div>
+                        <span asp-validation-for="CoverImage" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-success px-4">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-    <input type="hidden" asp-for="Id" />
-    <label for="BookName">Name</label>
-    <input asp-for="Name" type="text" id="BookName" placeholder="@Model.Name"/>
-    <span asp-validation-for="Name" class="text-danger"></span>
-    <br />
-    <hr />
-    <label for="BookAuthor">Author</label>
-    <input asp-for="AuthorName" type="text" id="AuthorName" placeholder="@Model.Name" />
-    <span asp-validation-for="AuthorName" class="text-danger"></span>
-    <br />
-    <hr />
-    <label for="SelectedGenreIds">Genres:</label>
-    <select asp-for="SelectedGenreIds" class="form-select" multiple="multiple">
-        @foreach (var genre in Model.GenreOptions)
-        {
-            <option value="@genre.Id">@genre.Name</option>
-        }
-    </select>
-    <hr />
+</div>
 
-    <label for="Category">Pick a category:</label>
-    <select asp-for="Category" class="form-select">
-        <option value="Education">Education</option>
-        <option value="Comics">Comics</option>
-        <option value="Newspaper">Newspaper</option>
-        <option value="Magazine">Magazine</option>
-        <option value="Books">Book</option>
-    </select>
-    <hr />
-
-    <label for="BookDescription">Description</label>
-    <input asp-for="Description" type="text" id="BookDescription" placeholder="@Model.Description" />
-    <span asp-validation-for="Description" class="text-danger"></span>
-    <br />
-    <hr />
-
-    <label for="BookReadingTime">Reading time</label>
-    <input asp-for="ReadingTime" type="text" id="BookReadingTime" placeholder="@Model.ReadingTime" />
-    <span asp-validation-for="ReadingTime" class="text-danger"></span>
-    <br />
-    <hr />
-
-    <label for="AmountInStock">Amount avaible: </label>
-    <input asp-for="AmountInStock" type="text" id="AmountInStock" placeholder="@Model.AmountInStock" />
-    <span asp-validation-for="AmountInStock" class="text-danger"></span>
-    <br />
-    <hr />
-
-    <label for="BookCoverImage">Cover</label>
-    <input asp-for="CoverImage" type="text" id="BookCoverIamge" placeholder="@Model.CoverImage" />
-    <span asp-validation-for="CoverImage" class="text-danger"></span>
-    <br />
-    <hr />
-
-    <label for="BookPages">Pages</label>
-    <input asp-for="Pages" type="text" id="BookPages" placeholder="@Model.Pages" />
-    <span asp-validation-for="Pages" class="text-danger"></span>
-    <br />
-    <hr />
-
-    <br />
-
-    <input type="submit" value="Submit" />
-</form>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-
 }
