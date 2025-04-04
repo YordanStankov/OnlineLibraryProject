@@ -99,8 +99,8 @@ namespace FInalProject.Services
             
             if(model == null || model.SelectedGenreIds == null)
             {
-                return false;
                 _logger.LogError("AN ERROR OCCURED IN EDITING BOOKS");
+                return false;
             }
 
             bookToEdit.Name = model.Name;

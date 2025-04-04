@@ -18,6 +18,9 @@ namespace FInalProject.Data.Seeding
             string AdminEmail = "Admin2108@gmail.com";
             string AdminPassword = "Admin2107$";
 
+            string LibrarianEmail = "NewLibrarian@gmail.com";
+            string LibrarianPassword = "New2107$";
+
             string[] roles = { "Librarian", "User", "Admin"}; 
             foreach (var role in roles)
             {
@@ -26,6 +29,7 @@ namespace FInalProject.Data.Seeding
                     await roleManager.CreateAsync(new IdentityRole(role));
                 }
             }
+
             var adminUser = await userManager.FindByEmailAsync(AdminEmail);
             if (adminUser == null)
             {
@@ -37,6 +41,19 @@ namespace FInalProject.Data.Seeding
             else
             {
                 await userManager.AddToRoleAsync(adminUser, "Admin"); 
+            }
+
+            var LibrarianUser = await userManager.FindByEmailAsync(LibrarianEmail);
+            if (LibrarianUser == null)
+            {
+                LibrarianUser = new User { UserName = LibrarianEmail, Email = LibrarianEmail };
+                await userManager.CreateAsync(LibrarianUser, LibrarianPassword);
+                await userManager.AddToRoleAsync(LibrarianUser, "Librarian");
+                throw new Exception("Librarian not present in db");
+            }
+            else
+            {
+                await userManager.AddToRoleAsync(LibrarianUser, "Librarian");
             }
         }
     }

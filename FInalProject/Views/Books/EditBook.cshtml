@@ -10,101 +10,130 @@
         <div class="card-header bg-primary text-white">
             <h2 class="text-center mb-0"><i class="fas fa-edit"></i> Edit Book</h2>
         </div>
+        @if(User.IsInRole("Admin"))
+        {
+            <div class="card-body">
+                <form asp-controller="BookOperations" asp-action="Edit" method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
-        <div class="card-body">
-            <form asp-controller="BookOperations" asp-action="Edit" method="post">
-                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                    <input type="hidden" asp-for="Id" />
 
-                <input type="hidden" asp-for="Id" />
-
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <input asp-for="Name" type="text" class="form-control" id="BookName" placeholder="Enter book name">
-                            <label for="BookName">Book Name</label>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input asp-for="Name" type="text" class="form-control" id="BookName" placeholder="Enter book name">
+                                <label for="BookName">Book Name</label>
+                            </div>
+                            <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
-                        <span asp-validation-for="Name" class="text-danger"></span>
-                    </div>
 
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <input asp-for="AuthorName" type="text" class="form-control" id="AuthorName" placeholder="Enter author name">
-                            <label for="AuthorName">Author</label>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input asp-for="AuthorName" type="text" class="form-control" id="AuthorName" placeholder="Enter author name">
+                                <label for="AuthorName">Author</label>
+                            </div>
+                            <span asp-validation-for="AuthorName" class="text-danger"></span>
                         </div>
-                        <span asp-validation-for="AuthorName" class="text-danger"></span>
-                    </div>
 
-                    <div class="col-md-6">
-                        <label for="SelectedGenreIds" class="form-label">Genres</label>
-                        <select asp-for="SelectedGenreIds" class="form-select" multiple>
-                            @foreach (var genre in Model.GenreOptions)
-                            {
-                                <option value="@genre.Id">@genre.Name</option>
-                            }
-                        </select>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="Category" class="form-label">Category</label>
-                        <select asp-for="Category" class="form-select">
-                            <option value="Education">Education</option>
-                            <option value="Comics">Comics</option>
-                            <option value="Newspaper">Newspaper</option>
-                            <option value="Magazine">Magazine</option>
-                            <option value="Books">Book</option>
-                        </select>
-                    </div>
-
-                    <div class="col-12">
-                        <div class="form-floating">
-                            <textarea asp-for="Description" class="form-control" id="BookDescription" placeholder="Enter book description"></textarea>
-                            <label for="BookDescription">Description</label>
+                        <div class="col-md-6">
+                            <label for="SelectedGenreIds" class="form-label">Genres</label>
+                            <select asp-for="SelectedGenreIds" class="form-select" multiple>
+                                @foreach (var genre in Model.GenreOptions)
+                                {
+                                    <option value="@genre.Id">@genre.Name</option>
+                                }
+                            </select>
                         </div>
-                        <span asp-validation-for="Description" class="text-danger"></span>
-                    </div>
 
-                    <div class="col-md-4">
-                        <div class="form-floating">
-                            <input asp-for="ReadingTime" type="text" class="form-control" id="BookReadingTime" placeholder="Reading Time">
-                            <label for="BookReadingTime">Reading Time</label>
+                        <div class="col-md-6">
+                            <label for="Category" class="form-label">Category</label>
+                            <select asp-for="Category" class="form-select">
+                                <option value="Education">Education</option>
+                                <option value="Comics">Comics</option>
+                                <option value="Newspaper">Newspaper</option>
+                                <option value="Magazine">Magazine</option>
+                                <option value="Books">Book</option>
+                            </select>
                         </div>
-                        <span asp-validation-for="ReadingTime" class="text-danger"></span>
-                    </div>
 
-                    <div class="col-md-4">
-                        <div class="form-floating">
-                            <input asp-for="AmountInStock" type="number" class="form-control" id="AmountInStock" placeholder="Stock">
-                            <label for="AmountInStock">Amount Available</label>
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <textarea asp-for="Description" class="form-control" id="BookDescription" placeholder="Enter book description"></textarea>
+                                <label for="BookDescription">Description</label>
+                            </div>
+                            <span asp-validation-for="Description" class="text-danger"></span>
                         </div>
-                        <span asp-validation-for="AmountInStock" class="text-danger"></span>
-                    </div>
 
-                    <div class="col-md-4">
-                        <div class="form-floating">
-                            <input asp-for="Pages" type="number" class="form-control" id="BookPages" placeholder="Pages">
-                            <label for="BookPages">Pages</label>
+                        <div class="col-md-4">
+                            <div class="form-floating">
+                                <input asp-for="ReadingTime" type="text" class="form-control" id="BookReadingTime" placeholder="Reading Time">
+                                <label for="BookReadingTime">Reading Time</label>
+                            </div>
+                            <span asp-validation-for="ReadingTime" class="text-danger"></span>
                         </div>
-                        <span asp-validation-for="Pages" class="text-danger"></span>
-                    </div>
 
-                    <div class="col-12">
-                        <div class="form-floating">
-                            <input asp-for="CoverImage" type="text" class="form-control" id="BookCoverImage" placeholder="Enter image URL">
-                            <label for="BookCoverImage">Cover Image URL</label>
+                        <div class="col-md-4">
+                            <div class="form-floating">
+                                <input asp-for="AmountInStock" type="number" class="form-control" id="AmountInStock" placeholder="Stock">
+                                <label for="AmountInStock">Amount Available</label>
+                            </div>
+                            <span asp-validation-for="AmountInStock" class="text-danger"></span>
                         </div>
-                        <span asp-validation-for="CoverImage" class="text-danger"></span>
-                    </div>
-                </div>
 
-                <div class="text-center mt-4">
-                    <button type="submit" class="btn btn-success px-4">
-                        <i class="fas fa-save"></i> Save Changes
-                    </button>
-                </div>
-            </form>
-        </div>
+                        <div class="col-md-4">
+                            <div class="form-floating">
+                                <input asp-for="Pages" type="number" class="form-control" id="BookPages" placeholder="Pages">
+                                <label for="BookPages">Pages</label>
+                            </div>
+                            <span asp-validation-for="Pages" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <input asp-for="CoverImage" type="text" class="form-control" id="BookCoverImage" placeholder="Enter image URL">
+                                <label for="BookCoverImage">Cover Image URL</label>
+                            </div>
+                            <span asp-validation-for="CoverImage" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-success px-4">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        }
+
+        else if (User.IsInRole("Librarian"))
+        {
+             <div class="card-body">
+                <form asp-controller="BookOperations" asp-action="Edit" method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input asp-for="Name" type="text" class="form-control" id="BookName" placeholder="Enter book name">
+                                <label for="BookName">Book Name</label>
+                            </div>
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-success px-4">
+                                <i class="fas fa-save"></i> Save Changes
+                            </button>
+                        </div>
+                </form>
+            </div>
+        }
     </div>
 </div>
+       
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

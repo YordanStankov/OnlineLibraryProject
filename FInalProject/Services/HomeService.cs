@@ -35,7 +35,7 @@ namespace FInalProject.Services
             if (currUser != null)
             {
                 var roles = await _userManager.GetRolesAsync(currUser);
-                if (!roles.Contains("User") && !roles.Contains("Admin"))
+                if (!roles.Contains("User") && !roles.Contains("Admin") && !roles.Contains("Librarian"))
                 {
                     await _userManager.AddToRoleAsync(currUser, "User");
                     _logger.LogInformation($"USER: {currUser} IS NOW A USER");
