@@ -78,12 +78,13 @@ namespace FInalProject.Services
                 .Include(b => b.BookGenres)
                 .Include(b => b.Favourites)
                 .FirstOrDefaultAsync(b => b.Id == doomedId); 
+
             if(doomedBook != null)
             {
                 _context.Remove(doomedBook);
                 await _context.SaveChangesAsync();
-                return true;
                 _logger.LogInformation("BLITZED THE BOOK");
+                return true;
             }
             return false;
         }
@@ -97,36 +98,42 @@ namespace FInalProject.Services
                 .ThenInclude(bte => bte.Genre)
                 .FirstOrDefaultAsync(bte => bte.Id == model.Id);
             
-            if(model == null || model.SelectedGenreIds == null)
+           if(model.editor == 0)
             {
-                _logger.LogError("AN ERROR OCCURED IN EDITING BOOKS");
-                return false;
+                bookToEdit.Name = model.Name;
+                bookToEdit.AmountInStock = model.AmountInStock;
+                bookToEdit.Pages = model.Pages;
+                bookToEdit.Category = model.Category;
+                bookToEdit.Description = model.Description;
+                bookToEdit.CoverImage = model.CoverImage;
+                bookToEdit.ReadingTime = model.ReadingTime;
+                var searchedAuthor = await _context.Authors.FirstOrDefaultAsync(a => a.Id == bookToEdit.Author.Id);
+                bookToEdit.Author = searchedAuthor ?? new Author { Name = model.AuthorName };
+
+                var existingGenreIds = bookToEdit.BookGenres.Select(bg => bg.GenreId).ToList();
+                var newGenres = model.SelectedGenreIds.Except(existingGenreIds);
+                var removedGenres = existingGenreIds.Except(model.SelectedGenreIds);
+
+                bookToEdit.BookGenres = bookToEdit.BookGenres.Where(bg => !removedGenres.Contains(bg.GenreId)).ToList();
+
+                foreach (var genreId in newGenres)
+                {
+                    _context.BookGenres.Add(new BookGenre { BookId = bookToEdit.Id, GenreId = genreId });
+                }
+
+                await _context.SaveChangesAsync();
+                _logger.LogInformation("EDITED BOOK");
+                return true;
             }
-
-            bookToEdit.Name = model.Name;
-            bookToEdit.AmountInStock = model.AmountInStock;
-            bookToEdit.Pages = model.Pages;
-            bookToEdit.Category = model.Category;
-            bookToEdit.Description = model.Description;
-            bookToEdit.CoverImage = model.CoverImage;
-            bookToEdit.ReadingTime = model.ReadingTime;
-            var searchedAuthor = await _context.Authors.FirstOrDefaultAsync(a => a.Id == bookToEdit.Author.Id);
-            bookToEdit.Author = searchedAuthor ?? new Author { Name = model.AuthorName };
-
-            var existingGenreIds = bookToEdit.BookGenres.Select(bg => bg.GenreId).ToList();
-            var newGenres = model.SelectedGenreIds.Except(existingGenreIds);
-            var removedGenres = existingGenreIds.Except(model.SelectedGenreIds);
-
-            bookToEdit.BookGenres = bookToEdit.BookGenres.Where(bg => !removedGenres.Contains(bg.GenreId)).ToList();
-
-            foreach (var genreId in newGenres)
+           else if(model.editor == 1)
             {
-                _context.BookGenres.Add(new BookGenre { BookId = bookToEdit.Id, GenreId = genreId });
+                bookToEdit.Name = model.Name;
+                await _context.SaveChangesAsync();
+                _logger.LogInformation("EDITED BOOK");
+                return true;
             }
-
-            await _context.SaveChangesAsync();
-            _logger.LogInformation("EDITED BOOK");
-            return true; 
+            _logger.LogError("Book editing failed");
+            return false; 
         }
 
         public async Task<List<BookListViewModel>> ReturnSearchResultsAync(string searchedString)

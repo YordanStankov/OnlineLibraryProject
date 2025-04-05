@@ -35,7 +35,7 @@ namespace FInalProject.Services
             if (currUser != null)
             {
                 var roles = await _userManager.GetRolesAsync(currUser);
-                if (!roles.Contains("User") && !roles.Contains("Admin") && !roles.Contains("Librarian"))
+                if (roles.Count() == 0)
                 {
                     await _userManager.AddToRoleAsync(currUser, "User");
                     _logger.LogInformation($"USER: {currUser} IS NOW A USER");
@@ -43,8 +43,8 @@ namespace FInalProject.Services
                 }
                 _logger.LogInformation("USER ALREADY IN ROLE");
                 return true;
-                
             }
+
             _logger.LogInformation("USER IS NULL REGISTER");
             return false; 
         }
