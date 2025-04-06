@@ -138,24 +138,30 @@ namespace FInalProject.Services
 
         public async Task<List<BookListViewModel>> ReturnSearchResultsAync(string searchedString)
         {
-            _logger.LogInformation("SEARCHING FOR BOOKS"); 
+            if (string.IsNullOrWhiteSpace(searchedString))
+            {
+                return null;
+            }
             string loweredSearch = searchedString.ToLower();
-            return await _context.Books
+            var books1 = await _context.Books
                 .Include(b => b.Author)
                 .Include(b => b.BookGenres)
-                .ThenInclude(b => b.Genre)
-                .Where(b => b.Author.Name.ToLower().Contains(loweredSearch)
-                || b.Name.ToLower().Contains(loweredSearch))
-                .Select(b => new BookListViewModel()
-                {
-                    Id = b.Id,
-                    Name = b.Name,
-                    Pages = b.Pages,
-                    AuthorName = b.Author.Name,
-                    CoverImage = b.CoverImage,
-                    Genres = b.BookGenres.Select(bg => bg.Genre.Name).ToList(),
-                })
+                .ThenInclude(bg => bg.Genre)
+                .Where(b => b.Name.ToLower().Contains(loweredSearch) ||
+                    b.Author != null && b.Author.Name.ToLower().Contains(loweredSearch) || 
+                    b.BookGenres.Any(bg => bg.Genre.Name.ToLower().Contains(loweredSearch)))
                 .ToListAsync();
+
+            return books1.Select(b => new BookListViewModel
+            {
+                Id = b.Id,
+                Name = b.Name,
+                Pages = b.Pages,
+                AuthorName = b.Author.Name,
+                Category = b.Category,
+                CoverImage = b.CoverImage,
+                Genres = b.BookGenres.Select(bg => bg.Genre.Name).ToList()
+            }).ToList();
         }
     }
 }
