@@ -24,6 +24,7 @@ namespace FInalProject.Data.Models
         public DateTime DateTaken { get; set; }
         public DateTimeOffset UntillReturn { get; set; }
         public Category Category { get; set; }
+        public string? CategoryString { get; set; }
         
         [Required]
         public string CoverImage { get; set; }

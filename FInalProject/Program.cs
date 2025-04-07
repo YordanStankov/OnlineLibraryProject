@@ -52,8 +52,6 @@ namespace FInalProject
                 app.UseHsts();
             }
 
-            //calling the seeding methods in case of empty db
-            app.Seeding();
             app.SeedRolesAndAdminAsync();
 
             app.UseHttpsRedirection();

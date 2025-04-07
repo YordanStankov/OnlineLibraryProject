@@ -65,6 +65,7 @@ namespace FInalProject.Services
                 Author = correctAuthor,
                 AmountInStock = model.AmountInStock,
                 Category = model.Category,
+                CategoryString = model.Category.ToString(),
                 CoverImage = model.CoverImage,
                 Description = model.Description
             };

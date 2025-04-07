@@ -104,6 +104,7 @@ namespace FInalProject.Services
                 bookToEdit.AmountInStock = model.AmountInStock;
                 bookToEdit.Pages = model.Pages;
                 bookToEdit.Category = model.Category;
+                bookToEdit.CategoryString = model.Category.ToString();
                 bookToEdit.Description = model.Description;
                 bookToEdit.CoverImage = model.CoverImage;
                 bookToEdit.ReadingTime = model.ReadingTime;
@@ -149,7 +150,8 @@ namespace FInalProject.Services
                 .ThenInclude(bg => bg.Genre)
                 .Where(b => b.Name.ToLower().Contains(loweredSearch) ||
                     b.Author != null && b.Author.Name.ToLower().Contains(loweredSearch) || 
-                    b.BookGenres.Any(bg => bg.Genre.Name.ToLower().Contains(loweredSearch)))
+                    b.BookGenres.Any(bg => bg.Genre.Name.ToLower().Contains(loweredSearch)) ||
+                    b.CategoryString.ToLower().Contains(loweredSearch))
                 .ToListAsync();
 
             return books1.Select(b => new BookListViewModel
