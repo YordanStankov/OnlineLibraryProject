@@ -9,28 +9,35 @@ namespace FInalProject.Data.Models
         public int Id { get; set; }
 
         [Required]
+        [StringLength(30, MinimumLength = 3)]
         public string Name { get; set; }
 
         [Required]
+        [Range(1, 1000, ErrorMessage ="Reading time must be between 1 and 1000 hours")]
         public double ReadingTime { get; set; }
 
         [Required]
+        [Range(1, 10000, ErrorMessage ="Pages must be between 1 and 10000 pages")]
         public int Pages { get; set; }
 
         [ForeignKey(nameof(Author))]
+        [Required]
         public int AuthorId { get; set; }
+        [Required]
         public Author Author { get; set; }
 
-        public DateTime DateTaken { get; set; }
-        public DateTimeOffset UntillReturn { get; set; }
+        public DateTime? DateTaken { get; set; }
+        public DateTimeOffset? UntillReturn { get; set; }
+
+        [Required]
         public Category Category { get; set; }
-        public string? CategoryString { get; set; }
+        public string CategoryString { get; set; }
         
         [Required]
         public string CoverImage { get; set; }
 
         [Required]
-        [MaxLength(200)]
+        [StringLength(1000, MinimumLength = 5, ErrorMessage ="Description must be between 5 and 1000 words")]
         public string Description { get; set; }
 
         [Required]
