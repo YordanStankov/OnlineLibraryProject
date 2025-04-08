@@ -28,7 +28,7 @@
             </div>
 
             <div class="mb-3">
-                <label for="SelectedGenreIds" class="form-label fw-semibold">Genres</label>
+                <label for="SelectedGenreIds" class="form-label fw-semibold">Genres hold CTR to select multiple</label>
                 <select asp-for="SelectedGenreIds" class="form-select" multiple>
                     @foreach (var genre in Model.GenreOptions)
                     {

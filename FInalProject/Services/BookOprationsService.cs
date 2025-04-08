@@ -36,12 +36,12 @@ namespace FInalProject.Services
         {
             _logger.LogInformation("BORROWING BOOK");
             var book = await _context.Books.FirstOrDefaultAsync(b => b.Id == borrowedId);
-            book.DateTaken = DateTime.Now;
-            book.UntillReturn = DateTime.Now.AddDays(14);
             book.AmountInStock -= 1;
             var userId = _userManager.GetUserId(user);
             var borrowedBook = new BorrowedBook
             {
+                DateTaken = DateTime.Now,
+                UntillReturn = DateTime.Now.AddDays(14),
                 UserId = userId, 
                 BookId = borrowedId
             };
@@ -112,25 +112,26 @@ namespace FInalProject.Services
                 bookToEdit.Author = searchedAuthor ?? new Author { Name = model.AuthorName };
 
                 var existingGenreIds = bookToEdit.BookGenres.Select(bg => bg.GenreId).ToList();
-                var newGenres = model.SelectedGenreIds.Except(existingGenreIds);
-                var removedGenres = existingGenreIds.Except(model.SelectedGenreIds);
-
-                bookToEdit.BookGenres = bookToEdit.BookGenres.Where(bg => !removedGenres.Contains(bg.GenreId)).ToList();
-
-                foreach (var genreId in newGenres)
+                if(existingGenreIds != null && model.SelectedGenreIds != null)
                 {
-                    _context.BookGenres.Add(new BookGenre { BookId = bookToEdit.Id, GenreId = genreId });
-                }
+                    var newGenres = model.SelectedGenreIds.Except(existingGenreIds);
+                    var removedGenres = existingGenreIds.Except(model.SelectedGenreIds);
+                    bookToEdit.BookGenres = bookToEdit.BookGenres.Where(bg => !removedGenres.Contains(bg.GenreId)).ToList();
 
+                    foreach (var genreId in newGenres)
+                    {
+                        _context.BookGenres.Add(new BookGenre { BookId = bookToEdit.Id, GenreId = genreId });
+                    }
+                }
                 await _context.SaveChangesAsync();
-                _logger.LogInformation("EDITED BOOK");
+                _logger.LogInformation("EDITED BOOK BY ADMIN");
                 return true;
             }
            else if(model.editor == 1)
             {
                 bookToEdit.Name = model.Name;
                 await _context.SaveChangesAsync();
-                _logger.LogInformation("EDITED BOOK");
+                _logger.LogInformation("EDITED BOOK BY LIBRARIAN");
                 return true;
             }
             _logger.LogError("Book editing failed");

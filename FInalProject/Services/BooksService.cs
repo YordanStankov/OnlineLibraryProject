@@ -51,10 +51,6 @@ namespace FInalProject.Services
         public async Task<int> CreateBookAsync(BookCreationViewModel model)
         {
             _logger.LogDebug("LOG DEBUG CREATING BOOK ASYNC");
-            if(model == null || model.SelectedGenreIds == null)
-            {
-                throw new ArgumentException("Invalid book data or no selected genres");
-            }
             var existingAuthor = await _context.Authors.FirstOrDefaultAsync(a => a.Name == model.AuthorName);
             var correctAuthor = existingAuthor ?? new Author { Name = model.AuthorName };
             var newBook = new Book
@@ -72,15 +68,17 @@ namespace FInalProject.Services
 
             _context.Books.Add(newBook);
             await _context.SaveChangesAsync();
-
-            foreach (var genreId in model.SelectedGenreIds)
+            if (model.SelectedGenreIds != null)
             {
-                var bookGenre = new BookGenre
+                foreach (var genreId in model.SelectedGenreIds)
                 {
-                    BookId = newBook.Id,
-                    GenreId = genreId
-                };
-                _context.BookGenres.Add(bookGenre);
+                    var bookGenre = new BookGenre
+                    {
+                        BookId = newBook.Id,
+                        GenreId = genreId
+                    };
+                    _context.BookGenres.Add(bookGenre);
+                }
             }
             newBook.Author.Books.Add(newBook);
             await _context.SaveChangesAsync();
