@@ -1,0 +1,10 @@
+﻿@page
+@model BorrowedBooksModel
+@{
+    ViewBag.Title = "Borrowed books list";
+}
+<h2>SHitttttt it worked</h2>
+@foreach(var bb in Model.BorrowedBooksFromUser)
+{
+    <a>@bb.Book.Name</a>
+}

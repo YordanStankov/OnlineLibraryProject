@@ -35,6 +35,7 @@ namespace  FInalProject.Areas.Identity.Pages.Account.Manage
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
+        public static string BorrowedBooks => "BorrowedBooks";
         public static string DownloadPersonalData => "DownloadPersonalData";
 
         /// <summary>
@@ -113,6 +114,13 @@ namespace  FInalProject.Areas.Identity.Pages.Account.Manage
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
+        
+        //I WROTE THIS GET BENT MICROSOFT
+        public static string BorrowedBooksNavClass(ViewContext viewContext)
+        {
+            return PageNavClass(viewContext, BorrowedBooks);
+        }
+
         public static string PageNavClass(ViewContext viewContext, string page)
         {
             var activePage = viewContext.ViewData["ActivePage"] as string
