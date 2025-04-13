@@ -35,19 +35,29 @@ namespace FInalProject.Services
         public async Task<bool> BorrowBookAsync(int borrowedId, ClaimsPrincipal user)
         {
             _logger.LogInformation("BORROWING BOOK");
-            var book = await _context.Books.FirstOrDefaultAsync(b => b.Id == borrowedId);
-            book.AmountInStock -= 1;
-            var userId = _userManager.GetUserId(user);
-            var borrowedBook = new BorrowedBook
+            var book = await _context.Books
+                .Include(b => b.Author)
+                .Include(b => b.BookGenres)
+                .ThenInclude(bg => bg.Genre)
+                .FirstOrDefaultAsync(b => b.Id == borrowedId);
+            if(book != null)
             {
-                DateTaken = DateTime.Now,
-                UntillReturn = DateTime.Now.AddDays(14),
-                UserId = userId, 
-                BookId = borrowedId
-            };
-            await _context.BorrowedBooks.AddAsync(borrowedBook);
-            await _context.SaveChangesAsync();
-            return true;
+                book.AmountInStock -= 1;
+                var borrowingUser = await _userManager.GetUserAsync(user);
+                var borrowedBook = new BorrowedBook
+                {
+                    DateTaken = DateTime.Now,
+                    UntillReturn = DateTime.Now.AddDays(14),
+                    UserId = borrowingUser.Id,
+                    Book = book,
+                    BookId = book.Id,
+                    User = borrowingUser
+                };
+                await _context.BorrowedBooks.AddAsync(borrowedBook);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
 
         public async Task<int> CreateCommentAsync(CreateCommentViewModel model, ClaimsPrincipal user)

@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-
 namespace FInalProject.Areas.Identity.Pages.Account.Manage
 {
     public class BorrowedBooksModel : PageModel
@@ -27,6 +26,7 @@ namespace FInalProject.Areas.Identity.Pages.Account.Manage
             {
                 BorrowedBooksFromUser = await _context
                     .BorrowedBooks
+                    .Include(b => b.Book)
                     .Where(bb => bb.UserId == currUser.Id)
                     .ToListAsync();
                 return Page();
