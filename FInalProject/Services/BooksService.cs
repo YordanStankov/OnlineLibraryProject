@@ -3,6 +3,7 @@ using FInalProject.Data.Models;
 using FInalProject.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Security.Claims;
 
 namespace FInalProject.Services
@@ -16,6 +17,7 @@ namespace FInalProject.Services
         Task<BookCreationViewModel> GetBookCreationViewModelAsync();
         Task<bool> UserRoleCheckAsync(ClaimsPrincipal user);
         Task<int> CreateBookAsync(BookCreationViewModel model);
+        Task<List<BooksLeaderboardViewModel>> ReturnLeaderboardResultsAsync();
     }
     public class BooksService : IBooksService
     {
@@ -189,7 +191,6 @@ namespace FInalProject.Services
             }
             return specificBooks; 
         }
-
         public async Task<bool> UserRoleCheckAsync(ClaimsPrincipal user)
         {
             var currUser = await _userManager.GetUserAsync(user);
@@ -200,6 +201,19 @@ namespace FInalProject.Services
             return false;
         }
 
-       
+        public async Task<List<BooksLeaderboardViewModel>> ReturnLeaderboardResultsAsync()
+        {
+            return await _context.Books
+                .OrderByDescending(b => b.Favourites.Sum(f => f.Amount))
+                .Select( b => new BooksLeaderboardViewModel
+                {
+                    BookId = b.Id,
+                    AuthorName = b.Author.Name,
+                    BookName = b.Name,
+                    CategoryString = b.CategoryString,
+                    PositiveReviews = b.Favourites.Sum(f => f.Amount)
+                })
+                .ToListAsync();
+        }
     }
 }

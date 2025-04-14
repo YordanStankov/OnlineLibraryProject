@@ -99,5 +99,11 @@ namespace FInalProject.Controllers
             var info = await _booksService.getBookInfoAsync(editId);
             return View(info);
         }
+        [HttpGet]
+        public async Task<IActionResult> BooksLeaderboard()
+        {
+            var bookies = await _booksService.ReturnLeaderboardResultsAsync();
+            return View(bookies);
+        }
     }
 }
