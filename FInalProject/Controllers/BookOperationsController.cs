@@ -74,5 +74,11 @@ namespace FInalProject.Controllers
             }
             return Json(new { succes = false, message = "Book not found" });
         }
+        public async Task<IActionResult> Rating (int amount, int bookId)
+        {
+            var response = await _bookOprationsService.UpdateFavouritesAsync(amount, bookId, User);
+            return RedirectToAction("BookFocus", "Books", new { id = bookId });
+        }
+
     }
 }

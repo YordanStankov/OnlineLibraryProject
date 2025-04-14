@@ -8,6 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
 using System.Linq;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace FInalProject.Services
 {
@@ -18,6 +19,7 @@ namespace FInalProject.Services
         Task<List<BookListViewModel>> ReturnSearchResultsAync(string searchedString);
         Task<bool> DeleteBookAsync(int doomedId);
         Task<int> CreateCommentAsync(CreateCommentViewModel model, ClaimsPrincipal user);
+        Task<bool> UpdateFavouritesAsync(int amount, int bookId, ClaimsPrincipal user);
     }
     public class BookOprationsService : IBookOprationsService
     {
@@ -176,5 +178,36 @@ namespace FInalProject.Services
                 Genres = b.BookGenres.Select(bg => bg.Genre.Name).ToList()
             }).ToList();
         }
+
+        public async Task<bool> UpdateFavouritesAsync(int amount, int bookId, ClaimsPrincipal user)
+        {
+            var Rating = await _context.Favourites
+                .FirstOrDefaultAsync(r => r.BookId == bookId && r.UserId == _userManager.GetUserId(user));
+            if (Rating is not null)
+            {
+                if (Rating.Amount == amount)
+                {
+                    Rating.Amount -= amount;
+                }
+                else
+                {
+                    Rating.Amount = amount;
+                }
+                _context.Update(Rating);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+
+            Rating = new Favourite
+            {
+                UserId = _userManager.GetUserId(user),
+                Amount = amount,
+                BookId = bookId
+            };
+            await _context.AddAsync(Rating);
+            await _context.SaveChangesAsync();
+            return false;
+        }
     }
 }
+

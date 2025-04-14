@@ -133,7 +133,8 @@ namespace FInalProject.Services
                 {
                     UserName = c.User.UserName ?? "Unknown User",
                     Description = c.CommentContent ?? string.Empty
-                }).ToList()
+                }).ToList(),
+                Favourites = currBook.Favourites
             };
         }
 

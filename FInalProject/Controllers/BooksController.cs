@@ -76,7 +76,6 @@ namespace FInalProject.Controllers
         public async Task<IActionResult> BookFocus(int id)
         {
             bool response = await _booksService.UserRoleCheckAsync(User);
-
             if(response == true)
                 {
                     ViewBag.IsHe = true; 

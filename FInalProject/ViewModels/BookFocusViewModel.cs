@@ -14,5 +14,7 @@ namespace FInalProject.ViewModels
         public Category Category { get; set; }
         public ICollection<Genre> genres { get; set; }
         public ICollection<CommentViewModel>? comments { get; set; }
+        public ICollection<Favourite>? Favourites { get; set; }
+
     }
 }

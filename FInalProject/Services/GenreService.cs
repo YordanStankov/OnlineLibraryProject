@@ -90,6 +90,7 @@ namespace FInalProject.Services
                     Name = bg.Book.Name,
                     Genres = new List<string> { bg.Genre.Name }
                 }).ToListAsync();
+
             if (correctBooks == null)
             {
                 _logger.LogInformation("NO BOOKS FROM THIS GENRE");
@@ -101,8 +102,6 @@ namespace FInalProject.Services
                 return correctBooks;
             }
         }
-
-        
 
         //Genre editing
         public async Task<GenreEditViewModel> ProvideGenreForPartialAsync(int genreEditId)
