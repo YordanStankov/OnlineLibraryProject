@@ -14,6 +14,7 @@ namespace FInalProject.Services
         Task<List<BookListViewModel>> GetAllBooksAsync();
         Task<BookFocusViewModel> GetBookFocusAsync(int id);
         Task<BookCreationViewModel> GetBookCreationViewModelAsync();
+        Task<bool> UserRoleCheckAsync(ClaimsPrincipal user);
         Task<int> CreateBookAsync(BookCreationViewModel model);
     }
     public class BooksService : IBooksService
@@ -37,6 +38,7 @@ namespace FInalProject.Services
                 .Include(a => a.Author)
                 .Include(bg => bg.BookGenres)
                 .ThenInclude(g => g.Genre)
+                .Where(b => b.AmountInStock > 0)
                 .Select(n => new BookListViewModel()
                 {
                     Id = n.Id,
@@ -186,5 +188,17 @@ namespace FInalProject.Services
             }
             return specificBooks; 
         }
+
+        public async Task<bool> UserRoleCheckAsync(ClaimsPrincipal user)
+        {
+            var currUser = await _userManager.GetUserAsync(user);
+            if (await _userManager.IsInRoleAsync(currUser, "User"))
+            {
+                return true;
+            }
+            return false;
+        }
+
+       
     }
 }

@@ -159,10 +159,10 @@ namespace FInalProject.Services
                 .Include(b => b.Author)
                 .Include(b => b.BookGenres)
                 .ThenInclude(bg => bg.Genre)
-                .Where(b => b.Name.ToLower().Contains(loweredSearch) ||
+                .Where(b => (b.Name.ToLower().Contains(loweredSearch) ||
                     b.Author != null && b.Author.Name.ToLower().Contains(loweredSearch) || 
                     b.BookGenres.Any(bg => bg.Genre.Name.ToLower().Contains(loweredSearch)) ||
-                    b.CategoryString.ToLower().Contains(loweredSearch))
+                    b.CategoryString.ToLower().Contains(loweredSearch)) && b.AmountInStock > 0)
                 .ToListAsync();
 
             return books1.Select(b => new BookListViewModel

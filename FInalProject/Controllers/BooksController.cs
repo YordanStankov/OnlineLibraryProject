@@ -16,37 +16,46 @@ namespace FInalProject.Controllers
     public class BooksController : Controller
     {
         private readonly IBooksService _booksService;
-        private readonly UserManager<User> _userManager;
-
-       
-
-        public BooksController(IBooksService bookService, UserManager<User> userManager)
+        public BooksController(IBooksService bookService)
         {
             _booksService = bookService;
-            _userManager = userManager;
         }
 
         [HttpGet]
         public async Task<IActionResult> AllBooks(int modifier)
         {
-              
-            if(modifier == 0)
+            string BookJson = TempData["Books"] as string;
+            if(BookJson == null)
             {
-                var books = await _booksService.GetAllBooksAsync();
-                if (books == null)
+                if (modifier == 0)
                 {
-                    return RedirectToAction("LoginPlease", "UserErrors");
+                    var bookies = await _booksService.GetAllBooksAsync();
+                    if (bookies == null)
+                    {
+                        return RedirectToAction("LoginPlease", "UserErrors");
+                    }
+                    return View(bookies);
+                }
+                else 
+                {
+                    var specificBooks = await _booksService.GetAllBooksFromSpecificCategoryAsync(modifier);
+                    if (specificBooks == null)
+                    {
+                        return RedirectToAction("NoneFromCategory", "UserErrors");
+                    }
+                    return View(specificBooks);
+                }
+            }
+            else
+            {
+                var booksJson = TempData["Books"] as string;
+                List<BookListViewModel> books = new List<BookListViewModel>();
+                if (booksJson != null)
+                {
+                    books = JsonConvert.DeserializeObject<List<BookListViewModel>>(booksJson);
                 }
                 return View(books);
             }
-
-            var specificBooks = await _booksService.GetAllBooksFromSpecificCategoryAsync(modifier);
-            if(specificBooks == null)
-                {
-                    return RedirectToAction("NoneFromCategory", "UserErrors");
-                }
-            return View(specificBooks);
-            
         }
 
         [HttpGet]
@@ -59,41 +68,29 @@ namespace FInalProject.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateABook(BookCreationViewModel model)
         {
-           
             int bookId = await _booksService.CreateBookAsync(model);
             return RedirectToAction("BookFocus", "Books", new { Id = bookId });
         }
 
         [HttpGet]
-        public async Task<IActionResult> SearchedBookList()
-        {
-            var booksJson = TempData["Books"] as string;
-            List<BookListViewModel> books = new List<BookListViewModel>();
-            if(booksJson != null)
-            {
-                books = JsonConvert.DeserializeObject<List<BookListViewModel>>(booksJson);
-            }
-            return View(books); 
-        }
-
-        [HttpGet]
         public async Task<IActionResult> BookFocus(int id)
         {
-            var viewUser = await _userManager.GetUserAsync(User);
-            if(await _userManager.IsInRoleAsync(viewUser, "User"))
-            {
-                ViewBag.IsHe = true; 
-            }
-            else
-            {
-                ViewBag.IsHe = false;  
-            }
+            bool response = await _booksService.UserRoleCheckAsync(User);
 
-                var focusedBook = await _booksService.GetBookFocusAsync(id);
-            if (focusedBook == null)
-            {
-                throw new ArgumentException("Book not found");
-            }
+            if(response == true)
+                {
+                    ViewBag.IsHe = true; 
+                }
+            else
+                {
+                    ViewBag.IsHe = false;  
+                }
+
+            var focusedBook = await _booksService.GetBookFocusAsync(id);
+                if (focusedBook == null)
+                    {
+                        throw new ArgumentException("Book not found");
+                    }
             return View(focusedBook);
         }
 

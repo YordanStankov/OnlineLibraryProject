@@ -52,7 +52,7 @@ namespace FInalProject.Controllers
             }
             var books = await _bookOprationsService.ReturnSearchResultsAync(searchedString);
             TempData["Books"] = JsonConvert.SerializeObject(books);
-            return RedirectToAction("SearchedBookList", "Books");
+            return RedirectToAction("AllBooks", "Books");
         }
         [HttpPost]
         public async Task<IActionResult> Edit(BookCreationViewModel model)

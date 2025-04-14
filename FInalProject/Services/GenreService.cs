@@ -79,7 +79,8 @@ namespace FInalProject.Services
             _logger.LogInformation("GETTING ALL BOOKS FROM CERTAIN GENRE METHOD");
             var correctBooks = await _context.BookGenres
                 .AsNoTracking()
-                .Where(bg => bg.GenreId == genreId)
+                .Where(bg => bg.GenreId == genreId && 
+                bg.Book.AmountInStock > 0)
                 .Select(bg => new BookListViewModel()
                 {
                     Id = bg.Book.Id,

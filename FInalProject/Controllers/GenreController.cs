@@ -40,10 +40,6 @@ namespace FInalProject.Controllers
         public async Task<IActionResult> SpecificGenreList(int genreId)
         {
             var result = await _genreService.GetAllBooksOfCertainGenre(genreId);
-            if(result == null)
-            {
-                throw new ArgumentException("No books associated with the genre");
-            }
                 return View(result);
         }
         [HttpPost]
