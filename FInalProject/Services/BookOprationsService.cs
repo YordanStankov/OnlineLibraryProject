@@ -20,6 +20,7 @@ namespace FInalProject.Services
         Task<bool> DeleteBookAsync(int doomedId);
         Task<int> CreateCommentAsync(CreateCommentViewModel model, ClaimsPrincipal user);
         Task<bool> UpdateFavouritesAsync(int amount, int bookId, ClaimsPrincipal user);
+        Task<bool> ReturnBookAsync(ReturnBookViewModel model);
     }
     public class BookOprationsService : IBookOprationsService
     {
@@ -148,6 +149,19 @@ namespace FInalProject.Services
             }
             _logger.LogError("Book editing failed");
             return false; 
+        }
+
+        public async Task<bool> ReturnBookAsync(ReturnBookViewModel model)
+        {
+            var bookToBeReturned = await _context.BorrowedBooks
+                .FirstOrDefaultAsync(bb => bb.BookId == model.BookId && bb.UserId == model.UserId);
+            if(bookToBeReturned == null)
+            {
+                return false;
+            }
+            _context.Remove(bookToBeReturned);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<List<BookListViewModel>> ReturnSearchResultsAync(string searchedString)

@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FInalProject.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250407093711_dataAnotations")]
-    partial class dataAnotations
+    [Migration("20250416120712_whoooo")]
+    partial class whoooo
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -68,9 +68,6 @@ namespace FInalProject.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("DateTaken")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(1000)
@@ -86,9 +83,6 @@ namespace FInalProject.Data.Migrations
 
                     b.Property<double>("ReadingTime")
                         .HasColumnType("float");
-
-                    b.Property<DateTimeOffset?>("UntillReturn")
-                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
 
@@ -119,6 +113,12 @@ namespace FInalProject.Data.Migrations
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("DateTaken")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTimeOffset?>("UntillReturn")
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("BookId", "UserId");
 

@@ -10,6 +10,7 @@ using SQLitePCL;
 using FInalProject.Services;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using System.Runtime.CompilerServices;
 
 namespace FInalProject.Controllers
 {
@@ -74,11 +75,18 @@ namespace FInalProject.Controllers
             }
             return Json(new { succes = false, message = "Book not found" });
         }
+        [HttpPost]
         public async Task<IActionResult> Rating (int amount, int bookId)
         {
             var response = await _bookOprationsService.UpdateFavouritesAsync(amount, bookId, User);
             return RedirectToAction("BookFocus", "Books", new { id = bookId });
         }
-
+        [HttpPost]
+        public async Task<IActionResult> ReturnBook(ReturnBookViewModel model)
+        {
+            bool response = await _bookOprationsService.ReturnBookAsync(model);
+            return RedirectToPage("BorrowedBooks");
+            
+        }
     }
 }

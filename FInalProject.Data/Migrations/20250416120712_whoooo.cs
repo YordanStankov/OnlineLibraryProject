@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FInalProject.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class aNewBenninging : Migration
+    public partial class whoooo : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -56,7 +56,7 @@ namespace FInalProject.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -188,16 +188,14 @@ namespace FInalProject.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     ReadingTime = table.Column<double>(type: "float", nullable: false),
                     Pages = table.Column<int>(type: "int", nullable: false),
                     AuthorId = table.Column<int>(type: "int", nullable: false),
-                    DateTaken = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UntillReturn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     Category = table.Column<int>(type: "int", nullable: false),
                     CategoryString = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CoverImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
                     AmountInStock = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -240,7 +238,9 @@ namespace FInalProject.Data.Migrations
                 columns: table => new
                 {
                     BookId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    DateTaken = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UntillReturn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -265,7 +265,7 @@ namespace FInalProject.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CommentContent = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
+                    CommentContent = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     BookId = table.Column<int>(type: "int", nullable: false)
                 },

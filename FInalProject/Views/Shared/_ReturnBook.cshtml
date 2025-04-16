@@ -1,0 +1,13 @@
+﻿@using FInalProject.ViewModels
+@model ReturnBookViewModel
+@{
+    ViewBag.Title = "Return book partial";
+}
+<form id="ReturnBook" asp-controller="BookOperations" asp-action="ReturnBook" method="post">
+    <input hidden asp-for="UserId"/>
+    <input hidden asp-for="BookId"/>
+    <button type="submit">
+        <i>Return</i>
+    </button>
+</form>
+

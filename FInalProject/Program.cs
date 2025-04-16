@@ -5,6 +5,7 @@ using FInalProject.Services;
 using FInalProject.Data;
 using FInalProject.Data.Seeding;
 using FInalProject.Data.Models;
+using System.Threading.Tasks;
 
 
 namespace FInalProject
@@ -12,7 +13,7 @@ namespace FInalProject
     public class Program
     {
         
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -53,7 +54,7 @@ namespace FInalProject
             }
 
             app.SeedRolesAndAdminAsync();
-
+            await app.SeedRolesAndAdminAsync();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

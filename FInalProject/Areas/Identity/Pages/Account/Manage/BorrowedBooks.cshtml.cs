@@ -32,7 +32,6 @@ namespace FInalProject.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
             return NotFound();
-
         }
     }
 }
