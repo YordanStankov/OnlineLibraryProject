@@ -81,12 +81,5 @@ namespace FInalProject.Controllers
             var response = await _bookOprationsService.UpdateFavouritesAsync(amount, bookId, User);
             return RedirectToAction("BookFocus", "Books", new { id = bookId });
         }
-        [HttpPost]
-        public async Task<IActionResult> ReturnBook(ReturnBookViewModel model)
-        {
-            bool response = await _bookOprationsService.ReturnBookAsync(model);
-            return RedirectToPage("BorrowedBooks");
-            
-        }
     }
 }

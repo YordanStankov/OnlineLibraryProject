@@ -3,11 +3,10 @@
 @{
     ViewBag.Title = "Return book partial";
 }
-<form id="ReturnBook" asp-controller="BookOperations" asp-action="ReturnBook" method="post">
-    <input hidden asp-for="UserId"/>
-    <input hidden asp-for="BookId"/>
-    <button type="submit">
+<form id="ReturnBook" method="post">
+    <input hidden asp-for="UserId" />
+    <input hidden asp-for="BookId" />
+    <button type="submit" class="btn btn-primary w-100">
         <i>Return</i>
     </button>
 </form>
-
