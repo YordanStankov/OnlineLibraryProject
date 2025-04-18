@@ -9,6 +9,7 @@ namespace FInalProject.Data.Models
         [Required]
         [StringLength(50, MinimumLength = 3, ErrorMessage ="Author name must be between 3 and 50 characters")]
         public string Name { get; set; }
+        public string? Portrait { get;set; }
         public ICollection<Book>? Books { get; set; }
         public ICollection<FavouriteAuthor> FavouriteAuthors { get; set; } = new List<FavouriteAuthor>();
 

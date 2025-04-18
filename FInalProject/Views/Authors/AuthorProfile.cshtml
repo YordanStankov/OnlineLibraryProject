@@ -1,0 +1,79 @@
+﻿@using FInalProject.ViewModels;
+@model AuthorProfileViewModel
+@{
+    ViewBag.Title = "Author Profile";
+}
+
+<div class="container mt-4">
+    <!-- Author Info Section -->
+    <div class="row mb-4">
+        <div class="col-md-3 offset-md-1 text-center">
+            <img src="@Model.AuthorPortrait"
+                 class="img-fluid rounded shadow"
+                 alt="Author Portrait"
+                 style="width: 16rem; height: 20rem; object-fit: cover;" />
+            <h2 class="mt-3">@Model.AuthorName</h2>
+        </div>
+    </div>
+
+    <!-- Author's Books Section -->
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="mb-3 text-center">Author's Books</h3>
+            <hr />
+        </div>
+    </div>
+
+    @if (Model.AuthorsBooks.Any())
+    {
+        <div class="row">
+            @foreach (var book in Model.AuthorsBooks)
+            {
+                <div class="col-md-6 mb-4">
+                    <div class="card p-3 shadow">
+                        <div class="row g-0 align-items-center">
+                            <!-- Book Cover -->
+                            <div class="col-md-4 text-center">
+                                <img src="@book.CoverImage"
+                                     class="img-fluid rounded"
+                                     alt="Book Cover"
+                                     style="width: 14rem; height: 16rem; object-fit: cover;" />
+                            </div>
+
+                            <!-- Book Details -->
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">@book.Name</h5>
+                                    <p class="card-text"><strong>Pages:</strong> @book.Pages</p>
+                                    <p class="card-text"><strong>Author:</strong> @book.AuthorName</p>
+                                    <p class="card-text"><strong>Category:</strong> @book.Category</p>
+                                    <p class="card-text">
+                                        <strong>Genres:</strong>
+                                        @if (!book.Genres.Any())
+                                        {
+                                            <span>No genres listed</span>
+                                        }
+                                        else
+                                        {
+                                            @foreach (var genre in book.Genres)
+                                            {
+                                                <span class="badge bg-secondary me-1">@genre</span>
+                                            }
+                                        }
+                                    </p>
+                                    <a href="@Url.Action("BookFocus", "Books", new { id = book.Id })" class="btn btn-primary">See more</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center" role="alert">
+            No books credited to this author.
+        </div>
+    }
+</div>

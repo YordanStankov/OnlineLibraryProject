@@ -9,7 +9,7 @@ namespace FInalProject.Data.Models
         public int Id { get; set; }
 
         [Required]
-        [StringLength(30, MinimumLength = 3)]
+        [StringLength(100, MinimumLength = 3)]
         public string Name { get; set; }
 
         [Required]
