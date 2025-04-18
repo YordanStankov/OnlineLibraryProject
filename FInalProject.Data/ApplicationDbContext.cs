@@ -19,6 +19,7 @@ namespace FInalProject.Data
         public DbSet<Genre> Genres { get; set; }
         public DbSet<BookGenre> BookGenres { get; set; }
         public DbSet<BorrowedBook> BorrowedBooks { get; set; }
+        public DbSet<FavouriteAuthor> FavouriteAuthors { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //normal tables
@@ -72,6 +73,20 @@ namespace FInalProject.Data
 
                 c.HasOne(u => u.User)
                     .WithMany(fm => fm.BorrowedBooks)
+                    .HasForeignKey(u => u.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<FavouriteAuthor>(c => {
+                c.HasKey(x => new { x.AuthorId, x.UserId });
+
+                c.HasOne(a => a.Author)
+                  .WithMany(fa => fa.FavouriteAuthors)
+                  .HasForeignKey(a => a.AuthorId)
+                  .OnDelete(DeleteBehavior.Cascade);
+
+                c.HasOne(u => u.User)
+                    .WithMany(fa => fa.FavouriteAuthors)
                     .HasForeignKey(u => u.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
             });

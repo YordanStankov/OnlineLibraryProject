@@ -37,6 +37,7 @@ namespace FInalProject
             builder.Services.AddScoped<IBookOprationsService, BookOprationsService>();
             builder.Services.AddScoped<IGenreService, GenreService>();
             builder.Services.AddScoped<IUserOperationsService, UserOperationsService>();
+            builder.Services.AddScoped<IAuthorsService, AuthorsService>();
 
             //the app gets built
             var app = builder.Build();
@@ -54,7 +55,7 @@ namespace FInalProject
             }
 
             app.SeedRolesAndAdminAsync();
-            await app.SeedRolesAndAdminAsync();
+            //await app.SeedRolesAndAdminAsync();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

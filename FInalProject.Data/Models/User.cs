@@ -7,6 +7,6 @@ namespace FInalProject.Data.Models
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
         public ICollection<Favourite> Favourites { get; set; } = new List<Favourite>();
         public ICollection<BorrowedBook> BorrowedBooks { get; set; } = new List<BorrowedBook>();
-
+        public ICollection<FavouriteAuthor> FavouriteAuthors { get; set; } = new List<FavouriteAuthor>();
     }
 }
