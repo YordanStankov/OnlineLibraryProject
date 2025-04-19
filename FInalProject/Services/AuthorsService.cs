@@ -11,6 +11,7 @@ namespace FInalProject.Services
     public interface IAuthorsService
     {
         Task<bool> FavouriteAuthorAsync(int authorId, ClaimsPrincipal User);
+        Task<bool> AddPortraitToAuthorAsync(AddAuthorPortraitViewModel model);
         Task<List<AuthorListViewModel>> RenderAuthorListAsync();
         Task<AuthorProfileViewModel> RenderAuthorProfileAsync(int authorId, ClaimsPrincipal User); 
     }
@@ -22,6 +23,15 @@ namespace FInalProject.Services
         {
             _context = context;
             _userManager = userManager;
+        }
+
+        public async Task<bool> AddPortraitToAuthorAsync(AddAuthorPortraitViewModel model)
+        {
+            var author = await _context.Authors.FirstOrDefaultAsync(a => a.Id == model.Id);
+            author.Portrait = model.Picture;
+            _context.Update(author);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<bool> FavouriteAuthorAsync(int authorId, ClaimsPrincipal User)
@@ -56,13 +66,13 @@ namespace FInalProject.Services
             return await _context.Authors.Select(a => new AuthorListViewModel
             {
                 AuthorId = a.Id,
+                AuthorPortrait = a.Portrait,
                 AuthorName = a.Name,
                 Favourites = a.FavouriteAuthors.Count()
             }).ToListAsync();
         }
         public async Task<AuthorProfileViewModel> RenderAuthorProfileAsync(int authorId, ClaimsPrincipal User)
         {
-            
             var currUser = await _userManager.GetUserAsync(User);
             var author = await _context.Authors
                 .AsNoTracking()

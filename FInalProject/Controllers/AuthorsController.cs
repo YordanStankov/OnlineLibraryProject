@@ -1,5 +1,6 @@
 ﻿using FInalProject.Data.Models;
 using FInalProject.Services;
+using FInalProject.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
@@ -38,6 +39,13 @@ namespace FInalProject.Controllers
                 throw new ArgumentNullException("user is null");
             }
             return Json(new { success = response });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddAuthorPortrait(AddAuthorPortraitViewModel model)
+        {
+            var response = await _authorsService.AddPortraitToAuthorAsync(model);
+            return RedirectToAction("AuthorProfile", new { authorId = model.Id });
         }
     }
 }

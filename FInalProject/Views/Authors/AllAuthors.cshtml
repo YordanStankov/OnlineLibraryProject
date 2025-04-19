@@ -5,8 +5,13 @@
 }
 <div class="container mt-4">
     <h2 class="mb-4">All Authors</h2>
-
-    @foreach (var author in Model)
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <h2>Login to access the library</h2>
+    }
+    else
+    {
+        @foreach (var author in Model)
     {
         <div class="d-flex align-items-center justify-content-between mb-4 p-4 border rounded shadow-sm"
              style="min-height: 12rem;">
@@ -36,4 +41,6 @@
             </div>
         </div>
     }
+}
 </div>
+    
