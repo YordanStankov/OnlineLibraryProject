@@ -4,7 +4,9 @@ namespace FInalProject.ViewModels
 {
     public class AuthorProfileViewModel
     {
+        public int AuthorId { get; set; }
         public string AuthorName { get; set; }
+        public bool isAuthorFavourited { get; set; }
         public string? AuthorPortrait { get; set; }
         public ICollection<FavouriteAuthor>? FavouriteAuthors { get; set; }
         public int FavouritesCount { get; set; }
