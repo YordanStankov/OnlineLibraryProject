@@ -13,7 +13,8 @@ namespace FInalProject.Services
         Task<bool> FavouriteAuthorAsync(int authorId, ClaimsPrincipal User);
         Task<bool> AddPortraitToAuthorAsync(AddAuthorPortraitViewModel model);
         Task<List<AuthorListViewModel>> RenderAuthorListAsync();
-        Task<AuthorProfileViewModel> RenderAuthorProfileAsync(int authorId, ClaimsPrincipal User); 
+        Task<AuthorProfileViewModel> RenderAuthorProfileAsync(int authorId, ClaimsPrincipal User);
+        Task<List<AuthorListViewModel>> RenderSearchResultsAsync(string searchString);
     }
     public class AuthorsService : IAuthorsService
     {
@@ -109,5 +110,19 @@ namespace FInalProject.Services
             };
         }
 
+        public async Task<List<AuthorListViewModel>> RenderSearchResultsAsync(string searchString)
+        {
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                return await _context.Authors.Where(a => a.Name.ToLower().Contains(searchString.ToLower())).Select(a => new AuthorListViewModel
+                {
+                    AuthorId = a.Id,
+                    AuthorPortrait = a.Portrait,
+                    AuthorName = a.Name,
+                    Favourites = a.FavouriteAuthors.Count()
+                }).ToListAsync();
+            }
+            return null;
+        }
     }
 }

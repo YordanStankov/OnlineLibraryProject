@@ -3,6 +3,7 @@ using FInalProject.Services;
 using FInalProject.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Runtime.CompilerServices;
 
 namespace FInalProject.Controllers
@@ -19,8 +20,15 @@ namespace FInalProject.Controllers
         [HttpGet]
         public async Task<IActionResult> AllAuthors()
         {
-            var authors = await _authorsService.RenderAuthorListAsync();
-            return View(authors);
+            string? authorsJson = TempData["SearchedAuthors"] as string;
+            if (authorsJson == null)
+            {
+                var authors = await _authorsService.RenderAuthorListAsync();
+                return View(authors);
+            }
+            List<AuthorListViewModel>? searchedAuthors = new List<AuthorListViewModel>();
+            searchedAuthors = JsonConvert.DeserializeObject<List<AuthorListViewModel>>(authorsJson);
+            return View(searchedAuthors);
         }
         [HttpGet]
         public async Task<IActionResult> AuthorProfile(int authorId)
@@ -46,6 +54,13 @@ namespace FInalProject.Controllers
         {
             var response = await _authorsService.AddPortraitToAuthorAsync(model);
             return RedirectToAction("AuthorProfile", new { authorId = model.Id });
+        }
+        [HttpGet]
+        public async Task<IActionResult> SearchAuthor(string searchedString)
+        {
+            var authors = await _authorsService.RenderSearchResultsAsync(searchedString);
+            TempData["SearchedAuthors"] = JsonConvert.SerializeObject(authors);
+            return RedirectToAction("AllAuthors");
         }
     }
 }

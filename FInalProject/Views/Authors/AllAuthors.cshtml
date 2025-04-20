@@ -11,6 +11,8 @@
     }
     else
     {
+        @await Html.PartialAsync("_AuthorsPageSearchBar");
+        
         @foreach (var author in Model)
     {
         <div class="d-flex align-items-center justify-content-between mb-4 p-4 border rounded shadow-sm"

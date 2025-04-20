@@ -24,7 +24,7 @@ namespace FInalProject.Controllers
         [HttpGet]
         public async Task<IActionResult> AllBooks(int modifier)
         {
-            string BookJson = TempData["Books"] as string;
+            string? BookJson = TempData["Books"] as string;
             if(BookJson == null)
             {
                 if (modifier == 0)
@@ -48,12 +48,9 @@ namespace FInalProject.Controllers
             }
             else
             {
-                var booksJson = TempData["Books"] as string;
-                List<BookListViewModel> books = new List<BookListViewModel>();
-                if (booksJson != null)
-                {
-                    books = JsonConvert.DeserializeObject<List<BookListViewModel>>(booksJson);
-                }
+               
+                List<BookListViewModel>? books = new List<BookListViewModel>();
+                    books = JsonConvert.DeserializeObject<List<BookListViewModel>>(BookJson);
                 return View(books);
             }
         }
