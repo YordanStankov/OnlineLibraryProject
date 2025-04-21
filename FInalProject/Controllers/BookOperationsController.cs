@@ -47,13 +47,10 @@ namespace FInalProject.Controllers
         [HttpGet]
         public async Task<IActionResult> Search(string searchedString)
         {
-            if (searchedString == null)
-            {
-                return RedirectToAction("AllBooks", "Books");
-            }
+            
             var books = await _bookOprationsService.ReturnSearchResultsAync(searchedString);
             TempData["Books"] = JsonConvert.SerializeObject(books);
-            return RedirectToAction("AllBooks", "Books");
+            return RedirectToAction("SearchResults", "Books");
         }
         [HttpPost]
         public async Task<IActionResult> Edit(BookCreationViewModel model)

@@ -24,34 +24,23 @@ namespace FInalProject.Controllers
         [HttpGet]
         public async Task<IActionResult> AllBooks(int modifier)
         {
-            string? BookJson = TempData["Books"] as string;
-            if(BookJson == null)
+            if (modifier == 0)
             {
-                if (modifier == 0)
+                var bookies = await _booksService.GetAllBooksAsync();
+                if (bookies == null)
                 {
-                    var bookies = await _booksService.GetAllBooksAsync();
-                    if (bookies == null)
-                    {
-                        return RedirectToAction("LoginPlease", "UserErrors");
-                    }
-                    return View(bookies);
+                    return RedirectToAction("LoginPlease", "UserErrors");
                 }
-                else 
-                {
-                    var specificBooks = await _booksService.GetAllBooksFromSpecificCategoryAsync(modifier);
-                    if (specificBooks == null)
-                    {
-                        return RedirectToAction("NoneFromCategory", "UserErrors");
-                    }
-                    return View(specificBooks);
-                }
+                return View(bookies);
             }
             else
             {
-               
-                List<BookListViewModel>? books = new List<BookListViewModel>();
-                    books = JsonConvert.DeserializeObject<List<BookListViewModel>>(BookJson);
-                return View(books);
+                var specificBooks = await _booksService.GetAllBooksFromSpecificCategoryAsync(modifier);
+                if (specificBooks == null)
+                {
+                    return RedirectToAction("NoneFromCategory", "UserErrors");
+                }
+                return View(specificBooks);
             }
         }
 
@@ -73,20 +62,20 @@ namespace FInalProject.Controllers
         public async Task<IActionResult> BookFocus(int id)
         {
             bool response = await _booksService.UserRoleCheckAsync(User);
-            if(response == true)
-                {
-                    ViewBag.IsHe = true; 
-                }
+            if (response == true)
+            {
+                ViewBag.IsHe = true;
+            }
             else
-                {
-                    ViewBag.IsHe = false;  
-                }
+            {
+                ViewBag.IsHe = false;
+            }
 
             var focusedBook = await _booksService.GetBookFocusAsync(id);
-                if (focusedBook == null)
-                    {
-                        throw new ArgumentException("Book not found");
-                    }
+            if (focusedBook == null)
+            {
+                throw new ArgumentException("Book not found");
+            }
             return View(focusedBook);
         }
 
@@ -96,11 +85,21 @@ namespace FInalProject.Controllers
             var info = await _booksService.getBookInfoAsync(editId);
             return View(info);
         }
+
         [HttpGet]
         public async Task<IActionResult> BooksLeaderboard()
         {
             var bookies = await _booksService.ReturnLeaderboardResultsAsync();
             return View(bookies);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> SearchResults()
+        {
+            string? resultsJson = TempData["Books"] as string;
+            SearchResultsViewModel? results = new();
+             results = JsonConvert.DeserializeObject<SearchResultsViewModel>(resultsJson);
+            return View(results);
         }
     }
 }

@@ -1,0 +1,36 @@
+﻿@page
+@model LikedBooksModel
+@{
+    ViewBag.Title = "Page of books liked by user";
+    ViewData["ActivePage"] = ManageNavPages.LikedBooks;
+}
+
+<div class="container mt-5" style="max-width: 800px;">
+    <h2 class="mb-4 text-success fw-bold text-center border-bottom pb-2">💖 Liked Books</h2>
+
+    @if (Model.FavouritesOfUser != null && Model.FavouritesOfUser.Any())
+    {
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            @foreach (var favourite in Model.FavouritesOfUser)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <img src="@favourite.CoverImage" class="card-img-top" alt="@favourite.Name" style="height: 35rem; object-fit: cover;">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <h5 class="card-title text-primary">@favourite.Name</h5>
+                            <a class="btn btn-outline-primary mt-3" href="@Url.Action("BookFocus", "Books", new { id = favourite.Id })">
+                                See more
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center fw-semibold mt-3">
+            No books have been liked so far.
+        </div>
+    }
+</div>

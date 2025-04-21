@@ -16,7 +16,7 @@ namespace FInalProject.Services
     {
         Task<bool> BorrowBookAsync(int borrowId, ClaimsPrincipal Use);
         Task<bool> EditBookAsync(BookCreationViewModel model);
-        Task<List<BookListViewModel>> ReturnSearchResultsAync(string searchedString);
+        Task<SearchResultsViewModel> ReturnSearchResultsAync(string searchedString);
         Task<bool> DeleteBookAsync(int doomedId);
         Task<int> CreateCommentAsync(CreateCommentViewModel model, ClaimsPrincipal user);
         Task<bool> UpdateFavouritesAsync(int amount, int bookId, ClaimsPrincipal user);
@@ -164,33 +164,50 @@ namespace FInalProject.Services
             return true;
         }
 
-        public async Task<List<BookListViewModel>> ReturnSearchResultsAync(string searchedString)
+        public async Task<SearchResultsViewModel> ReturnSearchResultsAync(string searchedString)
         {
-            if (string.IsNullOrWhiteSpace(searchedString))
+            SearchResultsViewModel results = new SearchResultsViewModel
             {
-                return null;
+                SearchQuery = searchedString
+            };
+            if (string.IsNullOrWhiteSpace(results.SearchQuery))
+            {
+                results.Message = "Nothing was typed into the search bar";
+                return results;
             }
-            string loweredSearch = searchedString.ToLower();
+
+            string loweredSearch = results.SearchQuery.ToLower();
+
             var books1 = await _context.Books
                 .Include(b => b.Author)
                 .Include(b => b.BookGenres)
                 .ThenInclude(bg => bg.Genre)
-                .Where(b => (b.Name.ToLower().Contains(loweredSearch) ||
-                    b.Author != null && b.Author.Name.ToLower().Contains(loweredSearch) || 
+                .Where(b => b.AmountInStock > 0 && (b.Name.ToLower().Contains(loweredSearch) ||
+                    (b.Author != null && b.Author.Name.ToLower().Contains(loweredSearch)) || 
                     b.BookGenres.Any(bg => bg.Genre.Name.ToLower().Contains(loweredSearch)) ||
-                    b.CategoryString.ToLower().Contains(loweredSearch)) && b.AmountInStock > 0)
+                    b.CategoryString.ToLower().Contains(loweredSearch)))
                 .ToListAsync();
 
-            return books1.Select(b => new BookListViewModel
+            if(books1.Any())
             {
-                Id = b.Id,
-                Name = b.Name,
-                Pages = b.Pages,
-                AuthorName = b.Author.Name,
-                Category = b.Category,
-                CoverImage = b.CoverImage,
-                Genres = b.BookGenres.Select(bg => bg.Genre.Name).ToList()
-            }).ToList();
+                results.Message = $"Search results for: {results.SearchQuery}";
+                results.BooksMatchingQuery = books1.Select(b => new BookListViewModel
+                {
+                    Id = b.Id,
+                    Name = b.Name,
+                    Pages = b.Pages,
+                    AuthorName = b.Author.Name,
+                    Category = b.Category,
+                    CoverImage = b.CoverImage,
+                    Genres = b.BookGenres?.Select(bg => bg.Genre.Name).ToList()
+                }).ToList();
+                return results;
+            }
+            else
+            {
+                results.Message = $"No books found matching this search: {results.SearchQuery}";
+            }
+            return results;
         }
 
         public async Task<bool> UpdateFavouritesAsync(int amount, int bookId, ClaimsPrincipal user)

@@ -45,7 +45,7 @@ namespace FInalProject.Areas.Identity.Pages.Account.Manage
         public async Task<IActionResult> OnPostAsync()
         {
             bool response = await _bookOperationsService.ReturnBookAsync(model);
-            return RedirectToPage();
+            return RedirectToPage   ();
         }
     }
 }

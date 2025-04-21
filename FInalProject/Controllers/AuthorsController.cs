@@ -17,6 +17,7 @@ namespace FInalProject.Controllers
             _authorsService = authorsService;
             _userManager = userManager;
         }
+
         [HttpGet]
         public async Task<IActionResult> AllAuthors()
         {
@@ -30,6 +31,7 @@ namespace FInalProject.Controllers
             searchedAuthors = JsonConvert.DeserializeObject<List<AuthorListViewModel>>(authorsJson);
             return View(searchedAuthors);
         }
+
         [HttpGet]
         public async Task<IActionResult> AuthorProfile(int authorId)
         {
@@ -55,6 +57,7 @@ namespace FInalProject.Controllers
             var response = await _authorsService.AddPortraitToAuthorAsync(model);
             return RedirectToAction("AuthorProfile", new { authorId = model.Id });
         }
+
         [HttpGet]
         public async Task<IActionResult> SearchAuthor(string searchedString)
         {

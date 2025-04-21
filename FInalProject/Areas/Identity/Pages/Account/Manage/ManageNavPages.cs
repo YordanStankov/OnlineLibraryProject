@@ -36,6 +36,7 @@ namespace  FInalProject.Areas.Identity.Pages.Account.Manage
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public static string BorrowedBooks => "BorrowedBooks";
+        public static string LikedBooks => "LikedBooks";
         public static string DownloadPersonalData => "DownloadPersonalData";
 
         /// <summary>
@@ -110,12 +111,17 @@ namespace  FInalProject.Areas.Identity.Pages.Account.Manage
         /// </summary>
         public static string TwoFactorAuthenticationNavClass(ViewContext viewContext) => PageNavClass(viewContext, TwoFactorAuthentication);
 
+
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         
         //I WROTE THIS GET BENT MICROSOFT
+        public static string LikedBooksNavClass(ViewContext viewContext)
+        {
+            return PageNavClass(viewContext, LikedBooks);
+        }
         public static string BorrowedBooksNavClass(ViewContext viewContext)
         {
             return PageNavClass(viewContext, BorrowedBooks);

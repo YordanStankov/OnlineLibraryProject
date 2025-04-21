@@ -174,7 +174,7 @@ namespace FInalProject.Services
                 .Include(a => a.Author)
                 .Include(bg => bg.BookGenres)
                 .ThenInclude(g => g.Genre)
-                .Where(b => (int)b.Category == modifier)
+                .Where(b => (int)b.Category == modifier && b.AmountInStock > 0)
                 .Select(n => new BookListViewModel()
                 {
                     Id = n.Id,
