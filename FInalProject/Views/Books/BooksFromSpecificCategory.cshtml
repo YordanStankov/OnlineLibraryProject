@@ -7,6 +7,9 @@
 {
     <h2>Please login to access the library</h2>
 }
+
+@await Html.PartialAsync("_SearchBarPartial")
+
 else
 {
     if(Model.BooksFromCategory is null)

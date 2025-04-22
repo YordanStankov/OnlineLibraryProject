@@ -27,12 +27,14 @@ namespace FInalProject.Services
         private readonly ILogger<BookOprationsService> _logger;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
+        private readonly IEmailService _emailService;
 
-        public BookOprationsService(ApplicationDbContext context, UserManager<User> userManager, ILogger<BookOprationsService> logger)
+        public BookOprationsService(ApplicationDbContext context, UserManager<User> userManager, ILogger<BookOprationsService> logger, IEmailService emailService)
         {
             _context = context;
             _userManager = userManager;
             _logger = logger;
+            _emailService = emailService;
         }
 
         public async Task<bool> BorrowBookAsync(int borrowedId, ClaimsPrincipal user)
@@ -43,7 +45,7 @@ namespace FInalProject.Services
                 .Include(b => b.BookGenres)
                 .ThenInclude(bg => bg.Genre)
                 .FirstOrDefaultAsync(b => b.Id == borrowedId);
-            if(book != null)
+            if(book != null && book.AmountInStock > 0)
             {
                 book.AmountInStock -= 1;
                 var borrowingUser = await _userManager.GetUserAsync(user);
@@ -58,7 +60,10 @@ namespace FInalProject.Services
                 };
                 await _context.BorrowedBooks.AddAsync(borrowedBook);
                 await _context.SaveChangesAsync();
+                var userMail = await _userManager.GetUserNameAsync(borrowingUser);
+                await _emailService.SendEmailForBorrowingAsync(userMail, "Book return",$"please return this book by: {borrowedBook.UntillReturn}");
                 return true;
+                
             }
             return false;
         }

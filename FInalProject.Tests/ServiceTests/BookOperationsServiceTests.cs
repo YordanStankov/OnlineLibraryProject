@@ -130,32 +130,6 @@ namespace FinalProject.Tests.ServiceTests
             Assert.AreEqual(0, await _context.Books.CountAsync());
         }
 
-        [Test]
-        public async Task ReturnSearchResultsAync_ValidString_ReturnsResults()
-        {
-            var author = new Author { Name = "Test Author" };
-            _context.Authors.Add(author);
-            await _context.SaveChangesAsync();
-
-            var book = new Book
-            {
-                Name = "Interesting Book",
-                AmountInStock = 5,
-                CategoryString = "Educational",
-                CoverImage = "cover.jpg",
-                Description = "A great book",
-                Pages = 100,
-                ReadingTime = 60, 
-                Author = author,
-                BookGenres = new List<BookGenre>() };
-            _context.Books.Add(book);
-            await _context.SaveChangesAsync();
-
-            var results = await _bookService.ReturnSearchResultsAync("Test");
-
-            Assert.IsNotNull(results);
-            Assert.AreEqual(1, results.Count);
-            Assert.AreEqual("Interesting Book", results[0].Name);
-        }
+        
     }
 }

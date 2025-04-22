@@ -38,6 +38,7 @@ namespace FInalProject
             builder.Services.AddScoped<IGenreService, GenreService>();
             builder.Services.AddScoped<IUserOperationsService, UserOperationsService>();
             builder.Services.AddScoped<IAuthorsService, AuthorsService>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
 
             //the app gets built
             var app = builder.Build();
