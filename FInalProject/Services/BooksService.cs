@@ -10,7 +10,7 @@ namespace FInalProject.Services
 {
     public interface IBooksService
     {
-        Task<List<BookListViewModel>> GetAllBooksFromSpecificCategoryAsync(int modifier);
+        Task<BooksFromCategoryViewModel> GetAllBooksFromSpecificCategoryAsync(int modifier);
         Task<BookCreationViewModel> getBookInfoAsync(int editId);
         Task<List<BookListViewModel>> GetAllBooksAsync();
         Task<BookFocusViewModel> GetBookFocusAsync(int id);
@@ -166,15 +166,16 @@ namespace FInalProject.Services
             };
         }
 
-        public async Task<List<BookListViewModel>> GetAllBooksFromSpecificCategoryAsync(int modifier)
+        public async Task<BooksFromCategoryViewModel> GetAllBooksFromSpecificCategoryAsync(int modifier)
         {
+            BooksFromCategoryViewModel returnModel = new BooksFromCategoryViewModel();
+            
             _logger.LogInformation("GETTING ALL BOOKS FROM A CERTAIN GENRE FILLING THE VIEW");
-            var specificBooks = await _context.Books
+
+            returnModel.BooksFromCategory = await _context.Books
                 .AsNoTracking()
-                .Include(a => a.Author)
-                .Include(bg => bg.BookGenres)
-                .ThenInclude(g => g.Genre)
                 .Where(b => (int)b.Category == modifier && b.AmountInStock > 0)
+                .Take(20)
                 .Select(n => new BookListViewModel()
                 {
                     Id = n.Id,
@@ -185,12 +186,18 @@ namespace FInalProject.Services
                     CoverImage = n.CoverImage,
                     Genres = n.BookGenres.Select(bg => bg.Genre.Name).ToList(),
                 }).ToListAsync();
-            if (specificBooks == null)
+            returnModel.Category = returnModel.BooksFromCategory.Select(rm => rm.Category).FirstOrDefault()?.ToString();
+
+            if (returnModel.BooksFromCategory.Count == 0)
             {
-                return null;
+                returnModel.Message = $"No books found from {returnModel.Category} category"; 
+                return returnModel;
             }
-            return specificBooks; 
+           
+            returnModel.Message = $"All books from {returnModel.Category} category";
+            return returnModel; 
         }
+
         public async Task<bool> UserRoleCheckAsync(ClaimsPrincipal user)
         {
             var currUser = await _userManager.GetUserAsync(user);

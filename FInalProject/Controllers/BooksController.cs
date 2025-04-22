@@ -22,26 +22,21 @@ namespace FInalProject.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> AllBooks(int modifier)
+        public async Task<IActionResult> AllBooks()
         {
-            if (modifier == 0)
-            {
                 var bookies = await _booksService.GetAllBooksAsync();
                 if (bookies == null)
                 {
                     return RedirectToAction("LoginPlease", "UserErrors");
                 }
                 return View(bookies);
-            }
-            else
-            {
-                var specificBooks = await _booksService.GetAllBooksFromSpecificCategoryAsync(modifier);
-                if (specificBooks == null)
-                {
-                    return RedirectToAction("NoneFromCategory", "UserErrors");
-                }
-                return View(specificBooks);
-            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> BooksFromSpecificCategory(int modifier)
+        {
+            var results = await _booksService.GetAllBooksFromSpecificCategoryAsync(modifier);
+            return View(results);
         }
 
         [HttpGet]
@@ -94,11 +89,11 @@ namespace FInalProject.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> SearchResults()
+        public IActionResult SearchResults()
         {
             string? resultsJson = TempData["Books"] as string;
             SearchResultsViewModel? results = new();
-             results = JsonConvert.DeserializeObject<SearchResultsViewModel>(resultsJson);
+            results = JsonConvert.DeserializeObject<SearchResultsViewModel>(resultsJson);
             return View(results);
         }
     }

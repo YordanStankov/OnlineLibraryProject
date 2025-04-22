@@ -1,0 +1,35 @@
+﻿/* Background Styling */
+body {
+    background: linear-gradient(to right, #141e30, #243b55);
+    color: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Card Styling */
+.category-card {
+    background: #2c3e50;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+    .category-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 6px 6px 20px rgba(0, 0, 0, 0.5);
+    }
+
+/* Button Styling */
+.browse-btn {
+    background: #2980b9;
+    color: white;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-weight: bold;
+    transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+    .browse-btn:hover {
+        background: #1f618d;
+        transform: scale(1.05);
+    }

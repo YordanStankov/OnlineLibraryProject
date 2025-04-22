@@ -1,0 +1,58 @@
+﻿@using FInalProject.ViewModels
+@model BooksFromCategoryViewModel
+@{
+    ViewBag.Title = $"Books from category: {Model.Category}";
+}
+@if (!User.Identity.IsAuthenticated)
+{
+    <h2>Please login to access the library</h2>
+}
+else
+{
+    if(Model.BooksFromCategory is null)
+    {
+        <h2>@Model.Message</h2>
+    }
+    else
+    {
+        <h2>@Model.Message</h2>
+        @foreach (var book in Model.BooksFromCategory)
+        {
+            <div class="col-md-6 mb-4">
+                <div class="card p-3 shadow">
+                    <div class="row g-0 align-items-center">
+                        <!-- Image Section -->
+                        <div class="col-md-4 text-center">
+                            <img src="@book.CoverImage" class="img-fluid rounded" alt="Book Cover" style="width: 18rem; height: 16rem; object-fit: cover;">
+                        </div>
+
+                        <!-- Text Content Section -->
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">@book.Name</h5>
+                                <p class="card-text"><strong>Pages:</strong> @book.Pages</p>
+                                <p class="card-text"><strong>Author:</strong> @book.AuthorName</p>
+                                <p class="card-text"><strong>Category:</strong> @book.Category</p>
+                                <p class="card-text">
+                                    <strong>Genres:</strong>
+                                    @if (!book.Genres.Any())
+                                    {
+                                        <span>No genres listed</span>
+                                    }
+                                    else
+                                    {
+                                        @foreach (var genre in book.Genres)
+                                        {
+                                            <span class="badge bg-secondary">@genre</span>
+                                        }
+                                    }
+                                </p>
+                                <a href="@Url.Action("BookFocus", "Books", new {id = book.Id})" class="btn btn-primary">See more</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+}

@@ -1,16 +1,20 @@
 ﻿@using FInalProject.ViewModels;
-@model SearchResultsViewModel;
+@model BooksFromCategoryViewModel;
 @{
     ViewBag.Title = "Search results";
 }
-@if(Model.BooksMatchingQuery is null)
+@if (!User.Identity.IsAuthenticated)
+{
+    <h2>Login to access the library</h2>
+}
+@if(Model.BooksFromCategory is null || !Model.BooksFromCategory.Any())
 {
     <h2>@Model.Message</h2>
 }
 else
 {
     <h2>@Model.Message</h2>
-    @foreach(var book in Model.BooksMatchingQuery)
+    @foreach(var book in Model.BooksFromCategory)
     {
                     <div class="col-md-6 mb-4">
                         <div class="card p-3 shadow">
