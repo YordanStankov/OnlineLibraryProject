@@ -7,6 +7,7 @@ namespace FInalProject.Services
     public interface IEmailService 
     {
         Task SendEmailForBorrowingAsync(string toEmail, string subject, string body);
+        Task<string> LoadEmailTemplateAsync(string TemplateName, Dictionary<string, string> placeholders);
     }
     public class EmailService : IEmailService
     {
@@ -14,6 +15,17 @@ namespace FInalProject.Services
         public EmailService(IConfiguration config)
         {
             _config = config;
+        }
+
+        public async Task<string> LoadEmailTemplateAsync(string templateName, Dictionary<string, string> placeholders)
+        {
+            var templatePath = Path.Combine(Directory.GetCurrentDirectory(), "EmailTemplates", templateName);
+            var content = await File.ReadAllTextAsync(templatePath);
+            foreach (var placeholder in placeholders)
+            {
+                content = content.Replace($"{{{{{placeholder.Key}}}}}", placeholder.Value);
+            }
+            return content;
         }
 
         public async Task SendEmailForBorrowingAsync(string toEmail, string subject, string body)
@@ -30,5 +42,6 @@ namespace FInalProject.Services
             await smtp.SendAsync(email);
             await smtp.DisconnectAsync(true);
         }
+
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using FInalProject.EmailTemplates;
 using SQLitePCL;
 using System.Linq;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -39,33 +40,44 @@ namespace FInalProject.Services
 
         public async Task<bool> BorrowBookAsync(int borrowedId, ClaimsPrincipal user)
         {
+            var borrowingUser = await _userManager.GetUserAsync(user);
+            if (borrowingUser == null) return false;
+
             _logger.LogInformation("BORROWING BOOK");
             var book = await _context.Books
                 .Include(b => b.Author)
-                .Include(b => b.BookGenres)
-                .ThenInclude(bg => bg.Genre)
+                .Include(b => b.BorrowedBooks)
                 .FirstOrDefaultAsync(b => b.Id == borrowedId);
-            if(book != null && book.AmountInStock > 0)
+
+
+            if(book != null && !book.BorrowedBooks.Any(bb => bb.UserId == borrowingUser.Id && bb.BookId == book.Id))
             {
-                book.AmountInStock -= 1;
-                var borrowingUser = await _userManager.GetUserAsync(user);
-                var borrowedBook = new BorrowedBook
-                {
-                    DateTaken = DateTime.Now,
-                    UntillReturn = DateTime.Now.AddDays(14),
-                    UserId = borrowingUser.Id,
-                    Book = book,
-                    BookId = book.Id,
-                    User = borrowingUser
-                };
-                await _context.BorrowedBooks.AddAsync(borrowedBook);
-                await _context.SaveChangesAsync();
-                var userMail = await _userManager.GetUserNameAsync(borrowingUser);
-                await _emailService.SendEmailForBorrowingAsync(userMail, "Book return",$"please return this book by: {borrowedBook.UntillReturn}");
-                return true;
-                
-            }
-            return false;
+                    book.AmountInStock -= 1;
+
+                    var borrowedBook = new BorrowedBook
+                    {
+                        DateTaken = DateTime.Now,
+                        UntillReturn = DateTime.Now.AddDays(14),
+                        UserId = borrowingUser.Id,
+                        Book = book,
+                        BookId = book.Id,
+                        User = borrowingUser
+                    };
+                    await _context.BorrowedBooks.AddAsync(borrowedBook);
+                    await _context.SaveChangesAsync();
+
+                var email = borrowingUser.Email ?? string.Empty;
+                    Dictionary<string, string> placeees = new Dictionary<string, string>
+                    {
+                        {"UserName", email },
+                        {"BookTitle", book.Name },
+                        {"ReturnDate", string.Format("{0:dd MMM yyyy}", borrowedBook.UntillReturn) }
+                    };
+                    var emailBody = await _emailService.LoadEmailTemplateAsync(TemplateNames.BorrowingConfirmationEmail, placeees);
+                    await _emailService.SendEmailForBorrowingAsync(email, "Book return", emailBody);
+                    return true;
+                }
+                return false;
         }
 
         public async Task<int> CreateCommentAsync(CreateCommentViewModel model, ClaimsPrincipal user)

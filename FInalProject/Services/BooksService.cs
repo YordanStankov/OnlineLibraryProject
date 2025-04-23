@@ -148,7 +148,10 @@ namespace FInalProject.Services
                 .Include(b => b.BookGenres)
                 .ThenInclude(b => b.Genre)
                 .FirstOrDefaultAsync(b => b.Id == editId);
-            
+            if(book is null)
+            {
+                return null;
+            }
             var genres = await _context.Genres.ToListAsync();
 
             return new BookCreationViewModel
