@@ -3,7 +3,10 @@
 @{
     ViewBag.Title = "Author Profile";
 }
-
+@if(Model.AuthorName == null)
+{
+    <h2>Profile not loaded correctly</h2>
+}
 <div class="container mt-4">
     <!-- Author Info Section (All wrapped in one clean div) -->
     <div class="author-profile-container shadow rounded p-4 mb-5 position-relative">
@@ -76,7 +79,7 @@
                                     <p class="card-text"><strong>Category:</strong> @book.Category</p>
                                     <p class="card-text">
                                         <strong>Genres:</strong>
-                                        @if (!book.Genres.Any())
+                                        @if (book.Genres == null || !book.Genres.Any())
                                         {
                                             <span>No genres listed</span>
                                         }

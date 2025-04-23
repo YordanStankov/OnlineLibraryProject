@@ -29,6 +29,7 @@ namespace FInalProject.Services
         public async Task<bool> AddPortraitToAuthorAsync(AddAuthorPortraitViewModel model)
         {
             var author = await _context.Authors.FirstOrDefaultAsync(a => a.Id == model.Id);
+            if (author == null) return false;
             author.Portrait = model.Picture;
             _context.Update(author);
             await _context.SaveChangesAsync();
@@ -74,47 +75,55 @@ namespace FInalProject.Services
         }
         public async Task<AuthorProfileViewModel> RenderAuthorProfileAsync(int authorId, ClaimsPrincipal User)
         {
-            var currUser = await _userManager.GetUserAsync(User);
+            var empty = new AuthorProfileViewModel();
+            var currUserId = _userManager.GetUserId(User);
+            if (currUserId == null) return empty;
+
             var author = await _context.Authors
                 .AsNoTracking()
                 .Include(a => a.Books)
-                .ThenInclude(b => b.BookGenres)
-                .ThenInclude(bg => bg.Genre)
+                    .ThenInclude(b => b.BookGenres)
+                        .ThenInclude(bg => bg.Genre)
+                .Include(a => a.Books)
                 .Include(a => a.FavouriteAuthors)
                 .FirstOrDefaultAsync(a => a.Id == authorId);
-           
-            if (author is null)
-            {
-                return null;
-            }
 
-            bool fave = author.FavouriteAuthors.Any(fa => fa.AuthorId == authorId && fa.UserId == currUser.Id);
+            if (author is null) return empty;
+
+            var fave = author.FavouriteAuthors.Any(fa => fa.AuthorId == authorId && fa.UserId == currUserId);
 
             return new AuthorProfileViewModel
             {
-                isAuthorFavourited = fave, 
+                isAuthorFavourited = fave,
                 AuthorId = author.Id,
                 AuthorName = author.Name,
                 AuthorPortrait = author.Portrait,
-                AuthorsBooks = author.Books.Select(n => new BookListViewModel
+                AuthorsBooks = author.Books!.Select(n => new BookListViewModel
                 {
                     Id = n.Id,
-                    Name = n.Name,
+                    Name = n.Name!,
                     Pages = n.Pages,
                     Category = n.Category,
-                    AuthorName = n.Author.Name,
-                    CoverImage = n.CoverImage,
-                    Genres = n.BookGenres.Select(bg => bg.Genre.Name).ToList()
+                    AuthorName = n.Author?.Name ?? "Unknown",
+                    CoverImage = n.CoverImage!,
+                    Genres = n.BookGenres?
+                                .Where(bg => bg.Genre != null)
+                                .Select(bg => bg.Genre!.Name!)
+                                .ToList() ?? new List<string>()
                 }).ToList(),
-                FavouritesCount = author.FavouriteAuthors.Count()
+                FavouritesCount = author.FavouriteAuthors?.Count() ?? 0
             };
         }
 
+
         public async Task<List<AuthorListViewModel>> RenderSearchResultsAsync(string searchString)
         {
+            List<AuthorListViewModel> emptyList = new List<AuthorListViewModel>();
             if (!string.IsNullOrWhiteSpace(searchString))
             {
-                return await _context.Authors.Where(a => a.Name.ToLower().Contains(searchString.ToLower())).Select(a => new AuthorListViewModel
+                return await _context.Authors
+                    .Where(a => a.Name.ToLower().Contains(searchString.ToLower()))
+                    .Select(a => new AuthorListViewModel
                 {
                     AuthorId = a.Id,
                     AuthorPortrait = a.Portrait,
@@ -122,7 +131,7 @@ namespace FInalProject.Services
                     Favourites = a.FavouriteAuthors.Count()
                 }).ToListAsync();
             }
-            return null;
+            return emptyList;
         }
     }
 }
