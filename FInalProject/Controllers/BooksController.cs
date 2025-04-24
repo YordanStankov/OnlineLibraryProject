@@ -47,6 +47,7 @@ namespace FInalProject.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateABook(BookCreationViewModel model)
         {
             int bookId = await _booksService.CreateBookAsync(model);

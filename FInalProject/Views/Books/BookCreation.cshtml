@@ -14,7 +14,7 @@
     <div class="card shadow-lg border-0 rounded p-4 bg-light">
         <form asp-controller="Books" asp-action="CreateABook" method="post">
             <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
-
+            @Html.AntiForgeryToken()
             <div class="mb-3">
                 <label for="BookName" class="form-label fw-semibold">Book Name</label>
                 <input asp-for="Name" type="text" id="BookName" class="form-control" placeholder="Enter book name..." />

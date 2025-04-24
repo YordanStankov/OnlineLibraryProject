@@ -5,7 +5,7 @@
 }
 <form asp-action="SaveChangesToGenre" asp-controller="Genre" method="post" onsubmit="closeModal();">
     <input asp-for="Id" type="hidden"/>
-
+    @Html.AntiForgeryToken()
     <label for="GenreName">Genre Name</label>
     <input asp-for="Name" type="text" placeholder="@Model.Name"/>
 </form>

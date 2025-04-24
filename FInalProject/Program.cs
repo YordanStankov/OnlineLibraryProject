@@ -23,7 +23,10 @@ namespace FInalProject
                 options.UseSqlServer(connectionString));
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
+            builder.Services.AddAntiforgery(options =>
+            {
+                options.HeaderName = "RequestVerificationToken";
+            });
             //registers the roles
             builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedEmail = false)
                 .AddRoles<IdentityRole>()
@@ -59,7 +62,6 @@ namespace FInalProject
             //await app.SeedRolesAndAdminAsync();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
 
             app.UseAuthorization();

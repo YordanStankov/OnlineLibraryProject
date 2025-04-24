@@ -4,6 +4,7 @@
     ViewBag.Title = "Author Portrait input field";
 }
 <form method="post" asp-action="AddAuthorPortrait" asp-controller="Authors">
+    @Html.AntiForgeryToken();
     <input hidden asp-for="Id"/>
     <input asp-for="Picture"/>
     <input type="submit" value="Submit"/>

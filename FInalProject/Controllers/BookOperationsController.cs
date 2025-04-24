@@ -23,7 +23,8 @@ namespace FInalProject.Controllers
             _bookOprationsService = bookOprationsService;
         }
 
-        [HttpDelete]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<JsonResult> DeleteBook(int doomedId)
         {
             bool succes = await _bookOprationsService.DeleteBookAsync(doomedId);
@@ -35,6 +36,7 @@ namespace FInalProject.Controllers
 
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateComment(CreateCommentViewModel comment)
         {
             int response = await _bookOprationsService.CreateCommentAsync(comment, User);
@@ -53,6 +55,7 @@ namespace FInalProject.Controllers
             return RedirectToAction("SearchResults", "Books");
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(BookCreationViewModel model)
         {
             var result = await _bookOprationsService.EditBookAsync(model);
@@ -63,6 +66,7 @@ namespace FInalProject.Controllers
                 return RedirectToAction("AllBooks", "Books");
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> BorrowBook(int borrowedId)
         {
             var response = await _bookOprationsService.BorrowBookAsync(borrowedId, User);
@@ -73,6 +77,7 @@ namespace FInalProject.Controllers
             return Json(new { succes = false, message = "Book not found" });
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Rating (int amount, int bookId)
         {
             var response = await _bookOprationsService.UpdateFavouritesAsync(amount, bookId, User);

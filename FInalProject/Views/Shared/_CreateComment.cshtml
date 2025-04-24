@@ -4,6 +4,7 @@
     ViewBag.Title = "Create Comment";
 }
 <form id="CommentCreation" asp-controller="BookOperations" asp-action="CreateComment" method="post">
+    @Html.AntiForgeryToken()
     <label for="Description">Comment:</label>
     <input asp-for="Description" type="text" id="CommentDescription"/>
     <span asp-validation-for="Description" class="text-danger"></span>

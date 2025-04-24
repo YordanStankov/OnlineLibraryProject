@@ -19,6 +19,7 @@ namespace FInalProject.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddGenre(string Name)
         {
             bool response = await _genreService.AddGenreAsync(Name);
@@ -43,6 +44,7 @@ namespace FInalProject.Controllers
                 return View(result);
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteGenre(int doomedGenreId)
         {
             bool succes = await _genreService.DeleteGenreAsync(doomedGenreId); 
@@ -61,6 +63,7 @@ namespace FInalProject.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> SaveChangesToGenre(GenreEditViewModel model)
         {
             var succes = await _genreService.SaveChangesToGenreAsync(model);

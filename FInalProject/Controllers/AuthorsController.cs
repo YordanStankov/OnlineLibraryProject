@@ -52,6 +52,7 @@ namespace FInalProject.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddAuthorPortrait(AddAuthorPortraitViewModel model)
         {
             var response = await _authorsService.AddPortraitToAuthorAsync(model);

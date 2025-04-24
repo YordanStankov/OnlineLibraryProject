@@ -1,7 +1,14 @@
-﻿    function DeleteBook(bookId){
-                    if (confirm("Are you sure you want to delete this")){
-        fetch(`/BookOperations/DeleteBook?doomedId=${bookId}`,{
-        method:"DELETE"
+﻿function DeleteBook(bookId) {
+
+    if (confirm("Are you sure you want to delete this"))
+    {
+        const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+        fetch(`/BookOperations/DeleteBook?doomedId=${bookId}`, {
+
+            method: "POST",
+            headers: {
+                "RequestVerificationToken": token
+            }
         })
             .then(response => response.json())
             .then(data => {
@@ -18,8 +25,13 @@
     }
 
 function BorrowBook(borrowedId) {
+    const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+
         fetch(`/BookOperations/BorrowBook?borrowedId=${borrowedId}`, {
-            method: "POST"
+            method: "POST",
+             headers: {
+                 "RequestVerificationToken": token
+            }
         })
             .then(response => response.json())
             .then(data => {
