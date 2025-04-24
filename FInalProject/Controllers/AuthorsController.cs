@@ -59,11 +59,10 @@ namespace FInalProject.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> SearchAuthor(string searchedString)
+        public async Task<IActionResult> AuthorSearchResults(string searchedString)
         {
-            var authors = await _authorsService.RenderSearchResultsAsync(searchedString);
-            TempData["SearchedAuthors"] = JsonConvert.SerializeObject(authors);
-            return RedirectToAction("AllAuthors");
+            var model = await _authorsService.RenderSearchResultsAsync(searchedString);
+            return View(model);
         }
     }
 }

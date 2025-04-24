@@ -10,10 +10,8 @@ namespace FInalProject.Services
     {
         Task<bool> DeleteGenreAsync(int doomedGenreId);
         Task<bool> AddGenreAsync(string Name);
-
-        Task<List<BookListViewModel>> GetAllBooksOfCertainGenre(int genreId);
+        Task<BooksFromGenreViewModel> GetAllBooksOfCertainGenre(int genreId);
         Task<List<Genre>> GetGenreListAsync();
-
         Task<GenreEditViewModel> ProvideGenreForPartialAsync(int genreEditId);
         Task<bool> SaveChangesToGenreAsync(GenreEditViewModel model);
     }
@@ -74,13 +72,16 @@ namespace FInalProject.Services
             return genreList;
         }
 
-        public async Task<List<BookListViewModel>> GetAllBooksOfCertainGenre(int genreId)
+        public async Task<BooksFromGenreViewModel> GetAllBooksOfCertainGenre(int genreId)
         {
-            _logger.LogInformation("GETTING ALL BOOKS FROM CERTAIN GENRE METHOD");
-            var correctBooks = await _context.BookGenres
+            BooksFromGenreViewModel GenreBooks = new BooksFromGenreViewModel();
+
+            var genre = await _context.Genres.FirstOrDefaultAsync(g => g.Id == genreId);
+            GenreBooks.Genre = genre?.Name ?? "Null";
+
+            GenreBooks.BooksMatchingGenre = await _context.BookGenres
                 .AsNoTracking()
-                .Where(bg => bg.GenreId == genreId && 
-                bg.Book.AmountInStock > 0)
+                .Where(bg => bg.GenreId == genreId && bg.Book.AmountInStock > 0)
                 .Select(bg => new BookListViewModel()
                 {
                     Id = bg.Book.Id,
@@ -91,15 +92,15 @@ namespace FInalProject.Services
                     Genres = new List<string> { bg.Genre.Name }
                 }).ToListAsync();
 
-            if (correctBooks == null)
+            if (GenreBooks.BooksMatchingGenre == null || !GenreBooks.BooksMatchingGenre.Any())
             {
-                _logger.LogInformation("NO BOOKS FROM THIS GENRE");
-                return null;
+                GenreBooks.Message = $"No books from genre {GenreBooks.Genre}";
+                return GenreBooks;
             }
             else
             {
-                _logger.LogInformation("ALL BOOKS FROM THE CORRECT GENRE RETURNED");
-                return correctBooks;
+                GenreBooks.Message = $"Books found from {GenreBooks.Genre}";
+                return GenreBooks;
             }
         }
 

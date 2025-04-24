@@ -14,7 +14,7 @@ namespace FInalProject.Services
         Task<bool> AddPortraitToAuthorAsync(AddAuthorPortraitViewModel model);
         Task<List<AuthorListViewModel>> RenderAuthorListAsync();
         Task<AuthorProfileViewModel> RenderAuthorProfileAsync(int authorId, ClaimsPrincipal User);
-        Task<List<AuthorListViewModel>> RenderSearchResultsAsync(string searchString);
+        Task<AuthorSearchResultsViewModel> RenderSearchResultsAsync(string searchString);
     }
     public class AuthorsService : IAuthorsService
     {
@@ -116,13 +116,17 @@ namespace FInalProject.Services
         }
 
 
-        public async Task<List<AuthorListViewModel>> RenderSearchResultsAsync(string searchString)
+        public async Task<AuthorSearchResultsViewModel> RenderSearchResultsAsync(string searchString)
         {
-            List<AuthorListViewModel> emptyList = new List<AuthorListViewModel>();
-            if (!string.IsNullOrWhiteSpace(searchString))
+            AuthorSearchResultsViewModel results = new AuthorSearchResultsViewModel();
+            results.SearchQuery = searchString;
+            if (string.IsNullOrWhiteSpace(searchString))
             {
-                return await _context.Authors
-                    .Where(a => a.Name.ToLower().Contains(searchString.ToLower()))
+                results.Message = $"Empty search";
+                return results;
+            }
+                results.authorsFound = await _context.Authors
+                    .Where(a => a.Name.ToLower().Contains(results.SearchQuery.ToLower()))
                     .Select(a => new AuthorListViewModel
                 {
                     AuthorId = a.Id,
@@ -130,8 +134,13 @@ namespace FInalProject.Services
                     AuthorName = a.Name,
                     Favourites = a.FavouriteAuthors.Count()
                 }).ToListAsync();
+            if (!results.authorsFound.Any())
+            {
+                results.Message = $"No authors found with search: {results.SearchQuery}";
+                return results;
             }
-            return emptyList;
+            results.Message = $"Authors found with search: {results.SearchQuery}";
+            return results;
         }
     }
 }

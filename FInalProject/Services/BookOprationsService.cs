@@ -187,6 +187,7 @@ namespace FInalProject.Services
             {
                 SearchQuery = searchedString
             };
+
             if (string.IsNullOrWhiteSpace(results.SearchQuery))
             {
                 results.Message = "Nothing was typed into the search bar";

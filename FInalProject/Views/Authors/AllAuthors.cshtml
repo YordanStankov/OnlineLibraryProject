@@ -10,15 +10,11 @@
         <h2>Login to access the library</h2>
     }
 
-
     else
     {
         @await Html.PartialAsync("_AuthorsPageSearchBar")
         
-        if(Model.Count == 0)
-        {
-            <h2>Empty search</h2>
-        }
+        
         @foreach (var author in Model)
     {
         <div class="d-flex align-items-center justify-content-between mb-4 p-4 border rounded shadow-sm"
