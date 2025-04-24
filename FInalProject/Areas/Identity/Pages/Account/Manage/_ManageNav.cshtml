@@ -1,4 +1,4 @@
-﻿@using FInalProject.Data.Models
+﻿﻿@using FInalProject.Data.Models
 @inject SignInManager<User> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();

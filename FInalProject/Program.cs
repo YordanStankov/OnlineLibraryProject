@@ -6,13 +6,14 @@ using FInalProject.Data;
 using FInalProject.Data.Seeding;
 using FInalProject.Data.Models;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Google;
 
 
 namespace FInalProject
 {
     public class Program
     {
-        
+
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -43,6 +44,24 @@ namespace FInalProject
             builder.Services.AddScoped<IAuthorsService, AuthorsService>();
             builder.Services.AddScoped<IEmailService, EmailService>();
 
+            builder.Services.AddAuthentication(opts =>
+            {
+                opts.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+                opts.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+                opts.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+            })
+
+        .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+        {
+         options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+         options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+         options.CallbackPath = "/signin-google";
+            // tell Google to use Identity’s External cookie
+         options.SignInScheme = IdentityConstants.ExternalScheme;
+         options.Scope.Add("email");
+         options.SaveTokens = true;
+        });
+
             //the app gets built
             var app = builder.Build();
 
@@ -63,7 +82,7 @@ namespace FInalProject
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
@@ -72,7 +91,7 @@ namespace FInalProject
             app.MapRazorPages();
             using (var scope = app.Services.CreateScope())
             {
-               
+
             }
 
             app.Run();
