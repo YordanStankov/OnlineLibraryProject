@@ -1,0 +1,23 @@
+﻿/* AllBooks.css */
+.all-books-page {
+    padding: 2rem;
+    color: #f5f5f5;
+    font-family: 'Poppins', sans-serif;
+}
+
+    .all-books-page h2 {
+        font-weight: bold;
+        color: black;
+        margin-bottom: 1rem;
+    }
+
+    .all-books-page hr {
+        border-top: 2px solid #2980b9;
+        width: 60px;
+        margin: 0 auto 2rem auto;
+    }
+
+/* Adjust SearchBar if needed */
+.search-bar {
+    margin-bottom: 2rem;
+}

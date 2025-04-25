@@ -1,6 +1,7 @@
 ﻿/* Background Styling */
 body {
-    background: linear-gradient(to right, #141e30, #243b55);
+    background: linear-gradient(to right, rgba(20, 30, 48, 0.85), rgba(36, 59, 85, 0.85)), url('/images/HomePageBackground.jpg') no-repeat center center fixed;
+    background-size: cover;
     color: white;
     font-family: 'Poppins', sans-serif;
 }

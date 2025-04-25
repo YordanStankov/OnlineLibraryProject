@@ -1,0 +1,44 @@
+﻿/* AllBooksPartial.css */
+
+.book-card {
+    background-color: #2c3e50;
+    border-radius: 15px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    color: #ecf0f1;
+}
+
+    .book-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .book-card .card-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+    }
+
+    .book-card .card-text {
+        font-size: 0.95rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .book-card .badge {
+        margin-right: 0.3rem;
+        background-color: #2980b9;
+        color: white;
+        font-size: 0.8rem;
+    }
+
+    .book-card .btn-primary {
+        background-color: #3498db;
+        border: none;
+        border-radius: 25px;
+        padding: 8px 16px;
+        font-weight: bold;
+        transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+    }
+
+        .book-card .btn-primary:hover {
+            background-color: #1f618d;
+            transform: scale(1.05);
+        }
