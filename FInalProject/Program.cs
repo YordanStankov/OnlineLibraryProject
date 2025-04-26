@@ -40,9 +40,9 @@ namespace FInalProject
             builder.Services.AddScoped<IHomeService, HomeService>();
             builder.Services.AddScoped<IBookOprationsService, BookOprationsService>();
             builder.Services.AddScoped<IGenreService, GenreService>();
-            builder.Services.AddScoped<IUserOperationsService, UserOperationsService>();
             builder.Services.AddScoped<IAuthorsService, AuthorsService>();
             builder.Services.AddScoped<IEmailService, EmailService>();
+            builder.Services.AddHostedService<BorrowedBooksService>();
 
             builder.Services.AddAuthentication(opts =>
             {

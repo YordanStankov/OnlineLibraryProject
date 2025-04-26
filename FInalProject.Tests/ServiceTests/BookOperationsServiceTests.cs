@@ -21,6 +21,7 @@ namespace FinalProject.Tests.ServiceTests
         private UserManager<User> _userManager;
         private BookOprationsService _bookService;
         private ILogger<BookOprationsService> _logger;
+        private readonly IEmailService _emailService;
 
         [SetUp]
         public void Setup()
@@ -35,7 +36,7 @@ namespace FinalProject.Tests.ServiceTests
             _userManager = new UserManager<User>(userStore, null, new PasswordHasher<User>(), null, null, null, null, null, null);
 
             _logger = new LoggerFactory().CreateLogger<BookOprationsService>();
-            _bookService = new BookOprationsService(_context, _userManager, _logger);
+            _bookService = new BookOprationsService(_context, _userManager, _logger, _emailService);
         }
 
         [TearDown]

@@ -21,7 +21,7 @@ namespace FInalProject.Services
         Task<bool> DeleteBookAsync(int doomedId);
         Task<int> CreateCommentAsync(CreateCommentViewModel model, ClaimsPrincipal user);
         Task<bool> UpdateFavouritesAsync(int amount, int bookId, ClaimsPrincipal user);
-        Task<bool> ReturnBookAsync(ReturnBookViewModel model);
+        Task<bool> ReturnBookAsync(ReturnBookViewModel model, ClaimsPrincipal User);
     }
     public class BookOprationsService : IBookOprationsService
     {
@@ -29,7 +29,6 @@ namespace FInalProject.Services
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
         private readonly IEmailService _emailService;
-
         public BookOprationsService(ApplicationDbContext context, UserManager<User> userManager, ILogger<BookOprationsService> logger, IEmailService emailService)
         {
             _context = context;
@@ -74,7 +73,7 @@ namespace FInalProject.Services
                         {"ReturnDate", string.Format("{0:dd MMM yyyy}", borrowedBook.UntillReturn) }
                     };
                     var emailBody = await _emailService.LoadEmailTemplateAsync(TemplateNames.BorrowingConfirmationEmail, placeees);
-                    await _emailService.SendEmailForBorrowingAsync(email, "Book return", emailBody);
+                    await _emailService.SendEmailFromServiceAsync(email, "Book return", emailBody);
                     return true;
                 }
                 return false;
@@ -168,16 +167,28 @@ namespace FInalProject.Services
             return false; 
         }
 
-        public async Task<bool> ReturnBookAsync(ReturnBookViewModel model)
+        public async Task<bool> ReturnBookAsync(ReturnBookViewModel model, ClaimsPrincipal User)
         {
-            var bookToBeReturned = await _context.BorrowedBooks
+            var returningUser = await _userManager.GetUserAsync(User);
+            if (returningUser == null) return false;
+
+            var bookToBeReturned = await _context.BorrowedBooks.Include(bb => bb.Book)
                 .FirstOrDefaultAsync(bb => bb.BookId == model.BookId && bb.UserId == model.UserId);
-            if(bookToBeReturned == null)
-            {
-                return false;
-            }
-            _context.Remove(bookToBeReturned);
+
+            if(bookToBeReturned == null) return false;
+            
+            var email = returningUser.Email ?? string.Empty;
+            Dictionary<string, string> placeees = new Dictionary<string, string>
+                    {
+                        {"UserName", email },
+                        {"BookTitle", bookToBeReturned.Book.Name },
+                    };
+            var emailBody = await _emailService.LoadEmailTemplateAsync(TemplateNames.ReturnConfirmationEmail, placeees);
+            await _emailService.SendEmailFromServiceAsync(email, "Thanks for returning", emailBody);
+                
+            _context.Remove(bookToBeReturned);  
             await _context.SaveChangesAsync();
+           
             return true;
         }
 

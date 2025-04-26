@@ -44,7 +44,8 @@ namespace FInalProject.Areas.Identity.Pages.Account.Manage
         public ReturnBookViewModel model { get; set; }
         public async Task<IActionResult> OnPostAsync()
         {
-            bool response = await _bookOperationsService.ReturnBookAsync(model);
+            var user = await _userManager.GetUserAsync(User);
+            bool response = await _bookOperationsService.ReturnBookAsync(model, User);
             return RedirectToPage   ();
         }
     }

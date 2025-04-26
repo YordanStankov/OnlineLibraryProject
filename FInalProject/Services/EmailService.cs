@@ -6,7 +6,7 @@ namespace FInalProject.Services
 {
     public interface IEmailService 
     {
-        Task SendEmailForBorrowingAsync(string toEmail, string subject, string body);
+        Task SendEmailFromServiceAsync(string toEmail, string subject, string body);
         Task<string> LoadEmailTemplateAsync(string TemplateName, Dictionary<string, string> placeholders);
     }
     public class EmailService : IEmailService
@@ -28,7 +28,7 @@ namespace FInalProject.Services
             return content;
         }
 
-        public async Task SendEmailForBorrowingAsync(string toEmail, string subject, string body)
+        public async Task SendEmailFromServiceAsync(string toEmail, string subject, string body)
         {
             var email = new MimeMessage();
             email.From.Add(MailboxAddress.Parse(_config["EmailSettings:From"]));
