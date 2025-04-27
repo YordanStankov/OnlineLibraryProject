@@ -40,7 +40,7 @@ function BorrowBook(borrowedId) {
                     window.location.href = data.redirectUrl;
                 }
                 else {
-                    alert("Womp womp didn't borrow" + data.message)
+                    alert(data.message)
                 }
             })
             .catch(error => console.error("Error: ", error))

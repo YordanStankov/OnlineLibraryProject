@@ -18,7 +18,7 @@ namespace FInalProject.Services
         Task<bool> UserRoleCheckAsync(ClaimsPrincipal user);
         Task<int> CreateBookAsync(BookCreationViewModel model);
         Task<List<BooksLeaderboardViewModel>> ReturnLeaderboardResultsAsync();
-        Task<bool> CheckIfUserCanBorrowAsync(ClaimsPrincipal User);
+        Task<bool> CheckIfUserCantBorrowAsync(ClaimsPrincipal User);
     }
     public class BooksService : IBooksService
     {
@@ -227,14 +227,14 @@ namespace FInalProject.Services
                 .ToListAsync();
         }
 
-        public async Task<bool> CheckIfUserCanBorrowAsync(ClaimsPrincipal User)
+        public async Task<bool> CheckIfUserCantBorrowAsync(ClaimsPrincipal User)
         {
             var currUser = await _userManager.GetUserAsync(User);
-            if (currUser.CanBorrow)
+            if (currUser.CantBorrow)
             {
                 return true; 
             }
-            else if (!currUser.CanBorrow)
+            else if (!currUser.CantBorrow)
             {
                 return false;
             }

@@ -49,7 +49,7 @@ namespace FInalProject.Services
                         if (user.Strikes >= 3)
                         {
                             await SendRevokedEmailAsync(emailService, user, bb.Book.Name);
-                            user.CanBorrow = false;
+                            user.CantBorrow = true;
                         }
 
                         if (!bb.StrikeGiven)

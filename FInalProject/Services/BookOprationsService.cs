@@ -197,7 +197,7 @@ namespace FInalProject.Services
 
             if(!stillOverdue && returningUser.Strikes == 0)
             {
-                returningUser.CanBorrow = true;
+                returningUser.CantBorrow = false;
                 await _context.SaveChangesAsync();
             }
             await SendEmailForReturnAsync(returningUser, bookToBeReturned.Book.Name);

@@ -9,6 +9,6 @@ namespace FInalProject.Data.Models
         public ICollection<BorrowedBook> BorrowedBooks { get; set; } = new List<BorrowedBook>();
         public ICollection<FavouriteAuthor> FavouriteAuthors { get; set; } = new List<FavouriteAuthor>();
         public int? Strikes { get; set; }
-        public bool CanBorrow { get; set; }
+        public bool CantBorrow { get; set; }
     }
 }

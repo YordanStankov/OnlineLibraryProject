@@ -84,7 +84,7 @@
                     {
                         <a href="@Url.Action("EditBook", "Books", new { editId = Model.BookId })" class="btn btn-primary">Edit</a>
                     }
-                    @if(ViewBag.CanBorrow == false)
+                    @if(ViewBag.CantBorrow == true)
                     {
                         <h2>Return all owed books before borrowing more</h2>
                     }

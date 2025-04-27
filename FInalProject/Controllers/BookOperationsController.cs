@@ -72,9 +72,9 @@ namespace FInalProject.Controllers
             var response = await _bookOprationsService.BorrowBookAsync(borrowedId, User);
             if(response == true)
             {
-                return Json(new { succes = true, redirectUrl = Url.Action("AllBooks", "Books") });
+                return Json(new { success = true, redirectUrl = Url.Action("AllBooks", "Books") });
             }
-            return Json(new { succes = false, message = "Book not found" });
+            return Json(new { success = false, message = "Book already borrowed check your account" });
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
