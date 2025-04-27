@@ -48,13 +48,13 @@ namespace FInalProject.Services
 
                         if (user.Strikes >= 3)
                         {
-                            await SendRevokedEmailAsync(emailService, user, bb.Book.Name, stoppingToken);
+                            await SendRevokedEmailAsync(emailService, user, bb.Book.Name);
                             user.CanBorrow = false;
                         }
 
                         if (!bb.StrikeGiven)
                         {
-                            await SendStrikeEmailAsync(emailService, user, bb.Book.Name, stoppingToken);
+                            await SendStrikeEmailAsync(emailService, user, bb.Book.Name);
                         }
                         bb.StrikeGiven = true;
                         user.Strikes++;

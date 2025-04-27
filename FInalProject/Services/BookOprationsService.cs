@@ -170,25 +170,37 @@ namespace FInalProject.Services
         public async Task<bool> ReturnBookAsync(ReturnBookViewModel model, ClaimsPrincipal User)
         {
             var returningUser = await _userManager.GetUserAsync(User);
-            if (returningUser == null) return false;
+            if (returningUser == null)
+            {
+                return false;
+            }
+            
 
-            var bookToBeReturned = await _context.BorrowedBooks.Include(bb => bb.Book)
+            var bookToBeReturned = await _context.BorrowedBooks
+                .Include(bb => bb.Book)
                 .FirstOrDefaultAsync(bb => bb.BookId == model.BookId && bb.UserId == model.UserId);
 
-            if(bookToBeReturned == null) return false;
+            if (bookToBeReturned == null)
+            {
+                return false;
+            }
+
+            if (bookToBeReturned.StrikeGiven)
+            {
+                returningUser.Strikes -= 1;
+            }
             
-            var email = returningUser.Email ?? string.Empty;
-            Dictionary<string, string> placeees = new Dictionary<string, string>
-                    {
-                        {"UserName", email },
-                        {"BookTitle", bookToBeReturned.Book.Name },
-                    };
-            var emailBody = await _emailService.LoadEmailTemplateAsync(TemplateNames.ReturnConfirmationEmail, placeees);
-            await _emailService.SendEmailFromServiceAsync(email, "Thanks for returning", emailBody);
-                
-            _context.Remove(bookToBeReturned);  
+            _context.Remove(bookToBeReturned);
             await _context.SaveChangesAsync();
-           
+            var stillOverdue = await _context.BorrowedBooks
+                  .AnyAsync(bb => bb.UserId == returningUser.Id && bb.StrikeGiven);
+
+            if(!stillOverdue && returningUser.Strikes == 0)
+            {
+                returningUser.CanBorrow = true;
+                await _context.SaveChangesAsync();
+            }
+            await SendEmailForReturnAsync(returningUser, bookToBeReturned.Book.Name);
             return true;
         }
 
@@ -268,6 +280,18 @@ namespace FInalProject.Services
             await _context.SaveChangesAsync();
             return false;
         }
+        private async Task SendEmailForReturnAsync(User User, string BookTitle)
+        {
+            var email = User.Email ?? string.Empty;
+            Dictionary<string, string> placeholders = new Dictionary<string, string>()
+            {
+                {"UserName", User.UserName },
+                {"BookTitle", BookTitle }
+            };
+            var emailBody = await _emailService.LoadEmailTemplateAsync(TemplateNames.ReturnConfirmationEmail, placeholders);
+            await _emailService.SendEmailFromServiceAsync(email, "Book Return", emailBody);
+        }
     }
 }
+
 
