@@ -1,13 +1,22 @@
-﻿/* AllBooks.css */
-.all-books-page {
-    padding: 2rem;
-    color: #f5f5f5;
+﻿/* Make the whole page have the gradient */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient( to bottom, #e0e0e0 0%, #b0b0b0 50%, #e0e0e0 100% );
     font-family: 'Poppins', sans-serif;
 }
 
+/* Your page-specific content still gets padding */
+.all-books-page {
+    padding: 2rem;
+    color: #f5f5f5;
+}
+
+    /* force the H2 text to white */
     .all-books-page h2 {
         font-weight: bold;
-        color: black;
+        color: #ffffff !important;
         margin-bottom: 1rem;
     }
 
@@ -17,7 +26,6 @@
         margin: 0 auto 2rem auto;
     }
 
-/* Adjust SearchBar if needed */
 .search-bar {
     margin-bottom: 2rem;
 }

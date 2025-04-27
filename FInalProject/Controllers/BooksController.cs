@@ -66,7 +66,9 @@ namespace FInalProject.Controllers
             {
                 ViewBag.IsHe = false;
             }
-
+            bool answer = await _booksService.CheckIfUserCanBorrowAsync(User);
+            if (!answer) ViewBag.CanBorrow = false;
+            if (answer) ViewBag.CanBorrow = true; 
             var focusedBook = await _booksService.GetBookFocusAsync(id);
             if (focusedBook == null)
             {
