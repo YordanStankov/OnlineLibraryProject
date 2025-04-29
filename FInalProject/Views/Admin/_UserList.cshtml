@@ -1,0 +1,32 @@
+﻿@model List<UserListViewModel>
+
+@{
+    ViewBag.Title = "User List";
+}
+<form id="token-form">
+    @Html.AntiForgeryToken()
+</form>
+<div class="container mt-4">
+    <h2 class="text-center mb-4">User list for admin</h2>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        @foreach (var user in Model)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">@user.UserName</h5>
+                        <p class="card-text"><strong>User ID:</strong> @user.UserId</p>
+                        <p class="card-text"><strong>Can't Borrow:</strong> @user.CantBorrow </p>
+                        <p class="card-text"><strong>Strikes:</strong> @user.Strikes</p>
+                    </div>
+                    <div class="card-footer text-end">
+                        <a href="javascript:void(0)" onclick="BanUser('@user.UserId')" class="btn btn-danger">
+                            Ban
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

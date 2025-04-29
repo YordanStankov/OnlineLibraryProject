@@ -1,0 +1,54 @@
+﻿@model AdminPanelViewModel
+@{
+    ViewBag.Title = "Admin Panel";
+}
+
+<div class="container mt-5">
+    @if (!User.IsInRole("Admin"))
+    {
+        <div class="alert alert-danger text-center">
+            <h4 class="fw-bold">Access Denied</h4>
+            <p>You're not the admin. Back off 😠</p>
+        </div>
+    }
+    else
+    {
+        <div class="text-center mb-4">
+            <h2 class="fw-bold">Good evening, Admin</h2>
+            <p class="text-muted">Manage the system from here</p>
+        </div>
+
+        <div class="card shadow-sm p-4 mb-4">
+            <form method="post" asp-action="AdminPanelSetting" asp-controller="Admin" class="row g-2 align-items-center justify-content-center">
+                @Html.AntiForgeryToken()
+
+                <div class="col-auto">
+                    <select asp-for="BookOrUser" class="form-select">
+                        <option value="0">Books</option>
+                        <option value="1">Users</option>
+                    </select>
+                </div>
+
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-outline-primary">Apply</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="mt-4">
+            @if (Model.BookOrUser == 0)
+            {
+                @await Html.PartialAsync("_BooksList", Model.BookList)
+            }
+            else
+            {
+                @await Html.PartialAsync("_UserList", Model.UserList)
+            }
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="~/js/site.js"></script>
+    <script src="~/js/AdminPanelScripts.js"></script>
+}

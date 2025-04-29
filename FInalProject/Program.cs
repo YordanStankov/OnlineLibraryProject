@@ -42,6 +42,8 @@ namespace FInalProject
             builder.Services.AddScoped<IGenreService, GenreService>();
             builder.Services.AddScoped<IAuthorsService, AuthorsService>();
             builder.Services.AddScoped<IEmailService, EmailService>();
+            builder.Services.AddScoped<IAdminService, AdminService>();
+
             builder.Services.AddHostedService<BorrowedBooksService>();
 
             builder.Services.AddAuthentication(opts =>

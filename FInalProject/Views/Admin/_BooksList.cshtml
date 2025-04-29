@@ -1,0 +1,54 @@
+﻿@model List<AdminBookListViewModel>
+
+@{
+    ViewBag.Title = "Book List for Admin";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">@ViewBag.Title</h2>
+
+    @if (Model.Count <= 0)
+    {
+        <div class="alert alert-info text-center">
+            No books present.
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            @foreach (var book in Model)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">@book.BookName</h5>
+                            <p class="card-text"><strong>ID:</strong> @book.BookId</p>
+                            <p class="card-text"><strong>Borrowed:</strong> @book.BooksBorrowed</p>
+                            <p class="card-text"><strong>In Stock:</strong> @book.BookStock</p>
+                            <p class="card-text"><strong>Category:</strong> @book.Category</p>
+
+                            @if (book.genres == null || !book.genres.Any())
+                            {
+                                <p class="text-muted">No genres listed</p>
+                            }
+                            else
+                            {
+                                <p><strong>Genres:</strong> @string.Join(", ", book.genres)</p>
+                            }
+                        </div>
+                        <div class="card-footer d-flex justify-content-between">
+                            <a href="@Url.Action("EditBook", "Books", new { editId = book.BookId })" class="btn btn-primary">
+                                Edit
+                            </a>
+                            <a href="javascript:void(0)" onclick="DeleteBook(@book.BookId)" class="btn btn-danger">
+                                Delete
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+
