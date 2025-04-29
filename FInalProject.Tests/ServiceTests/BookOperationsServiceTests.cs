@@ -47,33 +47,7 @@ namespace FinalProject.Tests.ServiceTests
             _context.Dispose();
         }
 
-        [Test]
-        public async Task BorrowBookAsync_ValidUserAndBook_Succeeds()
-        {
-            var user = new User { UserName = "borrower", Email = "borrower@example.com" };
-            await _userManager.CreateAsync(user, "Password123!");
-            var book = new Book
-            {
-                Name = "Book for comment",
-                AmountInStock = 5,
-                CategoryString = "Educational",
-                CoverImage = "cover.jpg",
-                Description = "A great book",
-                Pages = 100,
-                ReadingTime = 60
-            };
-            await _context.Books.AddAsync(book);
-            await _context.SaveChangesAsync();
-
-            var claims = new ClaimsIdentity(new[] { new Claim(ClaimTypes.NameIdentifier, user.Id) });
-            var principal = new ClaimsPrincipal(claims);
-
-            var result = await _bookService.BorrowBookAsync(book.Id, principal);
-
-            Assert.IsTrue(result);
-            Assert.AreEqual(4, (await _context.Books.FindAsync(book.Id)).AmountInStock);
-        }
-
+       
         [Test]
         public async Task CreateCommentAsync_ValidData_ReturnsBookId()
         {

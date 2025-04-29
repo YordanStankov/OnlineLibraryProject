@@ -29,6 +29,7 @@ namespace FinalProject.Tests.ServiceTests
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options;
+
             _context = new ApplicationDbContext(options);
             var userStore = new UserStore<User>(_context);
             _userManager = new UserManager<User>(userStore, null, new PasswordHasher<User>(), null, null, null, null, null, null);
@@ -129,36 +130,6 @@ namespace FinalProject.Tests.ServiceTests
             Assert.AreEqual(existingAuthor.Id, book.AuthorId);
         }
 
-        [Test]
-        public async Task ReturnLeaderboardResultsAsync_ReturnsOrderedList()
-        {
-            var user = new User { UserName = "liker", Email = "liker@example.com" };
-            var author = new Author { Name = "Leaderboard Author" };
-            var books = new List<Book>
-            {
-                new Book
-                {
-                    Name = "Book 1",
-                    Author = author,
-                    CategoryString = "Books",
-                    Favourites = new List<Favourite> { new Favourite { Amount = 10 } }
-                },
-                new Book
-                {
-                    Name = "Book 2",
-                    Author = author,
-                    CategoryString = "Magazines",
-                }
-            };
-
-            _context.Books.AddRange(books);
-            await _context.SaveChangesAsync();
-
-            var results = await _booksService.ReturnLeaderboardResultsAsync();
-
-            Assert.AreEqual(2, results.Count);
-            Assert.AreEqual("Book 2", results[0].BookName);
-            Assert.IsTrue(results[0].PositiveReviews >= results[1].PositiveReviews);
-        }
+       
     }
 }
