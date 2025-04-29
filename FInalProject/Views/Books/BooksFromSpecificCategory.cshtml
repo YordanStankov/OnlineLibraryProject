@@ -1,6 +1,11 @@
 ﻿@model BooksFromCategoryViewModel
 @{
     ViewBag.Title = $"Books from category: {Model.Category}";
+    var filtering = new FilteringViewModel
+            {
+                SortBy = Context.Request.Query["SortBy"],
+                SortDirection = Context.Request.Query["SortDirection"]
+            };
 }
 
 @if (!User.Identity.IsAuthenticated)
@@ -12,6 +17,7 @@
 
 @if(User.Identity.IsAuthenticated)
 {
+    @await Html.PartialAsync("_SortBooks", filtering)
     @if(Model.BooksFromCategory == null || !Model.BooksFromCategory.Any())
     {
         <h2>@Model.Message</h2>

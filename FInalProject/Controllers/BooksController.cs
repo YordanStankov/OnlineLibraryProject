@@ -11,31 +11,37 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using FInalProject.Services;
 using Newtonsoft.Json;
 
+using System.Threading.Tasks;
+
 namespace FInalProject.Controllers
 {
     public class BooksController : Controller
     {
         private readonly IBooksService _booksService;
-        public BooksController(IBooksService bookService)
+        private readonly IBookOprationsService _bookOperationsService;
+        public BooksController(IBooksService bookService, IBookOprationsService bookOperationsService)
         {
             _booksService = bookService;
+            _bookOperationsService = bookOperationsService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> AllBooks()
+        public async Task<IActionResult> AllBooks(FilteringViewModel filtering)
         {
-                var bookies = await _booksService.GetAllBooksAsync();
-                if (bookies == null)
-                {
-                    return RedirectToAction("LoginPlease", "UserErrors");
-                }
+            var books = await _booksService.GetAllBooksAsync();
+            var bookies = await _bookOperationsService.ApplyFiltering(books, filtering);
                 return View(bookies);
         }
 
         [HttpGet]
-        public async Task<IActionResult> BooksFromSpecificCategory(int modifier)
+        public async Task<IActionResult> BooksFromSpecificCategory(int modifier, FilteringViewModel filtering)
         {
             var results = await _booksService.GetAllBooksFromSpecificCategoryAsync(modifier);
+            if(results.BooksFromCategory != null)
+            {
+                results.BooksFromCategory = await _bookOperationsService.ApplyFiltering(results.BooksFromCategory, filtering);
+            }
+            
             return View(results);
         }
 
@@ -92,11 +98,13 @@ namespace FInalProject.Controllers
         }
 
         [HttpGet]
-        public IActionResult SearchResults()
+        public async Task<IActionResult> SearchResults(string searchedString ,FilteringViewModel filtering)
         {
-            string? resultsJson = TempData["Books"] as string;
-            SearchResultsViewModel? results = new();
-            results = JsonConvert.DeserializeObject<SearchResultsViewModel>(resultsJson);
+            var results = await _bookOperationsService.ReturnSearchResultsAync(searchedString);
+            if (results?.BooksMatchingQuery != null)
+            {
+                results.BooksMatchingQuery = await _bookOperationsService.ApplyFiltering(results.BooksMatchingQuery, filtering);
+            }
             return View(results);
         }
     }

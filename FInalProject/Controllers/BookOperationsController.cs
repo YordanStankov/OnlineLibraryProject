@@ -46,14 +46,6 @@ namespace FInalProject.Controllers
             }
             return RedirectToAction("BookFocus", "Books", new {Id = response}); 
         }
-        [HttpGet]
-        public async Task<IActionResult> Search(string searchedString)
-        {
-            
-            var books = await _bookOprationsService.ReturnSearchResultsAync(searchedString);
-            TempData["Books"] = JsonConvert.SerializeObject(books);
-            return RedirectToAction("SearchResults", "Books");
-        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(BookCreationViewModel model)

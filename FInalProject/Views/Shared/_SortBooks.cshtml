@@ -1,0 +1,43 @@
+﻿@model FilteringViewModel
+
+<form asp-controller="@ViewContext.RouteData.Values["controller"]"
+      asp-action="@ViewContext.RouteData.Values["action"]"
+      method="get"
+      class="mb-3">
+    @if (Context.Request.Query["searchedString"].Count > 0)
+    {
+        <input type="hidden" name="searchedString" value="@Context.Request.Query["searchedString"]" />
+    }
+
+    @if (Context.Request.Query["genreId"].Count > 0)
+    {
+        <input type="hidden" name="genreId" value="@Context.Request.Query["genreId"]" />
+    }
+
+    @if (Context.Request.Query["modifier"].Count > 0)
+    {
+        <input type="hidden" name="modifier" value="@Context.Request.Query["modifier"]" />
+    }
+    <div class="row g-2 align-items-center">
+        <div class="col-auto">
+            <label asp-for="SortBy" class="form-label">Sort By:</label>
+            <select asp-for="SortBy" class="form-select">
+                <option value="">-- Select --</option>
+                <option value="Name">Name</option>
+                <option value="Date">Date of Publication</option>
+            </select>
+        </div>
+
+        <div class="col-auto">
+            <label asp-for="SortDirection" class="form-label">Order:</label>
+            <select asp-for="SortDirection" class="form-select">
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+            </select>
+        </div>
+
+        <div class="col-auto align-self-end">
+            <button type="submit" class="btn btn-primary">Apply</button>
+        </div>
+    </div>
+</form>

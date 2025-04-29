@@ -6,16 +6,18 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using FInalProject.Services;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Newtonsoft.Json;
 
 namespace FInalProject.Controllers
 {
     public class GenreController : Controller
     {
         private readonly IGenreService _genreService;
-
-        public GenreController(IGenreService genreService)
+        private readonly IBookOprationsService _bookOperationsService;
+        public GenreController(IGenreService genreService, IBookOprationsService bookOprationsService)
         {
             _genreService = genreService;
+            _bookOperationsService = bookOprationsService;
         }
 
         [HttpPost]
@@ -38,9 +40,10 @@ namespace FInalProject.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> SpecificGenreList(int genreId)
+        public async Task<IActionResult> SpecificGenreList(int genreId, FilteringViewModel filtering)
         {
             var result = await _genreService.GetAllBooksOfCertainGenre(genreId);
+            result.BooksMatchingGenre = await _bookOperationsService.ApplyFiltering(result.BooksMatchingGenre, filtering);
                 return View(result);
         }
         [HttpPost]

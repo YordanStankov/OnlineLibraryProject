@@ -37,6 +37,14 @@
                         </div>
 
                         <div class="col-md-6">
+                            <div class="form-floating">
+                                <input asp-for="DateWritten" type="date" class="form-control" id="AuthorName" placeholder="YYYY-MM-DD">
+                                <label for="DateWritten">Date of publication</label>
+                            </div>
+                            <span asp-validation-for="DateWritten" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
                             <label for="SelectedGenreIds" class="form-label">Genres hold CTR to select multiple</label>
                             <select asp-for="SelectedGenreIds" class="form-select" multiple>
                                 @foreach (var genre in Model.GenreOptions)

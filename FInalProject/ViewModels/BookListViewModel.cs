@@ -11,6 +11,7 @@ namespace FInalProject.ViewModels
         public string? AuthorName { get; set; }
         public double? Pages { get; set; }
         public string CoverImage { get; set; }
+        public DateTime DateWritten { get; set; }
         public Category? Category { get; set; }
         public List<string>? Genres { get; set; } 
 

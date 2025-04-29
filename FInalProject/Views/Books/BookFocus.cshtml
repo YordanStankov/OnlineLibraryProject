@@ -57,6 +57,7 @@
                     <p class="card-text"><strong>Pages:</strong> @Model.BookPages</p>
                     <p class="card-text"><strong>Stock Left:</strong> @Model.AmountInStock</p>
                     <p class="card-text"><strong>Category:</strong> @Model.Category</p>
+                    <p class="card-text"><strong>Publishing date:</strong> @string.Format("{0:dd MMM yyyy}", Model.DateWritten)</p>
 
                     <!-- Display Genres -->
                     <p class="card-text">

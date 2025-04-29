@@ -89,6 +89,7 @@ namespace FInalProject.Services
                     CoverImage = bg.Book.CoverImage,
                     Pages = bg.Book.Pages,
                     Name = bg.Book.Name,
+                    DateWritten = bg.Book.DateWritten,
                     Genres = new List<string> { bg.Genre.Name }
                 }).ToListAsync();
 

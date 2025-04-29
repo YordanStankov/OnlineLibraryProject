@@ -10,6 +10,7 @@ using FInalProject.EmailTemplates;
 using SQLitePCL;
 using System.Linq;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace FInalProject.Services
 {
@@ -22,6 +23,8 @@ namespace FInalProject.Services
         Task<int> CreateCommentAsync(CreateCommentViewModel model, ClaimsPrincipal user);
         Task<bool> UpdateFavouritesAsync(int amount, int bookId, ClaimsPrincipal user);
         Task<bool> ReturnBookAsync(ReturnBookViewModel model, ClaimsPrincipal User);
+        Task<List<BookListViewModel>> ApplyFiltering (IEnumerable<BookListViewModel> books, FilteringViewModel filtering);
+       
     }
     public class BookOprationsService : IBookOprationsService
     {
@@ -130,6 +133,7 @@ namespace FInalProject.Services
            if(model.editor == 0)
             {
                 bookToEdit.Name = model.Name;
+                bookToEdit.DateWritten = model.DateWritten;
                 bookToEdit.AmountInStock = model.AmountInStock;
                 bookToEdit.Pages = model.Pages;
                 bookToEdit.Category = model.Category;
@@ -167,6 +171,21 @@ namespace FInalProject.Services
             return false; 
         }
 
+        public async Task<List<BookListViewModel>> ApplyFiltering(IEnumerable<BookListViewModel> books, FilteringViewModel filtering)
+        {
+            return await Task.FromResult(filtering.SortBy switch
+            {
+                "Name" => filtering.SortDirection == "desc"
+                    ? books.OrderByDescending(b => b.Name).ToList()
+                    : books.OrderBy(b => b.Name).ToList(),
+
+                "Date" => filtering.SortDirection == "desc"
+                    ? books.OrderByDescending(b => b.DateWritten).ToList()
+                    : books.OrderBy(b => b.DateWritten).ToList(),
+
+                _ => books.ToList()
+            });
+        }
         public async Task<bool> ReturnBookAsync(ReturnBookViewModel model, ClaimsPrincipal User)
         {
             var returningUser = await _userManager.GetUserAsync(User);

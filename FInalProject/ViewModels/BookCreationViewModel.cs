@@ -16,7 +16,10 @@ namespace FInalProject.ViewModels
         [Required]
         [Range(1, 1000, ErrorMessage = "Reading time must be between 1 and 1000 hours")]
         public double ReadingTime { get; set; }
+        [Required]
         public string CoverImage { get; set; }
+        [Required]
+        public DateTime DateWritten { get; set; }
 
         [Required]
         [StringLength(1000, MinimumLength = 5, ErrorMessage = "Description must be between 5 and 1000 words")]

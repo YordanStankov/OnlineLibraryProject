@@ -1,13 +1,18 @@
 ﻿@model SearchResultsViewModel
 @{
     ViewBag.Title = "Search results";
+    var filtering = new FilteringViewModel
+            {
+                SortBy = Context.Request.Query["SortBy"],
+                SortDirection = Context.Request.Query["SortDirection"]
+            };
 }
 @if (!User.Identity.IsAuthenticated)
 {
     <h2>Login to access the library</h2>
 }
 @await Html.PartialAsync("_SearchBarPartial")
-
+@await Html.PartialAsync("_SortBooks", filtering)
 @if(Model.BooksMatchingQuery is null || !Model.BooksMatchingQuery.Any())
 {
     <h2>@Model.Message</h2>

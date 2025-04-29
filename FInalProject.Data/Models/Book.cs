@@ -39,6 +39,8 @@ namespace FInalProject.Data.Models
 
         [Required]
         public int AmountInStock { get; set; }
+        [Required]
+        public DateTime DateWritten { get; set; }
 
         public ICollection<Comment>? Comments { get; set; } 
         public ICollection<BookGenre>? BookGenres { get; set; } 

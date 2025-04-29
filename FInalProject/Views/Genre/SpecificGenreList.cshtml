@@ -1,9 +1,15 @@
 ﻿@model BooksFromGenreViewModel
 @{
     ViewBag.Title = "All Books";
+    var filtering = new FilteringViewModel
+            {
+                SortBy = Context.Request.Query["SortBy"],
+                SortDirection = Context.Request.Query["SortDirection"]
+            };
 }
 <h1>@Model.Genre</h1>
 <hr />
+@await Html.PartialAsync("_SortBooks", filtering)
 @if (Model.BooksMatchingGenre == null || !Model.BooksMatchingGenre.Any())
 {
     <h2>@Model.Message</h2>

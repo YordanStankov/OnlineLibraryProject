@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "Search bar";
 }
-<form asp-action="Search" asp-controller="BookOperations" method="get" class="d-flex align-items-center border rounded-pill p-2 shadow-sm">
+<form asp-action="SearchResults" asp-controller="Books" method="get" class="d-flex align-items-center border rounded-pill p-2 shadow-sm">
     <input name="searchedString" type="text" id="SearchField" class="form-control border-0 shadow-none" placeholder="Search..." />
     <button type="submit" class="btn btn-link text-dark">
         <i class="bi bi-search"></i>

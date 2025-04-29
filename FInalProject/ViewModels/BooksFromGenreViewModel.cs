@@ -1,4 +1,6 @@
-﻿namespace FInalProject.ViewModels
+﻿using MimeKit.Cryptography;
+
+namespace FInalProject.ViewModels
 {
     public class BooksFromGenreViewModel
     {

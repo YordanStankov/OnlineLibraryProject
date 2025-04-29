@@ -1,6 +1,11 @@
 ﻿@model List<BookListViewModel>
 @{
     ViewBag.Title = "All Books";
+    var filtering = new FilteringViewModel
+            {
+                SortBy = Context.Request.Query["SortBy"],
+                SortDirection = Context.Request.Query["SortDirection"]
+            };
 }
 <div class="all-books-page">
 <header>
@@ -8,11 +13,13 @@
     <hr />
     @await Html.PartialAsync("_SearchBarPartial")
 </header>
-@if(!User.Identity.IsAuthenticated){
+@if(!User.Identity.IsAuthenticated)
+{
 <h2>Login to use the library</h2>
 }
 else if (Model.Count > 0)
 {
+        @await Html.PartialAsync("_SortBooks", filtering)
     <div class="container mt-4">
         @await Html.PartialAsync("_AllBooks", Model)
     </div>
