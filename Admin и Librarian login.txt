@@ -1,0 +1,5 @@
+Admin Email = "Admin2108@gmail.com"
+Admin Password = "Admin2107$"
+
+Librarian Email = "NewLibrarian@gmail.com"
+Librarian Password = "New2107$"

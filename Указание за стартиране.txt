@@ -1,0 +1,15 @@
+Проекта се отваря ползвайки Visual Studio 
+Датабазата трябва да се мигрира ползвайки следния проект: FInalProject.Data
+Проекта е настроен за Sql студио и connection string a е следния: (localdb)\\MSSQLLocalDB(намира се в appsettings.json)
+
+използва локална датабаза няма hosting за базата или за сайта
+
+Package Manager Console за проект FInalProject.Data и се изпълняват тези команди
+EntityFrameworkCore\Add-Migration Initial
+EntityFrameworkCore\Update-Database
+
+Датабазата е готова и проекта може да бъде стартиран
+Стартира се ползвайки https протокол във Visual Studio и като web browser се ползва 
+Chrome
+
+След пускането на проекта не е нужно нищо друго за да работи просто се използва front end a
