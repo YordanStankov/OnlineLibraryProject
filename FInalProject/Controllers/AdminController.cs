@@ -37,5 +37,16 @@ namespace FInalProject.Controllers
             }
             return Json(new { succes = false, message = "User not found" });
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UnbanUser(string unbanId)
+        {
+            var succes = await _adminService.UnbanUser(unbanId);
+            if (succes == true)
+            {
+                return Json(new { succes = true, redirectUrl = Url.Action("AdminPanel", "Admin") });
+            }
+            return Json(new { succes = false, message = "User not found" });
+        }
     }
 }

@@ -3,12 +3,14 @@ using FInalProject.Data;
 using FInalProject.Data.Models;
 using FInalProject.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using static Org.BouncyCastle.Asn1.Cmp.Challenge;
 
 namespace FInalProject.Services
 {
     public interface IAdminService
     {
         Task<bool> BanUser(string banId);
+        Task<bool> UnbanUser(string unbanId);
         Task<List<UserListViewModel>> RenderUserListAsync();
         Task<List<AdminBookListViewModel>> RenderBookListAsync();
     }
@@ -21,6 +23,7 @@ namespace FInalProject.Services
             _userManager = userManager;
             _context = context;
         }
+
         public async Task<bool> BanUser(string banId)
         {
             var User = await _context.Users.FirstOrDefaultAsync(u => u.Id == banId);
@@ -29,6 +32,7 @@ namespace FInalProject.Services
                 return false;
             }
             User.CantBorrow = true;
+            User.Strikes = 3;
             _context.Update(User);
             await _context.SaveChangesAsync();
             return true;
@@ -56,6 +60,20 @@ namespace FInalProject.Services
                 Strikes = u.Strikes ?? 0,
                 CantBorrow = u.CantBorrow
             }).ToListAsync();
+        }
+
+        public async Task<bool> UnbanUser(string unbanId)
+        {
+            var User = await _context.Users.FirstOrDefaultAsync(u => u.Id == unbanId);
+            if (User == null)
+            {
+                return false;
+            }
+            User.CantBorrow = false;
+            User.Strikes = 0;
+            _context.Update(User);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }
