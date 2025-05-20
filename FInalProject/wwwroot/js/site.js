@@ -24,28 +24,6 @@
         }
     }
 
-function BorrowBook(borrowedId) {
-    const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
-
-        fetch(`/BookOperations/BorrowBook?borrowedId=${borrowedId}`, {
-            method: "POST",
-             headers: {
-                 "RequestVerificationToken": token
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.succes) {
-                    alert("Book borrowed check your account");
-                    window.location.href = data.redirectUrl;
-                }
-                else {
-                    alert(data.message)
-                }
-            })
-            .catch(error => console.error("Error: ", error))
-}
-
 document.addEventListener("DOMContentLoaded", function () {
     let modal = document.getElementById("editGenreModal");
 

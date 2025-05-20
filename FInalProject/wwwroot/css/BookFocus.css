@@ -1,0 +1,65 @@
+﻿/* === Background and Base === */
+body {
+    background: linear-gradient(to bottom, #1c2b3a, #2a3f55);
+    color: #f5f5f5;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.book-focus-section {
+    padding-bottom: 3rem;
+}
+
+/* === Card Styling === */
+.book-card {
+    background-color: #263648;
+    border-left: 5px solid #d4a017;
+    border-radius: 10px;
+    color: #f5f5f5;
+    position: relative;
+}
+
+.book-comment-section {
+    background-color: #263648;
+    border-left: 5px solid #d4a017;
+    border-radius: 10px;
+    color: #f5f5f5;
+}
+
+/* === Book Cover === */
+.book-cover {
+    max-width: 100%;
+    max-height: 20rem;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+/* === Custom Colors === */
+.text-gold {
+    color: #d4a017 !important;
+}
+
+.border-gold {
+    border-color: #d4a017 !important;
+}
+
+.genre-badge {
+    background-color: #3fa37f;
+    color: #1c2b3a;
+    margin-right: 0.5rem;
+}
+
+/* === Button Styling === */
+.btn-gold {
+    background-color: #d4a017;
+    color: #1c2b3a;
+    font-weight: 600;
+    border: none;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+    .btn-gold:hover {
+        background-color: #b98c14;
+        color: #fff;
+    }

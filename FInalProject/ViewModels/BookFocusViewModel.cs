@@ -13,6 +13,8 @@ namespace FInalProject.ViewModels
         public string Description { get; set; }
         public DateTime DateWritten { get; set; }
         public Category Category { get; set; }
+
+        public bool Borrowed { get; set; }
         public ICollection<Genre> genres { get; set; }
         public ICollection<CommentViewModel>? comments { get; set; }
         public ICollection<Favourite>? Favourites { get; set; }

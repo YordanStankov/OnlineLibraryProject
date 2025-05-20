@@ -1,0 +1,45 @@
+﻿/* === Form Container === */
+.add-genre-form {
+    background-color: #263238;
+    border-left: 5px solid #3fa37f;
+    color: #e0f7fa;
+    transition: box-shadow 0.3s ease;
+}
+
+    .add-genre-form:hover {
+        box-shadow: 0 4px 20px rgba(0, 255, 200, 0.15);
+    }
+
+/* === Input Styling === */
+.genre-input {
+    background-color: #1e2d3b;
+    border: 1px solid #3fa37f;
+    color: #e0f7fa;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .genre-input::placeholder {
+        color: #b0bec5;
+    }
+
+    .genre-input:focus {
+        border-color: #66ffe0;
+        box-shadow: 0 0 5px rgba(102, 255, 224, 0.6);
+        background-color: #1e2d3b;
+        color: #ffffff;
+    }
+
+/* === Submit Button === */
+.btn-add-genre {
+    background-color: #3fa37f;
+    color: #1e2d3b;
+    font-weight: 600;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+    .btn-add-genre:hover {
+        background-color: #66ffe0;
+        color: #1e2d3b;
+    }

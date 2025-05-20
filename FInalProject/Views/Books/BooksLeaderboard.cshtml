@@ -5,28 +5,27 @@
     int i = 1;
 }
 
-<div class="container mt-5 justify-content-center">
-    <h2 class="mb-4">📚 Book Leaderboard</h2>
+<div class="container mt-5 leaderboard-section">
+    <h2 class="text-center text-accent mb-4">📚 Book Leaderboard</h2>
+
     @if (!User.Identity.IsAuthenticated)
     {
-        <h2>Login to acces the library</h2>
+        <h2 class="text-warning">Login to access the library</h2>
     }
-
-    else if(Model.Count > 0)
+    else if (Model.Count > 0)
     {
         <div class="d-flex flex-column gap-3">
             @foreach (var book in Model)
             {
-                <div class="card w-100 shadow-sm border-start border-4 border-primary">
-                    <div class="card-body d-flex justify-content-between align-items-center flex-wrap">
+                var rankClass = i == 1 ? "gold-rank" : "standard-rank";
 
+                <div class="card leaderboard-card shadow-sm border-0 @rankClass">
+                    <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-3">
                         <!-- Placement Number -->
-                        <div class="fw-bold fs-4 text-primary" style="width: 50px;">
-                            @i.
-                        </div>
+                        <div class="rank-number">@i.</div>
 
-                        <!-- Book Details Inline (Title, Author, Category, Reviews) -->
-                        <div class="d-flex flex-wrap gap-4">
+                        <!-- Book Details -->
+                        <div class="d-flex flex-wrap gap-4 leaderboard-book-info">
                             <div><strong>Title:</strong> @book.BookName</div>
                             <div><strong>Author:</strong> @book.AuthorName</div>
                             <div><strong>Category:</strong> @book.CategoryString</div>
@@ -35,18 +34,23 @@
 
                         <!-- See More Button -->
                         <div class="mt-2 mt-md-0">
-                            <a href="@Url.Action("BookFocus", "Books", new { id = book.BookId })" class="btn btn-outline-primary">See more</a>
+                            <a href="@Url.Action("BookFocus", "Books", new { id = book.BookId })" class="btn btn-leaderboard">See more</a>
                         </div>
                     </div>
                 </div>
+
                 i++;
             }
         </div>
     }
     else
     {
-        <div class="alert alert-warning" role="alert">
+        <div class="alert alert-secondary text-center" role="alert">
             No books on the leaderboard.
         </div>
     }
 </div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Leaderboard.css" />
+}

@@ -2,18 +2,28 @@
     ViewBag.Title = "Add Genre";
 }
 
-<form action="@Url.Action("AddGenre", "Genre")" method="post" class="p-3 border rounded shadow-sm bg-white">
+<form action="@Url.Action("AddGenre", "Genre")"
+      method="post"
+      class="add-genre-form shadow-sm rounded p-4">
+
     <div class="mb-3">
-        <input type="text" id="genreName" name="name" class="form-control" placeholder="Enter genre name..." required />
+        <input type="text"
+               id="genreName"
+               name="name"
+               class="form-control genre-input"
+               placeholder="Enter genre name..."
+               required />
     </div>
+
     @Html.AntiForgeryToken()
+
     <div class="text-end">
-        <button type="submit" class="btn btn-primary">
+        <button type="submit" class="btn btn-add-genre">
             <i class="bi bi-plus-circle me-2"></i> Add Genre
         </button>
     </div>
 </form>
 
-@section scripts {
+@section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

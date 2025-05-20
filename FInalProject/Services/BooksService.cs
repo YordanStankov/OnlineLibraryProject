@@ -13,7 +13,7 @@ namespace FInalProject.Services
         Task<BooksFromCategoryViewModel> GetAllBooksFromSpecificCategoryAsync(int modifier);
         Task<BookCreationViewModel> getBookInfoAsync(int editId);
         Task<List<BookListViewModel>> GetAllBooksAsync();
-        Task<BookFocusViewModel> GetBookFocusAsync(int id);
+        Task<BookFocusViewModel> GetBookFocusAsync(int id, ClaimsPrincipal User);
         Task<BookCreationViewModel> GetBookCreationViewModelAsync();
         Task<bool> UserRoleCheckAsync(ClaimsPrincipal user);
         Task<int> CreateBookAsync(BookCreationViewModel model);
@@ -103,8 +103,15 @@ namespace FInalProject.Services
             };
         }
 
-        public async Task<BookFocusViewModel> GetBookFocusAsync(int id)
+        public async Task<BookFocusViewModel> GetBookFocusAsync(int id, ClaimsPrincipal User)
         {
+            BookFocusViewModel focusModel = new BookFocusViewModel();
+            var curr = _userManager.GetUserId(User);
+
+            if(curr == null)
+            {
+                return focusModel;
+            }
             _logger.LogInformation("GETTING BOOK FOCUS FILLING THE VIEW");
             var currBook = await _context.Books
                .AsNoTracking()
@@ -120,28 +127,37 @@ namespace FInalProject.Services
             {
                 return null;
             }
-
-            return new BookFocusViewModel
+            var borrow = await _context.BorrowedBooks.FirstOrDefaultAsync(b => b.UserId == curr && b.BookId == currBook.Id);
+            if(borrow == null)
             {
-                BookCover = currBook.CoverImage,
-                BookId = currBook.Id,
-                BookName = currBook.Name,
-                BookPages = currBook.Pages,
-                Category = currBook.Category,
-                DateWritten = currBook.DateWritten,
-                BookAuthorName = currBook.Author.Name,
-                AmountInStock = currBook.AmountInStock,
-                BookReadingTime = currBook.ReadingTime,
-                Description = currBook.Description,
-                
-                genres = currBook.BookGenres.Select(bg => bg.Genre).ToList(),
-                comments = currBook.Comments.Select(c => new CommentViewModel
+                focusModel.Borrowed = false;
+            }
+            else
+            {
+                focusModel.Borrowed = true;
+            }
+             
+                {
+                focusModel.BookCover = currBook.CoverImage;
+                focusModel.BookId = currBook.Id;
+                focusModel.BookName = currBook.Name;
+                focusModel.BookPages = currBook.Pages;
+               focusModel.Category = currBook.Category;
+                focusModel.DateWritten = currBook.DateWritten;
+                focusModel.BookAuthorName = currBook.Author.Name;
+                focusModel.AmountInStock = currBook.AmountInStock;
+                focusModel.BookReadingTime = currBook.ReadingTime;
+                focusModel.Description = currBook.Description;
+
+                focusModel.genres = currBook.BookGenres.Select(bg => bg.Genre).ToList();
+                focusModel.comments = currBook.Comments.Select(c => new CommentViewModel
                 {
                     UserName = c.User.UserName ?? "Unknown User",
                     Description = c.CommentContent ?? string.Empty
-                }).ToList(),
-                Favourites = currBook.Favourites
-            };
+                }).ToList();
+                focusModel.Favourites = currBook.Favourites;
+                };
+            return focusModel;
         }
 
         public async Task<BookCreationViewModel> getBookInfoAsync(int editId)

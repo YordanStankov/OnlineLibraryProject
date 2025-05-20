@@ -2,16 +2,18 @@
 @{
     ViewBag.Title = "Author Profile";
 }
-@if(Model.AuthorName == null)
+
+@if (Model.AuthorName == null)
 {
-    <h2>Profile not loaded correctly</h2>
+    <h2 class="text-danger">Profile not loaded correctly</h2>
 }
 else
 {
-    <h2>Author's Profile</h2>
-    <hr>
-    <div class="container mt-4">
-        <!-- Author Info Section (All wrapped in one clean div) -->
+    <div class="container mt-5 authors-section">
+        <h2 class="text-white mb-4">Author's Profile</h2>
+        <hr class="border-light">
+
+        <!-- Author Info Section -->
         <div class="author-profile-container shadow rounded p-4 mb-5 position-relative">
             <!-- Star in top-right corner -->
             <a href="#"
@@ -30,7 +32,7 @@ else
 
                 <!-- Info Right -->
                 <div class="col-md-9 d-flex flex-column justify-content-center">
-                    <h2>@Model.AuthorName</h2>
+                    <h2 class="author-name">@Model.AuthorName</h2>
 
                     @if (User.IsInRole("Admin"))
                     {
@@ -48,8 +50,8 @@ else
         <!-- Author's Books Section -->
         <div class="row">
             <div class="col-md-12">
-                <h3 class="mb-3 text-center">Author's Books</h3>
-                <hr />
+                <h3 class="text-center text-white mb-3">Author's Books</h3>
+                <hr class="border-light" />
             </div>
         </div>
 
@@ -59,7 +61,8 @@ else
 
         @if (Model.AuthorsBooks.Any())
         {
-            @await Html.PartialAsync("_AllBooks", Model.AuthorsBooks);
+            @await Html.PartialAsync("_AllBooks", Model.AuthorsBooks)
+            ;
         }
         else
         {
@@ -68,13 +71,14 @@ else
             </div>
         }
     </div>
-
 }
 
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="~/js/authorProfileLikeButtonJs.js"></script>
 }
-@section Styles{
-    <link rel="stylesheet" href="~/css/AuthorProfile.css"/>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/AuthorProfile.css" />
+    <link rel="stylesheet" href="~/css/AllBooksPartial.css" />
 }

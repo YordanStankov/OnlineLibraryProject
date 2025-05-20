@@ -75,7 +75,9 @@ namespace FInalProject.Controllers
             bool answer = await _booksService.CheckIfUserCantBorrowAsync(User);
             if (!answer) ViewBag.CantBorrow = false;
             if (answer) ViewBag.CantBorrow = true; 
-            var focusedBook = await _booksService.GetBookFocusAsync(id);
+
+            var focusedBook = await _booksService.GetBookFocusAsync(id, User);
+
             if (focusedBook == null)
             {
                 throw new ArgumentException("Book not found");

@@ -1,0 +1,88 @@
+﻿/* === Base Page Styling === */
+body {
+    background: linear-gradient(to bottom, #1e2d3b, #263238);
+    color: #e0f7fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.genre-section h1,
+.genre-section h2 {
+    color: #66ffe0;
+}
+
+.border-light {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* === Genre Cards === */
+.genre-card {
+    background-color: #263238;
+    border-left: 5px solid #3fa37f;
+    color: #e0f7fa;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .genre-card:hover {
+        transform: scale(1.02);
+        box-shadow: 0 4px 20px rgba(0, 255, 200, 0.15);
+    }
+
+/* === Buttons === */
+.btn-genre {
+    background-color: #3fa37f;
+    border: none;
+    color: #1e2d3b;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+    .btn-genre:hover {
+        background-color: #66ffe0;
+        color: #1e2d3b;
+    }
+
+/* === Text Colors === */
+.text-aqua {
+    color: #66ffe0 !important;
+}
+
+.text-warning {
+    color: #ffcc00 !important;
+}
+
+.text-info {
+    color: #66d9ef !important;
+}
+
+/* === Modal Styling === */
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #263238;
+    padding: 20px;
+    box-shadow: 0px 0px 15px #3fa37f;
+    z-index: 1000;
+    border-radius: 10px;
+    color: #e0f7fa;
+}
+
+.modal-content {
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 20px;
+    color: #66ffe0;
+}
+
+    .close:hover {
+        color: #ffffff;
+    }

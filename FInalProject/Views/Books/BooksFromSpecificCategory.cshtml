@@ -7,7 +7,7 @@
                 SortDirection = Context.Request.Query["SortDirection"]
             };
 }
-
+<div class="content">
 @if (!User.Identity.IsAuthenticated)
 {
     <h2>Please login to access the library</h2>
@@ -27,4 +27,9 @@
         <h2>@Model.Message</h2>
        @await Html.PartialAsync("_AllBooks", Model.BooksFromCategory)
     }
+}
+</div>
+@section Styles{
+    <link rel="stylesheet" href="~/css/BookPages.css"/>
+    <link rel="stylesheet" href="~/css/AllBooksPartial.css"/>
 }

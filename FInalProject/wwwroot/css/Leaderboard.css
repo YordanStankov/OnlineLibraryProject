@@ -1,0 +1,84 @@
+﻿/* === Page Background & Font === */
+body {
+    background: #121212;
+    color: #cfd8dc;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.leaderboard-section {
+    background: linear-gradient(to bottom, #121212, #1e1e1e);
+    padding: 2rem;
+    border-radius: 8px;
+}
+
+/* === Header === */
+.text-accent {
+    color: #00b0ff;
+}
+
+.text-warning {
+    color: #ffcc00 !important;
+}
+
+/* === Card Styles === */
+.leaderboard-card {
+    background-color: #1e1e1e;
+    color: #e0f7fa;
+    border-left: 5px solid #00b0ff;
+    border-radius: 6px;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+    .leaderboard-card:hover {
+        transform: scale(1.02);
+        background-color: #232323;
+    }
+
+.gold-rank {
+    border-left-color: #ffd700;
+}
+
+.standard-rank {
+    border-left-color: #00b0ff;
+}
+
+/* === Rank Number === */
+.rank-number {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #00b0ff;
+    min-width: 50px;
+    text-align: center;
+}
+
+.gold-rank .rank-number {
+    color: #ffd700;
+}
+
+/* === Book Info Section === */
+.leaderboard-book-info > div {
+    color: #cfd8dc;
+    font-weight: 500;
+}
+
+/* === Button === */
+.btn-leaderboard {
+    background-color: #00b0ff;
+    border: none;
+    color: #121212;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+    .btn-leaderboard:hover {
+        background-color: #66ffe0;
+        color: #121212;
+    }
+
+/* === Alerts === */
+.alert-secondary {
+    background-color: #2c2c2c;
+    border: none;
+    color: #cfd8dc;
+}

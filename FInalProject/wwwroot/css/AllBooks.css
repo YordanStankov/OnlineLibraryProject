@@ -1,9 +1,9 @@
 ﻿/* Make the whole page have the gradient */
-html, body {
+body {
     height: 100%;
     margin: 0;
     padding: 0;
-    background: linear-gradient( to bottom, #e0e0e0 0%, #b0b0b0 50%, #e0e0e0 100% );
+    background: linear-gradient(to bottom, #1c2b3a 0%, #2a3f55 50%, #1c2b3a 100%);
     font-family: 'Poppins', sans-serif;
 }
 
@@ -21,11 +21,12 @@ html, body {
     }
 
     .all-books-page hr {
-        border-top: 2px solid #2980b9;
+        border-top: solid #2980b9;
         width: 60px;
         margin: 0 auto 2rem auto;
     }
 
 .search-bar {
+
     margin-bottom: 2rem;
 }
