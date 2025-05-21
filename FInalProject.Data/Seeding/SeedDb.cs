@@ -37,7 +37,7 @@ namespace FInalProject.Data.Seeding
                     new Author
                     {
                         Name = "Jeffrey Kluger",
-                        Portrait = "https://www.npg.org.uk/collections/search/portrait/mw114951/Stephen-Hawking"
+                        Portrait = "https://m.media-amazon.com/images/M/MV5BMTYyNmJjY2YtNWYxZi00MjEwLTk1MDMtZjE3N2YwNDM3Zjg3XkEyXkFqcGc@._V1_.jpg"
                     },
     new Author
     {
@@ -47,22 +47,22 @@ namespace FInalProject.Data.Seeding
     new Author
     {
         Name = "Stan Lee",
-        Portrait = "https://upload.wikimedia.org/wikipedia/commons/3/3d/Stan_Lee_photo_by_Gage_Skidmore_2.jpg"
+        Portrait = "https://m.media-amazon.com/images/M/MV5BMTk3NDE3Njc5M15BMl5BanBnXkFtZTYwOTY5Nzc1._V1_.jpg"
     },
     new Author
     {
         Name = "Bob Kane",
-        Portrait = "https://upload.wikimedia.org/wikipedia/commons/0/0d/Bob_Kane_1989.jpg"
+        Portrait = "https://m.media-amazon.com/images/M/MV5BMTM2MDQ2MDAyOV5BMl5BanBnXkFtZTcwMDUyMjcxOA@@._V1_.jpg"
     },
     new Author
     {
         Name = "Stephen Hawking",
-        Portrait = "https://www.npg.org.uk/collections/search/portrait/mw114951/Stephen-Hawking"
+        Portrait = "https://www.usatoday.com/gcdn/-mm-/0db2ccf25305cbb6908a2661859c91e39d7cad25/c=693-0-3911-3218/local/-/media/2018/03/14/USATODAY/USATODAY/636565852197338918-AFP-AFP-12H63P.jpg"
     },
     new Author
     {
         Name = "Richard Feynman",
-        Portrait = "https://www.npg.org.uk/collections/search/portrait/mw13583/Richard-Feynman"
+        Portrait = "https://upload.wikimedia.org/wikipedia/en/4/42/Richard_Feynman_Nobel.jpg"
     }
 
 
