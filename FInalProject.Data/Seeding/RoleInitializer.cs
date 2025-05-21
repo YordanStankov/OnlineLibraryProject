@@ -36,7 +36,6 @@ namespace FInalProject.Data.Seeding
                 adminUser = new User { UserName = AdminEmail, Email = AdminEmail};
                 await userManager.CreateAsync(adminUser, AdminPassword);
                 await userManager.AddToRoleAsync(adminUser, "Admin"); 
-                throw new Exception("Admin not present in db");
             }
 
             var LibrarianUser = await userManager.FindByEmailAsync(LibrarianEmail);
@@ -45,7 +44,6 @@ namespace FInalProject.Data.Seeding
                 LibrarianUser = new User { UserName = LibrarianEmail, Email = LibrarianEmail };
                 await userManager.CreateAsync(LibrarianUser, LibrarianPassword);
                 await userManager.AddToRoleAsync(LibrarianUser, "Librarian");
-                throw new Exception("Librarian not present in db");
             }
         }
     }

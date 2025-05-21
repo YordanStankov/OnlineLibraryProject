@@ -79,8 +79,8 @@ namespace FInalProject
                 app.UseHsts();
             }
 
-            app.SeedRolesAndAdminAsync();
-            //await app.SeedRolesAndAdminAsync();
+            await app.SeedRolesAndAdminAsync();
+            await app.SeedBooksAuthorsAndRest();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();

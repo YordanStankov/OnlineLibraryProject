@@ -259,6 +259,7 @@ namespace FInalProject.Services
                     AuthorName = b.Author.Name,
                     Category = b.Category,
                     CoverImage = b.CoverImage,
+                    DateWritten = b.DateWritten,
                     Genres = b.BookGenres?.Select(bg => bg.Genre.Name).ToList()
                 }).ToList();
                 return results;
