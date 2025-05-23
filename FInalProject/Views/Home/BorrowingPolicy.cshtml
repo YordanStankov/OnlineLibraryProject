@@ -1,0 +1,54 @@
+﻿@{
+    ViewData["Title"] = "Borrowing Policy";
+}
+
+<div class="container borrowing-policy-container">
+    <div class="borrowing-policy-card">
+        <h2 class="borrowing-policy-title">Borrowing Policy</h2>
+
+        <p>
+            Our digital library allows registered users to borrow books for a fixed period. The following borrowing policies are in place to ensure fairness and a smooth experience for everyone:
+        </p>
+
+        <h4 class="borrowing-policy-section-title">1. Loan Period</h4>
+        <ul class="borrowing-policy-list">
+            <li>Each book can be borrowed for a maximum of <strong>14 calendar days</strong>.</li>
+            <li>Books must be returned manually from your profile before or on the due date.</li>
+        </ul>
+
+        <h4 class="borrowing-policy-section-title">2. Late Returns and Strikes</h4>
+        <ul class="borrowing-policy-list">
+            <li>If a book is not returned on time, the user receives <strong>1 strike</strong>.</li>
+            <li>
+                Upon receiving <strong>3 strikes</strong>:
+                <ul>
+                    <li>The user loses borrowing privileges temporarily.</li>
+                    <li>Privileges are restored automatically after all overdue books are returned.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h4 class="borrowing-policy-section-title">3. Borrowing Conditions</h4>
+        <ul class="borrowing-policy-list">
+            <li>Books can only be borrowed if <strong>available in stock</strong>.</li>
+            <li>The same user cannot borrow the same book more than once at the same time.</li>
+        </ul>
+
+        <h4 class="borrowing-policy-section-title">4. Returning Books</h4>
+        <ul class="borrowing-policy-list">
+            <li>Books can be returned from the "Borrowed Books" section in the user profile.</li>
+            <li>Returned books become immediately available to other users.</li>
+        </ul>
+
+        <h4 class="borrowing-policy-section-title">5. Usage Guidelines</h4>
+        <p>
+            Please borrow books responsibly. If you do not intend to read a book within the loan period, leave it available for others.
+        </p>
+
+        <p class="policy-footer-note">Last updated: @DateTime.Now.ToString("MMMM dd, yyyy")</p>
+    </div>
+</div>
+
+@section Styles{
+    <link rel="stylesheet" href="~/css/BorrowingPolicy.css"/>
+}

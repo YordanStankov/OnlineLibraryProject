@@ -27,6 +27,10 @@ namespace FInalProject.Controllers
           
             return View();
         }
+        public async Task<IActionResult> BorrowingPolicy()
+        {
+            return View();
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
