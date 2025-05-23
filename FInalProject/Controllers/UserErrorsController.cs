@@ -2,17 +2,11 @@
 
 namespace FInalProject.Controllers
 {
+    [Route("UserErrors/NotFound404")]
     public class UserErrorsController : Controller
     {
-        public IActionResult LoginPlease()
-        {
-            return View();
-        }
-        public IActionResult EmptySearch()
-        {
-            return View();
-        }
-        public IActionResult NoneFromCategory()
+        [HttpGet]
+        public IActionResult Error404()
         {
             return View();
         }

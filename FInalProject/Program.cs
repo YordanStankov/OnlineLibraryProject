@@ -86,6 +86,7 @@ namespace FInalProject
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseStatusCodePagesWithReExecute("/UserErrors/NotFound404");
 
             app.MapControllerRoute(
                 name: "default",
