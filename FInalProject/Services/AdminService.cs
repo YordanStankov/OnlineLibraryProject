@@ -1,8 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using FInalProject.Data;
-using FInalProject.Data.Models;
+﻿using FInalProject.Data.Models;
 using FInalProject.ViewModels;
-using Microsoft.EntityFrameworkCore;
 using FInalProject.Repositories.Interfaces;
 
 

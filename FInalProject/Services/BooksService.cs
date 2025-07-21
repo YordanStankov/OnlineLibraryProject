@@ -1,5 +1,6 @@
 ﻿using FInalProject.Data;
 using FInalProject.Data.Models;
+using FInalProject.Repositories.Interfaces;
 using FInalProject.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -24,40 +25,32 @@ namespace FInalProject.Services
     {
         public readonly ILogger<BooksService> _logger;
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<User> _userManager; 
+        private readonly UserManager<User> _userManager;
+        private readonly IAuthorRepository _authorRepository;
+        private readonly IBookRepository _bookRepository;
+        private readonly IGenreRepository _genreRepository;
+        private readonly IBookGenreRepository _bookGenreRepository;
 
-        public BooksService(ApplicationDbContext context, UserManager<User> userManager, ILogger<BooksService> logger)
+        public BooksService(ApplicationDbContext context, UserManager<User> userManager, ILogger<BooksService> logger, IBookRepository bookRepository, IGenreRepository genreRepository, IAuthorRepository authorRepository, IBookGenreRepository bookGenreRepository )
         {
             _context = context;
             _userManager = userManager;
             _logger = logger;
+            _bookRepository = bookRepository;
+            _genreRepository = genreRepository;
+            _authorRepository = authorRepository;
+            _bookGenreRepository = bookGenreRepository;
         }
 
         public async Task<List<BookListViewModel>> GetAllBooksAsync()
         {
             _logger.LogInformation("GETTING ALL BOOKS");
-            return await _context.Books
-                .AsNoTracking()
-                .Include(a => a.Author)
-                .Include(bg => bg.BookGenres)
-                .ThenInclude(g => g.Genre)
-                .Where(b => b.AmountInStock > 0)
-                .Select(n => new BookListViewModel()
-                {
-                    Id = n.Id,
-                    Name = n.Name,
-                    Pages = n.Pages,
-                    Category = n.Category,
-                    AuthorName = n.Author.Name,
-                    DateWritten = n.DateWritten,
-                    CoverImage = n.CoverImage,
-                    Genres = n.BookGenres.Select(bg => bg.Genre.Name).ToList(),
-                }).ToListAsync();
+           return await _bookRepository.RenderBookListViewModelAsync();
         }
         public async Task<int> CreateBookAsync(BookCreationViewModel model)
         {
             _logger.LogDebug("LOG DEBUG CREATING BOOK ASYNC");
-            var existingAuthor = await _context.Authors.FirstOrDefaultAsync(a => a.Name == model.AuthorName);
+            var existingAuthor = await _authorRepository.GetAuthorByNameAsync(model.AuthorName);
             var correctAuthor = existingAuthor ?? new Author { Name = model.AuthorName };
             var newBook = new Book
             {
@@ -73,8 +66,7 @@ namespace FInalProject.Services
                 Description = model.Description
             };
 
-            _context.Books.Add(newBook);
-            await _context.SaveChangesAsync();
+            await _bookRepository.AddBookAsync(newBook);
             if (model.SelectedGenreIds != null)
             {
                 foreach (var genreId in model.SelectedGenreIds)
@@ -84,11 +76,10 @@ namespace FInalProject.Services
                         BookId = newBook.Id,
                         GenreId = genreId
                     };
-                    _context.BookGenres.Add(bookGenre);
+                  await _bookGenreRepository.AddNewBookGenre(bookGenre);
                 }
             }
-            newBook.Author.Books.Add(newBook);
-            await _context.SaveChangesAsync();
+            await _authorRepository.AddToAuhtorBookListAsync(correctAuthor, newBook);
             return newBook.Id;
         }
 
@@ -96,10 +87,10 @@ namespace FInalProject.Services
         public async Task<BookCreationViewModel> GetBookCreationViewModelAsync()
         {
             _logger.LogInformation("FILLING THE VIEW WITH GENRE OPTIONS");
-            var genres = await _context.Genres.AsNoTracking().ToListAsync();
+
             return new BookCreationViewModel
             {
-                GenreOptions = genres
+                GenreOptions = await _genreRepository.GetAllGenresAsync()
             };
         }
 
@@ -162,17 +153,11 @@ namespace FInalProject.Services
 
         public async Task<BookCreationViewModel> getBookInfoAsync(int editId)
         {
-            var book = await _context.Books
-                .AsNoTracking()
-                .Include(b => b.Author)
-                .Include(b => b.BookGenres)
-                .ThenInclude(b => b.Genre)
-                .FirstOrDefaultAsync(b => b.Id == editId);
+            var book = await _bookRepository.GetSingleBookForEditAsync(editId);
             if(book is null)
             {
                 return null;
             }
-            var genres = await _context.Genres.ToListAsync();
 
             return new BookCreationViewModel
             {
@@ -186,7 +171,7 @@ namespace FInalProject.Services
                 Description = book.Description,
                 Pages = book.Pages, 
                 ReadingTime = book.ReadingTime,
-                GenreOptions = genres,
+                GenreOptions = await _genreRepository.GetAllGenresAsync(),
             };
         }
 

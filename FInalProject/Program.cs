@@ -49,7 +49,12 @@ namespace FInalProject
             //Repository pattern implementation
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IBookRepository, BookRepository>();
-            
+            builder.Services.AddScoped<IGenreRepository, GenreRepository>();
+            builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+            builder.Services.AddScoped<IBookGenreRepository, BookGenreRepository>();
+
+
+
 
             builder.Services.AddHostedService<BorrowedBooksService>();
 
