@@ -7,6 +7,8 @@ using FInalProject.Data.Seeding;
 using FInalProject.Data.Models;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Google;
+using FInalProject.Repositories.Interfaces;
+using FInalProject.Repositories.DataAcces;
 
 
 namespace FInalProject
@@ -43,6 +45,11 @@ namespace FInalProject
             builder.Services.AddScoped<IAuthorsService, AuthorsService>();
             builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddScoped<IAdminService, AdminService>();
+
+            //Repository pattern implementation
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IBookRepository, BookRepository>();
+            
 
             builder.Services.AddHostedService<BorrowedBooksService>();
 

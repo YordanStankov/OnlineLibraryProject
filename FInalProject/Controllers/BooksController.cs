@@ -1,17 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using FInalProject.Data.Models;
 using FInalProject.ViewModels;
-using FInalProject.Data;
-using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using FInalProject.Services;
-using Newtonsoft.Json;
-
-using System.Threading.Tasks;
 
 namespace FInalProject.Controllers
 {

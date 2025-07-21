@@ -11,11 +11,10 @@ namespace FInalProject.Controllers
     public class AuthorsController : Controller
     {
         private readonly IAuthorsService _authorsService;
-        private readonly UserManager<User> _userManager;
-        public AuthorsController(IAuthorsService authorsService, UserManager<User> userManager)
+        
+        public AuthorsController(IAuthorsService authorsService)
         {
             _authorsService = authorsService;
-            _userManager = userManager;
         }
 
         [HttpGet]

@@ -3,7 +3,8 @@ using FInalProject.Data;
 using FInalProject.Data.Models;
 using FInalProject.ViewModels;
 using Microsoft.EntityFrameworkCore;
-using static Org.BouncyCastle.Asn1.Cmp.Challenge;
+using FInalProject.Repositories.Interfaces;
+
 
 namespace FInalProject.Services
 {
@@ -16,63 +17,47 @@ namespace FInalProject.Services
     }
     public class AdminService : IAdminService
     {
-        private readonly UserManager<User> _userManager;
-        private readonly ApplicationDbContext _context;
-        public AdminService(UserManager<User> userManager, ApplicationDbContext context)
+        private readonly IBookRepository _bookRepository;
+        private readonly IUserRepository _userRepository;
+        public AdminService( IUserRepository userRepository, IBookRepository bookRepository)
         {
-            _userManager = userManager;
-            _context = context;
+            _bookRepository = bookRepository;
+            _userRepository = userRepository;
         }
 
         public async Task<bool> BanUser(string banId)
         {
-            var User = await _context.Users.FirstOrDefaultAsync(u => u.Id == banId);
-            if(User == null)
+            var user = await _userRepository.GetUserByIdAsync(banId);
+            if(user == null)
             {
                 return false;
             }
-            User.CantBorrow = true;
-            User.Strikes = 3;
-            _context.Update(User);
-            await _context.SaveChangesAsync();
+            user.CantBorrow = true;
+            user.Strikes = 3;
+            await _userRepository.UpdateUserAsync(user);
             return true;
         }
 
         public async Task<List<AdminBookListViewModel>> RenderBookListAsync()
         {
-            return await _context.Books.AsNoTracking().Select(b => new AdminBookListViewModel
-            {
-                BookId = b.Id,
-                BookName = b.Name,
-                BooksBorrowed = b.BorrowedBooks.Count(),
-                BookStock = b.AmountInStock,
-                Category = b.CategoryString,
-                genres = b.BookGenres.Select(bg => bg.Genre.Name).ToList() ?? new List<string>()
-            }).ToListAsync();
+            return await _bookRepository.RenderAdminBooksInViewModelAsync();
         }
 
         public async Task<List<UserListViewModel>> RenderUserListAsync()
         {
-            return await _context.Users.AsNoTracking().Select(u => new UserListViewModel
-            {
-                UserId = u.Id,
-                UserName = u.UserName,
-                Strikes = u.Strikes ?? 0,
-                CantBorrow = u.CantBorrow
-            }).ToListAsync();
+            return await _userRepository.RenderUsersInViewModelAsync();
         }
 
         public async Task<bool> UnbanUser(string unbanId)
         {
-            var User = await _context.Users.FirstOrDefaultAsync(u => u.Id == unbanId);
+            var User = await _userRepository.GetUserByIdAsync(unbanId);
             if (User == null)
             {
                 return false;
             }
             User.CantBorrow = false;
             User.Strikes = 0;
-            _context.Update(User);
-            await _context.SaveChangesAsync();
+            await _userRepository.UpdateUserAsync(User);
             return true;
         }
     }

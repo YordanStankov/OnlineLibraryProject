@@ -36,7 +36,7 @@ function UnbanUser(unbanId) {
             .then(response => response.json())
             .then(data => {
                 if (data.succes) {
-                    alert("User has been banned");
+                    alert("User has been unbanned");
                     window.location.href = data.redirectUrl;
                 }
                 else {
