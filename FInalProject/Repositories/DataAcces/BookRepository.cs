@@ -25,14 +25,17 @@ namespace FInalProject.Repositories.DataAcces
             return await _context.Books.AsNoTracking().ToListAsync();
         }
 
-        public async Task<Book> GetSingleBook(int BookId)
+        public async Task<Book> GetSingleBookAsync(int bookId)
         {
-            return await _context.Books.AsNoTracking().FirstOrDefaultAsync( b => b.Id == BookId);
-        }
-
-        public Task<Book> GetSingleBookAsync(int bookId)
-        {
-            throw new NotImplementedException();
+            return await _context.Books
+               .AsNoTracking()
+              .Include(b => b.Favourites)
+              .Include(b => b.Author)
+              .Include(b => b.Comments)
+              .ThenInclude(c => c.User)
+              .Include(b => b.BookGenres)
+              .ThenInclude(b => b.Genre)
+              .FirstOrDefaultAsync(b => b.Id == bookId);
         }
 
         public async Task<Book> GetSingleBookForEditAsync(int editId)
@@ -45,7 +48,7 @@ namespace FInalProject.Repositories.DataAcces
                 .FirstOrDefaultAsync(b => b.Id == editId);
         }
 
-        public async Task<List<AdminBookListViewModel>> RenderAdminBooksInViewModelAsync()
+        public async Task<List<AdminBookListViewModel>> RenderAdminBookListAsync()
         {
             return await _context.Books.AsNoTracking().Select(b => new AdminBookListViewModel
             {
@@ -58,7 +61,7 @@ namespace FInalProject.Repositories.DataAcces
             }).ToListAsync();
         }
 
-        public async Task<List<BookListViewModel>> RenderBookListViewModelAsync()
+        public async Task<List<BookListViewModel>> RenderBookListAsync()
         {
             return await _context.Books
                .AsNoTracking()
@@ -77,6 +80,40 @@ namespace FInalProject.Repositories.DataAcces
                    CoverImage = n.CoverImage,
                    Genres = n.BookGenres.Select(bg => bg.Genre.Name).ToList(),
                }).ToListAsync();
+        }
+
+        public async Task<List<BookListViewModel>> RenderBooksByCategoryAsync(int modifier)
+        {
+            return await _context.Books
+                .AsNoTracking()
+                .Where(b => (int)b.Category == modifier && b.AmountInStock > 0)
+                .Take(20)
+                .Select(n => new BookListViewModel()
+                {
+                    Id = n.Id,
+                    Name = n.Name,
+                    Pages = n.Pages,
+                    AuthorName = n.Author.Name,
+                    Category = n.Category,
+                    DateWritten = n.DateWritten,
+                    CoverImage = n.CoverImage,
+                    Genres = n.BookGenres.Select(bg => bg.Genre.Name).ToList(),
+                }).ToListAsync();
+        }
+
+        public async Task<List<BooksLeaderboardViewModel>> RenderBooksLeaderboardAsync()
+        {
+            return await _context.Books
+                .OrderByDescending(b => b.Favourites.Sum(f => f.Amount))
+                .Select(b => new BooksLeaderboardViewModel
+                {
+                    BookId = b.Id,
+                    AuthorName = b.Author.Name,
+                    BookName = b.Name,
+                    CategoryString = b.CategoryString,
+                    PositiveReviews = b.Favourites.Sum(f => f.Amount)
+                })
+                .ToListAsync();
         }
 
         public async Task UpdateBookAsync(Book book)

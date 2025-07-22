@@ -52,6 +52,8 @@ namespace FInalProject
             builder.Services.AddScoped<IGenreRepository, GenreRepository>();
             builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
             builder.Services.AddScoped<IBookGenreRepository, BookGenreRepository>();
+            builder.Services.AddScoped<IBorrowedBookRepository, BorrowedBookRepository>();
+
 
 
 

@@ -1,16 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using FInalProject.Data.Models;
+﻿using FInalProject.Data.Models;
 using FInalProject.ViewModels;
 using FInalProject.Data;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using FInalProject.EmailTemplates;
-using SQLitePCL;
-using System.Linq;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using static System.Reflection.Metadata.BlobBuilder;
+
 
 namespace FInalProject.Services
 {
@@ -156,6 +151,7 @@ namespace FInalProject.Services
                         _context.BookGenres.Add(new BookGenre { BookId = bookToEdit.Id, GenreId = genreId });
                     }
                 }
+                _context.Books.Update(bookToEdit);
                 await _context.SaveChangesAsync();
                 _logger.LogInformation("EDITED BOOK BY ADMIN");
                 return true;

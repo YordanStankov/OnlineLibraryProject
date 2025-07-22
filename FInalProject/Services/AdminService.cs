@@ -37,7 +37,7 @@ namespace FInalProject.Services
 
         public async Task<List<AdminBookListViewModel>> RenderBookListAsync()
         {
-            return await _bookRepository.RenderAdminBooksInViewModelAsync();
+            return await _bookRepository.RenderAdminBookListAsync();
         }
 
         public async Task<List<UserListViewModel>> RenderUserListAsync()

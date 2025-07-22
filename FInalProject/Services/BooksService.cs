@@ -29,9 +29,10 @@ namespace FInalProject.Services
         private readonly IAuthorRepository _authorRepository;
         private readonly IBookRepository _bookRepository;
         private readonly IGenreRepository _genreRepository;
+        private readonly IBorrowedBookRepository _borrowedBookRepository;
         private readonly IBookGenreRepository _bookGenreRepository;
 
-        public BooksService(ApplicationDbContext context, UserManager<User> userManager, ILogger<BooksService> logger, IBookRepository bookRepository, IGenreRepository genreRepository, IAuthorRepository authorRepository, IBookGenreRepository bookGenreRepository )
+        public BooksService(ApplicationDbContext context, UserManager<User> userManager, ILogger<BooksService> logger, IBookRepository bookRepository, IGenreRepository genreRepository, IAuthorRepository authorRepository, IBookGenreRepository bookGenreRepository, IBorrowedBookRepository borrowedBookRepository )
         {
             _context = context;
             _userManager = userManager;
@@ -40,12 +41,13 @@ namespace FInalProject.Services
             _genreRepository = genreRepository;
             _authorRepository = authorRepository;
             _bookGenreRepository = bookGenreRepository;
+            _borrowedBookRepository = borrowedBookRepository;
         }
 
         public async Task<List<BookListViewModel>> GetAllBooksAsync()
         {
             _logger.LogInformation("GETTING ALL BOOKS");
-           return await _bookRepository.RenderBookListViewModelAsync();
+           return await _bookRepository.RenderBookListAsync();
         }
         public async Task<int> CreateBookAsync(BookCreationViewModel model)
         {
@@ -104,21 +106,13 @@ namespace FInalProject.Services
                 return focusModel;
             }
             _logger.LogInformation("GETTING BOOK FOCUS FILLING THE VIEW");
-            var currBook = await _context.Books
-               .AsNoTracking()
-              .Include(b => b.Favourites)
-              .Include(b => b.Author)
-              .Include(b => b.Comments)
-              .ThenInclude(c => c.User)
-              .Include(b => b.BookGenres)
-              .ThenInclude(b => b.Genre)
-              .FirstOrDefaultAsync(b => b.Id == id);
+            var currBook = await _bookRepository.GetSingleBookAsync(id);
 
             if (currBook == null)
             {
                 return null;
             }
-            var borrow = await _context.BorrowedBooks.FirstOrDefaultAsync(b => b.UserId == curr && b.BookId == currBook.Id);
+            var borrow = await _borrowedBookRepository.GetSingleBorrowedBookAsync(curr, currBook.Id);
             if(borrow == null)
             {
                 focusModel.Borrowed = false;
@@ -181,21 +175,7 @@ namespace FInalProject.Services
             
             _logger.LogInformation("GETTING ALL BOOKS FROM A CERTAIN GENRE FILLING THE VIEW");
 
-            returnModel.BooksFromCategory = await _context.Books
-                .AsNoTracking()
-                .Where(b => (int)b.Category == modifier && b.AmountInStock > 0)
-                .Take(20)
-                .Select(n => new BookListViewModel()
-                {
-                    Id = n.Id,
-                    Name = n.Name,
-                    Pages = n.Pages,
-                    AuthorName = n.Author.Name,
-                    Category = n.Category,
-                    DateWritten = n.DateWritten,
-                    CoverImage = n.CoverImage,
-                    Genres = n.BookGenres.Select(bg => bg.Genre.Name).ToList(),
-                }).ToListAsync();
+            returnModel.BooksFromCategory = await _bookRepository.RenderBooksByCategoryAsync(modifier);
             returnModel.Category = returnModel.BooksFromCategory.Select(rm => rm.Category).FirstOrDefault()?.ToString();
 
             if (returnModel.BooksFromCategory.Count == 0)
@@ -220,17 +200,8 @@ namespace FInalProject.Services
 
         public async Task<List<BooksLeaderboardViewModel>> ReturnLeaderboardResultsAsync()
         {
-            return await _context.Books
-                .OrderByDescending(b => b.Favourites.Sum(f => f.Amount))
-                .Select( b => new BooksLeaderboardViewModel
-                {
-                    BookId = b.Id,
-                    AuthorName = b.Author.Name,
-                    BookName = b.Name,
-                    CategoryString = b.CategoryString,
-                    PositiveReviews = b.Favourites.Sum(f => f.Amount)
-                })
-                .ToListAsync();
+            return await _bookRepository.RenderBooksLeaderboardAsync();
+                
         }
 
         public async Task<bool> CheckIfUserCantBorrowAsync(ClaimsPrincipal User)
