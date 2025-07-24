@@ -29,5 +29,11 @@ namespace FInalProject.Repositories.DataAcces
         {
             return await _context.Authors.AsNoTracking().FirstOrDefaultAsync(a => a.Name == name);
         }
+
+        public async Task UpdateAuthorAsync(Author author)
+        {
+            _context.Authors.Update(author);
+            await _context.SaveChangesAsync();
+        }
     }
 }

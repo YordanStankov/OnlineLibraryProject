@@ -1,10 +1,7 @@
-﻿using FInalProject.Data;
-using FInalProject.Data.Models;
+﻿using FInalProject.Data.Models;
 using FInalProject.Repositories.Interfaces;
 using FInalProject.ViewModels;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System.Security.Claims;
 
 namespace FInalProject.Services
@@ -24,7 +21,6 @@ namespace FInalProject.Services
     public class BooksService : IBooksService
     {
         public readonly ILogger<BooksService> _logger;
-        private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
         private readonly IAuthorRepository _authorRepository;
         private readonly IBookRepository _bookRepository;
@@ -32,9 +28,8 @@ namespace FInalProject.Services
         private readonly IBorrowedBookRepository _borrowedBookRepository;
         private readonly IBookGenreRepository _bookGenreRepository;
 
-        public BooksService(ApplicationDbContext context, UserManager<User> userManager, ILogger<BooksService> logger, IBookRepository bookRepository, IGenreRepository genreRepository, IAuthorRepository authorRepository, IBookGenreRepository bookGenreRepository, IBorrowedBookRepository borrowedBookRepository )
+        public BooksService(UserManager<User> userManager, ILogger<BooksService> logger, IBookRepository bookRepository, IGenreRepository genreRepository, IAuthorRepository authorRepository, IBookGenreRepository bookGenreRepository, IBorrowedBookRepository borrowedBookRepository )
         {
-            _context = context;
             _userManager = userManager;
             _logger = logger;
             _bookRepository = bookRepository;
@@ -54,23 +49,14 @@ namespace FInalProject.Services
             _logger.LogDebug("LOG DEBUG CREATING BOOK ASYNC");
             var existingAuthor = await _authorRepository.GetAuthorByNameAsync(model.AuthorName);
             var correctAuthor = existingAuthor ?? new Author { Name = model.AuthorName };
-            var newBook = new Book
-            {
-                Name = model.Name,
-                ReadingTime = model.ReadingTime,
-                Pages = model.Pages,
-                Author = correctAuthor,
-                DateWritten = model.DateWritten,
-                AmountInStock = model.AmountInStock,
-                Category = model.Category,
-                CategoryString = model.Category.ToString(),
-                CoverImage = model.CoverImage,
-                Description = model.Description
-            };
+            var newBook = new Book();
+            MapBook(newBook, model, correctAuthor);
 
             await _bookRepository.AddBookAsync(newBook);
+
             if (model.SelectedGenreIds != null)
             {
+                List<BookGenre> newBookGenres = new List<BookGenre>();
                 foreach (var genreId in model.SelectedGenreIds)
                 {
                     var bookGenre = new BookGenre
@@ -78,8 +64,9 @@ namespace FInalProject.Services
                         BookId = newBook.Id,
                         GenreId = genreId
                     };
-                  await _bookGenreRepository.AddNewBookGenre(bookGenre);
+                    newBookGenres.Add(bookGenre);
                 }
+                await _bookGenreRepository.AddListOfNewBookGenresAsync(newBookGenres);
             }
             await _authorRepository.AddToAuhtorBookListAsync(correctAuthor, newBook);
             return newBook.Id;
@@ -105,68 +92,29 @@ namespace FInalProject.Services
             {
                 return focusModel;
             }
-            _logger.LogInformation("GETTING BOOK FOCUS FILLING THE VIEW");
-            var currBook = await _bookRepository.GetSingleBookAsync(id);
+            var currBook = await _bookRepository.GetSingleBookForFocusAsync(id);
 
             if (currBook == null)
-            {
-                return null;
-            }
-            var borrow = await _borrowedBookRepository.GetSingleBorrowedBookAsync(curr, currBook.Id);
-            if(borrow == null)
-            {
-                focusModel.Borrowed = false;
-            }
+                return focusModel;
             else
             {
-                focusModel.Borrowed = true;
+                focusModel = currBook;
+                var borrow = await _borrowedBookRepository.GetSingleBorrowedBookAsync(curr, id);
+                if (borrow == false)
+                    focusModel.Borrowed = false;
+                else
+                    focusModel.Borrowed = true;
             }
-             
-                {
-                focusModel.BookCover = currBook.CoverImage;
-                focusModel.BookId = currBook.Id;
-                focusModel.BookName = currBook.Name;
-                focusModel.BookPages = currBook.Pages;
-               focusModel.Category = currBook.Category;
-                focusModel.DateWritten = currBook.DateWritten;
-                focusModel.BookAuthorName = currBook.Author.Name;
-                focusModel.AmountInStock = currBook.AmountInStock;
-                focusModel.BookReadingTime = currBook.ReadingTime;
-                focusModel.Description = currBook.Description;
-
-                focusModel.genres = currBook.BookGenres.Select(bg => bg.Genre).ToList();
-                focusModel.comments = currBook.Comments.Select(c => new CommentViewModel
-                {
-                    UserName = c.User.UserName ?? "Unknown User",
-                    Description = c.CommentContent ?? string.Empty
-                }).ToList();
-                focusModel.Favourites = currBook.Favourites;
-                };
             return focusModel;
         }
 
         public async Task<BookCreationViewModel> getBookInfoAsync(int editId)
         {
             var book = await _bookRepository.GetSingleBookForEditAsync(editId);
-            if(book is null)
-            {
+            if (book is null)
                 return null;
-            }
-
-            return new BookCreationViewModel
-            {
-                Id = book.Id,
-                Name = book.Name, 
-                Category = book.Category,
-                AuthorName = book.Author.Name,
-                DateWritten = book.DateWritten,
-                AmountInStock = book.AmountInStock, 
-                CoverImage = book.CoverImage,
-                Description = book.Description,
-                Pages = book.Pages, 
-                ReadingTime = book.ReadingTime,
-                GenreOptions = await _genreRepository.GetAllGenresAsync(),
-            };
+            else
+                return book;
         }
 
         public async Task<BooksFromCategoryViewModel> GetAllBooksFromSpecificCategoryAsync(int modifier)
@@ -217,5 +165,18 @@ namespace FInalProject.Services
             }
             return true;
         }
+        private void MapBook(Book book, BookCreationViewModel model, Author correctAuthor)
+        {
+            book.Name = model.Name;
+            book.ReadingTime = model.ReadingTime;
+            book.Pages = model.Pages;
+            book.Author = correctAuthor;
+            book.DateWritten = model.DateWritten;
+            book.AmountInStock = model.AmountInStock;
+            book.Category = model.Category;
+            book.CategoryString = model.Category.ToString();
+            book.CoverImage = model.CoverImage;
+            book.Description = model.Description;
+        } 
     }
 }

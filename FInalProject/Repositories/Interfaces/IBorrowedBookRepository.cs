@@ -4,6 +4,6 @@ namespace FInalProject.Repositories.Interfaces
 {
     public interface IBorrowedBookRepository
     {
-        Task<BorrowedBook> GetSingleBorrowedBookAsync(string userId, int bookId);
+        Task<bool> GetSingleBorrowedBookAsync(string userId, int bookId);
     }
 }

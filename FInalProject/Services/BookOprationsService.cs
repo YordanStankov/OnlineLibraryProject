@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using FInalProject.EmailTemplates;
+using FInalProject.Repositories.Interfaces;
 
 
 namespace FInalProject.Services
@@ -27,12 +28,25 @@ namespace FInalProject.Services
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
         private readonly IEmailService _emailService;
-        public BookOprationsService(ApplicationDbContext context, UserManager<User> userManager, ILogger<BookOprationsService> logger, IEmailService emailService)
+        private readonly IBookRepository _bookRepository;
+        private readonly IAuthorRepository _authorRepository;
+        private readonly IBookGenreRepository _bookGenreRepository;
+
+        public BookOprationsService(ApplicationDbContext context, 
+            UserManager<User> userManager, 
+            ILogger<BookOprationsService> logger, 
+            IEmailService emailService, 
+            IBookRepository bookRepository, 
+            IAuthorRepository authorRepository, 
+            IBookGenreRepository bookGenreRepository)
         {
             _context = context;
             _userManager = userManager;
             _logger = logger;
             _emailService = emailService;
+            _bookRepository = bookRepository;
+            _authorRepository = authorRepository;
+            _bookGenreRepository = bookGenreRepository;
         }
 
         public async Task<bool> BorrowBookAsync(int borrowedId, ClaimsPrincipal user)
@@ -119,48 +133,26 @@ namespace FInalProject.Services
         public async Task<bool> EditBookAsync(BookCreationViewModel model)
         {
             _logger.LogInformation("EDITING BOOK");
-            var bookToEdit = await _context.Books
-                .Include(bte => bte.Author)
-                .Include(bte => bte.BookGenres)
-                .ThenInclude(bte => bte.Genre)
-                .FirstOrDefaultAsync(bte => bte.Id == model.Id);
+            var bookToEdit = await _bookRepository.ReturnBookEntityToEditAsync(model.Id);
             
            if(model.editor == 0)
             {
-                bookToEdit.Name = model.Name;
-                bookToEdit.DateWritten = model.DateWritten;
-                bookToEdit.AmountInStock = model.AmountInStock;
-                bookToEdit.Pages = model.Pages;
-                bookToEdit.Category = model.Category;
-                bookToEdit.CategoryString = model.Category.ToString();
-                bookToEdit.Description = model.Description;
-                bookToEdit.CoverImage = model.CoverImage;
-                bookToEdit.ReadingTime = model.ReadingTime;
-                var searchedAuthor = await _context.Authors.FirstOrDefaultAsync(a => a.Id == bookToEdit.Author.Id);
-                bookToEdit.Author = searchedAuthor ?? new Author { Name = model.AuthorName };
+                MapAdminFields(bookToEdit, model);
+                
+                await MapAuthor(bookToEdit, model);
 
-                var existingGenreIds = bookToEdit.BookGenres.Select(bg => bg.GenreId).ToList();
-                if(existingGenreIds != null && model.SelectedGenreIds != null)
-                {
-                    var newGenres = model.SelectedGenreIds.Except(existingGenreIds);
-                    var removedGenres = existingGenreIds.Except(model.SelectedGenreIds);
-                    bookToEdit.BookGenres = bookToEdit.BookGenres.Where(bg => !removedGenres.Contains(bg.GenreId)).ToList();
+                await MapBookGenres(bookToEdit, model);
 
-                    foreach (var genreId in newGenres)
-                    {
-                        _context.BookGenres.Add(new BookGenre { BookId = bookToEdit.Id, GenreId = genreId });
-                    }
-                }
-                _context.Books.Update(bookToEdit);
-                await _context.SaveChangesAsync();
+                await _authorRepository.UpdateAuthorAsync(bookToEdit.Author);
+                await _bookRepository.UpdateBookAsync(bookToEdit);
                 _logger.LogInformation("EDITED BOOK BY ADMIN");
                 return true;
             }
            else if(model.editor == 1)
             {
-                bookToEdit.Name = model.Name;
-                await _context.SaveChangesAsync();
                 _logger.LogInformation("EDITED BOOK BY LIBRARIAN");
+                bookToEdit.Name = model.Name;
+                await _bookRepository.UpdateBookAsync(bookToEdit);
                 return true;
             }
             _logger.LogError("Book editing failed");
@@ -306,6 +298,46 @@ namespace FInalProject.Services
             };
             var emailBody = await _emailService.LoadEmailTemplateAsync(TemplateNames.ReturnConfirmationEmail, placeholders);
             await _emailService.SendEmailFromServiceAsync(email, "Book Return", emailBody);
+        }
+
+        //SEPERATE HELPER METHODS THAT DONT EXPORT ANYTHING TO CONTROLLERS
+        private void MapAdminFields(Book bookToEdit, BookCreationViewModel model)
+        {
+            bookToEdit.Name = model.Name;
+            bookToEdit.DateWritten = model.DateWritten;
+            bookToEdit.AmountInStock = model.AmountInStock;
+            bookToEdit.Pages = model.Pages;
+            bookToEdit.Category = model.Category;
+            bookToEdit.CategoryString = model.Category.ToString();
+            bookToEdit.Description = model.Description;
+            bookToEdit.CoverImage = model.CoverImage;
+            bookToEdit.ReadingTime = model.ReadingTime;
+        }
+        private async Task MapAuthor(Book bookToEdit, BookCreationViewModel model)
+        {
+            var searchedAuthor = await _context.Authors.FirstOrDefaultAsync(a => a.Id == bookToEdit.Author.Id);
+            searchedAuthor.Name = model.AuthorName;
+        }
+        private async Task MapBookGenres(Book bookToEdit, BookCreationViewModel model)
+        {
+            var existingGenreIds = bookToEdit.BookGenres.Select(bg => bg.GenreId).ToList();
+            if (existingGenreIds != null && model.SelectedGenreIds != null)
+            {
+                var newGenres = model.SelectedGenreIds.Except(existingGenreIds);
+                var removedGenres = existingGenreIds.Except(model.SelectedGenreIds);
+                bookToEdit.BookGenres = bookToEdit.BookGenres.Where(bg => !removedGenres.Contains(bg.GenreId)).ToList();
+
+                List<BookGenre> bookGenresToAdd = new List<BookGenre>();
+                foreach (var genreId in newGenres)
+                {
+                    bookGenresToAdd.Add(new BookGenre { BookId = bookToEdit.Id, GenreId = genreId });
+                }
+                if (bookGenresToAdd.Count > 1)
+                    await _bookGenreRepository.AddListOfNewBookGenresAsync(bookGenresToAdd);
+                else if (bookGenresToAdd.Count == 1)
+                    await _bookGenreRepository.AddNewBookGenreAsync(bookGenresToAdd[0]);
+            }
+
         }
     }
 }

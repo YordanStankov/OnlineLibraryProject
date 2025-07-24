@@ -4,6 +4,7 @@ namespace FInalProject.Repositories.Interfaces
 {
     public interface IBookGenreRepository
     {
-        Task AddNewBookGenre(BookGenre bookGenre);
+        Task AddNewBookGenreAsync(BookGenre bookGenre);
+        Task AddListOfNewBookGenresAsync(List<BookGenre> bookGenres);
     }
 }

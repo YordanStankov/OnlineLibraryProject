@@ -9,6 +9,8 @@ namespace FInalProject.Repositories.DataAcces
     public class BookRepository : IBookRepository
     {
         private readonly ApplicationDbContext _context;
+        
+        
         public BookRepository(ApplicationDbContext context)
         {
             _context = context;
@@ -25,8 +27,9 @@ namespace FInalProject.Repositories.DataAcces
             return await _context.Books.AsNoTracking().ToListAsync();
         }
 
-        public async Task<Book> GetSingleBookAsync(int bookId)
+        public async Task<BookFocusViewModel> GetSingleBookForFocusAsync(int bookId)
         {
+           
             return await _context.Books
                .AsNoTracking()
               .Include(b => b.Favourites)
@@ -35,17 +38,56 @@ namespace FInalProject.Repositories.DataAcces
               .ThenInclude(c => c.User)
               .Include(b => b.BookGenres)
               .ThenInclude(b => b.Genre)
-              .FirstOrDefaultAsync(b => b.Id == bookId);
+              .Where(b => b.Id == bookId)
+              .Select(b => new BookFocusViewModel
+              {
+                  BookCover = b.CoverImage,
+                  BookId = b.Id,
+                  BookName = b.Name,
+                  BookPages = b.Pages,
+                  Category = b.Category,
+                  DateWritten = b.DateWritten,
+                  BookAuthorName = b.Author.Name,
+                  AmountInStock = b.AmountInStock,
+                  BookReadingTime = b.ReadingTime,
+                  Description = b.Description,
+                  genres = b.BookGenres.Select(bg => bg.Genre).ToList(),
+                  comments = b.Comments.Select(c => new CommentViewModel
+                  {
+                      UserName = c.User.UserName ?? "Unknown User",
+                      Description = c.CommentContent ?? string.Empty
+                  }).ToList(),
+                  Favourites = b.Favourites,
+                  Borrowed = false
+              }).FirstOrDefaultAsync();
+              
+              
+
         }
 
-        public async Task<Book> GetSingleBookForEditAsync(int editId)
+        public async Task<BookCreationViewModel> GetSingleBookForEditAsync(int editId)
         {
+            List<Genre> genreOpts = await _context.Genres.AsNoTracking().ToListAsync(); 
             return await _context.Books
                 .AsNoTracking()
                 .Include(b => b.Author)
                 .Include(b => b.BookGenres)
                 .ThenInclude(b => b.Genre)
-                .FirstOrDefaultAsync(b => b.Id == editId);
+                .Where(b => b.Id == editId)
+                .Select(book => new BookCreationViewModel
+                {
+                    Id = book.Id,
+                    Name = book.Name,
+                    Category = book.Category,
+                    AuthorName = book.Author.Name,
+                    DateWritten = book.DateWritten,
+                    AmountInStock = book.AmountInStock,
+                    CoverImage = book.CoverImage,
+                    Description = book.Description,
+                    Pages = book.Pages,
+                    ReadingTime = book.ReadingTime,
+                    GenreOptions = genreOpts
+                }).FirstOrDefaultAsync();
         }
 
         public async Task<List<AdminBookListViewModel>> RenderAdminBookListAsync()
@@ -120,6 +162,16 @@ namespace FInalProject.Repositories.DataAcces
         {
              _context.Books.Update(book);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<Book> ReturnBookEntityToEditAsync(int bookId)
+        {
+            
+            return await _context.Books
+                .Include(bte => bte.Author)
+                .Include(bte => bte.BookGenres)
+                .ThenInclude(bte => bte.Genre)
+                .FirstOrDefaultAsync(bte => bte.Id == bookId);
         }
     }
 }

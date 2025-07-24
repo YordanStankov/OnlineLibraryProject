@@ -12,9 +12,9 @@ namespace FInalProject.Repositories.DataAcces
         { 
             _context = context;
         }
-        public async Task<BorrowedBook> GetSingleBorrowedBookAsync(string userId, int bookId)
+        public async Task<bool> GetSingleBorrowedBookAsync(string userId, int bookId)
         {
-            return await  _context.BorrowedBooks.FirstOrDefaultAsync(b => b.UserId == userId && b.BookId == bookId);
+             return await _context.BorrowedBooks.AnyAsync(b => b.UserId == userId && b.BookId == bookId);
         }
     }
 }
