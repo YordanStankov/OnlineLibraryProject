@@ -163,15 +163,71 @@ namespace FInalProject.Repositories.DataAcces
              _context.Books.Update(book);
             await _context.SaveChangesAsync();
         }
+        public async Task RemoveBookAsync(Book book)
+        {
+            _context.Books.Remove(book);
+            await _context.SaveChangesAsync();
+        }
 
         public async Task<Book> ReturnBookEntityToEditAsync(int bookId)
         {
-            
             return await _context.Books
                 .Include(bte => bte.Author)
                 .Include(bte => bte.BookGenres)
                 .ThenInclude(bte => bte.Genre)
                 .FirstOrDefaultAsync(bte => bte.Id == bookId);
+        }
+
+        public async Task<Book> ReturnBookEntityToBorrowAsync(int bookId)
+        {
+            Book book = new Book();
+            return book = await _context.Books
+                .Include(b => b.Author)
+                .Include(b => b.BorrowedBooks)
+                .FirstOrDefaultAsync(b => b.Id == bookId);
+        }
+        public async Task<Book> ReturnBookEntityToDeleteAsync(int bookId)
+        {
+            Book book = new Book();
+            return book = await _context.Books
+                .Include(b => b.Comments)
+                .Include(b => b.BookGenres)
+                .Include(b => b.Favourites)
+                .FirstOrDefaultAsync(b => b.Id == bookId);
+        }
+
+        public async Task<List<BookListViewModel>> RenderSearchedBookListAsync(string searchQuery)
+        {
+            string loweredQuery = searchQuery.ToLower();
+            List<BookListViewModel> queriedBooks = new List<BookListViewModel>();
+
+            var books = await _context.Books
+                .AsNoTracking()
+                .Include(b => b.Author)
+                .Include(b => b.BookGenres)
+                .ThenInclude(bg => bg.Genre)
+                .Where(b => b.AmountInStock > 0 && (b.Name.ToLower().Contains(loweredQuery) ||
+                    (b.Author != null && b.Author.Name.ToLower().Contains(loweredQuery)) ||
+                    b.BookGenres.Any(bg => EF.Functions.Like(bg.Genre.Name, $"%{loweredQuery}%")) ||
+                    b.CategoryString.ToLower().Contains(loweredQuery)))
+                .ToListAsync();
+
+            if (books.Any())
+            queriedBooks = books.Select(b => new BookListViewModel
+            {
+                Id = b.Id,
+                Name = b.Name,
+                Pages = b.Pages,
+                AuthorName = b.Author.Name,
+                Category = b.Category,
+                CoverImage = b.CoverImage,
+                DateWritten = b.DateWritten,
+                Genres = b.BookGenres?.Select(bg => bg.Genre.Name).ToList()
+            }).ToList();
+
+                return queriedBooks;
+        
+
         }
     }
 }

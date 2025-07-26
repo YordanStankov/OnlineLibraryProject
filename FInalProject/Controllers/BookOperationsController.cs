@@ -73,7 +73,7 @@ namespace FInalProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Rating (int amount, int bookId)
         {
-            var response = await _bookOprationsService.UpdateFavouritesAsync(amount, bookId, User);
+            await _bookOprationsService.UpdateFavouritesAsync(amount, bookId, User);
             return RedirectToAction("BookFocus", "Books", new { id = bookId });
         }
     }

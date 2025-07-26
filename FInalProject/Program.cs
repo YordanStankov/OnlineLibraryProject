@@ -53,10 +53,8 @@ namespace FInalProject
             builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
             builder.Services.AddScoped<IBookGenreRepository, BookGenreRepository>();
             builder.Services.AddScoped<IBorrowedBookRepository, BorrowedBookRepository>();
-
-
-
-
+            builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+            builder.Services.AddScoped<IFavouriteRepository, FavouriteRepository>();
 
             builder.Services.AddHostedService<BorrowedBooksService>();
 
