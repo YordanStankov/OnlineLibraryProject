@@ -1,6 +1,7 @@
 ﻿using FInalProject.Data;
 using FInalProject.Data.Models;
 using FInalProject.Repositories.Interfaces;
+using FInalProject.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace FInalProject.Repositories.DataAcces
@@ -30,9 +31,23 @@ namespace FInalProject.Repositories.DataAcces
             return await _context.Authors.AsNoTracking().FirstOrDefaultAsync(a => a.Name == name);
         }
 
-        public Task SaveChangesAsync()
+        public async Task<List<AuthorListViewModel>> RenderAuthorListAsync()
         {
-            throw new NotImplementedException();
+            List<AuthorListViewModel> listOfAuthors = new List<AuthorListViewModel>();  
+
+            listOfAuthors = await _context.Authors.Select(a => new AuthorListViewModel
+            {
+                AuthorId = a.Id,
+                AuthorPortrait = a.Portrait,
+                AuthorName = a.Name,
+                Favourites = a.FavouriteAuthors.Count()
+            }).ToListAsync();
+            return listOfAuthors;
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
         }
 
         public  void UpdateAuthor(Author author)

@@ -1,11 +1,10 @@
-﻿
-using FInalProject.ViewModels;
+﻿using FInalProject.ViewModels;
 using FInalProject.Data;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using FInalProject.Data.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
+using FInalProject.Repositories.Interfaces;
 namespace FInalProject.Services
 {
     public interface IAuthorsService
@@ -20,19 +19,23 @@ namespace FInalProject.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
-        public AuthorsService(ApplicationDbContext context, UserManager<User> userManager)
+        private readonly IAuthorRepository _authorRepository;
+        private readonly IFavouriteAuthorRepository _favouriteAuthorRepository;
+        public AuthorsService(ApplicationDbContext context, UserManager<User> userManager, IAuthorRepository authorRepository, IFavouriteAuthorRepository favouriteAuthorRepository)
         {
             _context = context;
             _userManager = userManager;
+            _authorRepository = authorRepository;
+            _favouriteAuthorRepository = favouriteAuthorRepository;
         }
 
         public async Task<bool> AddPortraitToAuthorAsync(AddAuthorPortraitViewModel model)
         {
-            var author = await _context.Authors.FirstOrDefaultAsync(a => a.Id == model.Id);
+            var author = await _authorRepository.GetAuthorByIdAsync(model.Id);
             if (author == null) return false;
             author.Portrait = model.Picture;
-            _context.Update(author);
-            await _context.SaveChangesAsync();
+            _authorRepository.UpdateAuthor(author);
+            await _authorRepository.SaveChangesAsync();
             return true;
         }
 
@@ -40,11 +43,9 @@ namespace FInalProject.Services
         {
             var currUser = await _userManager.GetUserAsync(User);
             if (currUser == null) return false;
-            
-                var favourite = await _context.FavouriteAuthors
-                 .Include(fa => fa.Author)
-                .FirstOrDefaultAsync(a => a.AuthorId == authorId && a.UserId == currUser.Id);
-            var author = await _context.Authors.FirstOrDefaultAsync(a => a.Id == authorId);
+
+            var favourite = await _favouriteAuthorRepository.GetFavouriteAuthorAsync(authorId, currUser.Id);
+            var author = await _authorRepository.GetAuthorByIdAsync(authorId);
                 if(favourite == null)
                 {
                     FavouriteAuthor newFave = new FavouriteAuthor
@@ -54,24 +55,18 @@ namespace FInalProject.Services
                         Author = author,
                         AuthorId = authorId
                     };
-                    await _context.AddAsync(newFave);
-                    await _context.SaveChangesAsync();
+                await _favouriteAuthorRepository.AddFavouriteAuthorAsync(newFave);
+                await _favouriteAuthorRepository.SaveChangesAsync();
                     return true;
                 }
-                _context.Remove(favourite);
-               await _context.SaveChangesAsync();
+                _favouriteAuthorRepository.RemoveFavouriteAuthor(favourite);
+            await _favouriteAuthorRepository.SaveChangesAsync();
                return true;
         }
 
         public async Task<List<AuthorListViewModel>> RenderAuthorListAsync()
         {
-            return await _context.Authors.Select(a => new AuthorListViewModel
-            {
-                AuthorId = a.Id,
-                AuthorPortrait = a.Portrait,
-                AuthorName = a.Name,
-                Favourites = a.FavouriteAuthors.Count()
-            }).ToListAsync();
+            return await _authorRepository.RenderAuthorListAsync();
         }
         public async Task<AuthorProfileViewModel> RenderAuthorProfileAsync(int authorId, ClaimsPrincipal User)
         {
@@ -84,7 +79,6 @@ namespace FInalProject.Services
                 .Include(a => a.Books)
                     .ThenInclude(b => b.BookGenres)
                         .ThenInclude(bg => bg.Genre)
-                .Include(a => a.Books)
                 .Include(a => a.FavouriteAuthors)
                 .FirstOrDefaultAsync(a => a.Id == authorId);
 
