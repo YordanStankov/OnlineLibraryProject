@@ -6,7 +6,8 @@ namespace FInalProject.Repositories.Interfaces
     {
         Task<Author> GetAuthorByIdAsync(int authorId);
         Task<Author> GetAuthorByNameAsync(string name);
-        Task AddToAuhtorBookListAsync(Author author, Book book);
-        Task UpdateAuthorAsync(Author author);
+        void AddToAuhtorBookList(Author author, Book book);
+        void UpdateAuthor(Author author);
+        Task SaveChangesAsync();
     }
 }

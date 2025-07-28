@@ -1,10 +1,11 @@
 ﻿using FInalProject.Data.Models;
+using FInalProject.EmailTemplates;
+using FInalProject.Repositories.DataAcces;
+using FInalProject.Repositories.Interfaces;
 using FInalProject.ViewModels;
 using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
-using FInalProject.EmailTemplates;
-using FInalProject.Repositories.Interfaces;
+using System.Security.Claims;
 
 namespace FInalProject.Services
 {
@@ -107,8 +108,8 @@ namespace FInalProject.Services
                 BookId = model.BookId,
                 CommentContent = model.Description
             };
-            await _commentRepository.AddAndSaveCommentAsync(comment);
-
+             _commentRepository.AddComment(comment);
+            await _commentRepository.SaveChangesAsync();
             return comment.BookId;
         }
 
@@ -119,7 +120,8 @@ namespace FInalProject.Services
 
             if(doomedBook != null)
             {
-                await _bookRepository.RemoveBookAsync(doomedBook);
+                 _bookRepository.RemoveBook(doomedBook);
+                await _bookRepository.SaveChangesAsync();
                 _logger.LogInformation("BLITZED THE BOOK");
                 return true;
             }
@@ -139,18 +141,21 @@ namespace FInalProject.Services
 
                 await MapBookGenres(bookToEdit, model);
 
-                await _authorRepository.UpdateAuthorAsync(bookToEdit.Author);
-                await _bookRepository.UpdateBookAsync(bookToEdit);
+                _authorRepository.UpdateAuthor(bookToEdit.Author);
+                 _bookRepository.UpdateBook(bookToEdit);
                 _logger.LogInformation("EDITED BOOK BY ADMIN");
+                 await _bookRepository.SaveChangesAsync();
                 return true;
             }
            else if(model.editor == 1)
             {
                 _logger.LogInformation("EDITED BOOK BY LIBRARIAN");
                 bookToEdit.Name = model.Name;
-                await _bookRepository.UpdateBookAsync(bookToEdit);
+                 _bookRepository.UpdateBook(bookToEdit);
+                await _bookRepository.SaveChangesAsync();
                 return true;
             }
+
             _logger.LogError("Book editing failed");
             return false; 
         }

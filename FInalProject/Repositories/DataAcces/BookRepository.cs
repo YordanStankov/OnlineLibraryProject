@@ -16,10 +16,9 @@ namespace FInalProject.Repositories.DataAcces
             _context = context;
         }
 
-        public async Task AddBookAsync(Book book)
+        public void AddBook(Book book)
         {
-            await _context.Books.AddAsync(book);
-            await _context.SaveChangesAsync();
+             _context.Books.Add(book);
         }
 
         public async Task<List<Book>> GetAllBooksAsync()
@@ -158,16 +157,22 @@ namespace FInalProject.Repositories.DataAcces
                 .ToListAsync();
         }
 
-        public async Task UpdateBookAsync(Book book)
+        public void UpdateBook(Book book)
         {
              _context.Books.Update(book);
-            await _context.SaveChangesAsync();
         }
-        public async Task RemoveBookAsync(Book book)
+        public void RemoveBook(Book book)
         {
             _context.Books.Remove(book);
+          
+        }
+
+        public async Task SaveChangesAsync()
+        {
             await _context.SaveChangesAsync();
         }
+
+
 
         public async Task<Book> ReturnBookEntityToEditAsync(int bookId)
         {

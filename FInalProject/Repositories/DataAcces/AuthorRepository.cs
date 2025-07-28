@@ -14,10 +14,10 @@ namespace FInalProject.Repositories.DataAcces
            _context = context;
         }
 
-        public async Task AddToAuhtorBookListAsync(Author author, Book book)
+        public  void AddToAuhtorBookList(Author author, Book book)
         {
-            author.Books.Add(book);
-            await _context.SaveChangesAsync();
+            if(author != null && book != null) 
+             author.Books.Add(book);
         }
 
         public async Task<Author> GetAuthorByIdAsync(int authorId)
@@ -30,10 +30,14 @@ namespace FInalProject.Repositories.DataAcces
             return await _context.Authors.AsNoTracking().FirstOrDefaultAsync(a => a.Name == name);
         }
 
-        public async Task UpdateAuthorAsync(Author author)
+        public Task SaveChangesAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public  void UpdateAuthor(Author author)
         {
             _context.Authors.Update(author);
-            await _context.SaveChangesAsync();
         }
     }
 }

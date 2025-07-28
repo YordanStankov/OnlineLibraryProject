@@ -16,12 +16,15 @@ namespace FInalProject.Repositories.DataAcces
         public async Task AddListOfNewBookGenresAsync(List<BookGenre> bookGenres)
         {
            await _context.AddRangeAsync(bookGenres);
-            _context.SaveChanges();
         }
 
         public async Task AddNewBookGenreAsync(BookGenre bookGenre)
         {
             await _context.BookGenres.AddAsync(bookGenre);
+        }
+
+        public async Task SaveChangesAsync()
+        {
             await _context.SaveChangesAsync();
         }
     }

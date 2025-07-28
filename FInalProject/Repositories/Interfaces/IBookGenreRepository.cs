@@ -6,5 +6,6 @@ namespace FInalProject.Repositories.Interfaces
     {
         Task AddNewBookGenreAsync(BookGenre bookGenre);
         Task AddListOfNewBookGenresAsync(List<BookGenre> bookGenres);
+        Task SaveChangesAsync();
     }
 }

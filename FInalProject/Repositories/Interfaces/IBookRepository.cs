@@ -9,14 +9,15 @@ namespace FInalProject.Repositories.Interfaces
         Task<BookFocusViewModel> GetSingleBookForFocusAsync(int bookId);
         Task<BookCreationViewModel> GetSingleBookForEditAsync(int editId);
         Task<List<BookListViewModel>> RenderBookListAsync();
-        Task UpdateBookAsync(Book book);
-        Task AddBookAsync (Book book);
+        void UpdateBook(Book book);
+        void AddBook(Book book);
         Task<List<BookListViewModel>> RenderBooksByCategoryAsync(int modifier);
         Task<List<BooksLeaderboardViewModel>> RenderBooksLeaderboardAsync();
         Task<Book> ReturnBookEntityToEditAsync(int bookId);
         Task<Book> ReturnBookEntityToBorrowAsync(int bookId);
         Task<Book> ReturnBookEntityToDeleteAsync(int bookId);
-        Task RemoveBookAsync(Book book);
+        void RemoveBook(Book book);
+        Task SaveChangesAsync();
         Task<List<BookListViewModel>> RenderSearchedBookListAsync(string searchQuery);
     }
 }

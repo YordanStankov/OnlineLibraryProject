@@ -11,9 +11,13 @@ namespace FInalProject.Repositories.DataAcces
         {
             _context = context;
         }
-        public async Task AddAndSaveCommentAsync(Comment newComment)
+        public void AddComment(Comment newComment)
         {
             _context.Comments.Add(newComment);
+        }
+
+        public async Task SaveChangesAsync()
+        {
             await _context.SaveChangesAsync();
         }
     }

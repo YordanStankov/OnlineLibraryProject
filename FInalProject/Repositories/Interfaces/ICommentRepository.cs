@@ -4,6 +4,7 @@ namespace FInalProject.Repositories.Interfaces
 {
     public interface ICommentRepository
     {
-        Task AddAndSaveCommentAsync(Comment newComment);
+        void AddComment(Comment newComment);
+        Task SaveChangesAsync();
     }
 }

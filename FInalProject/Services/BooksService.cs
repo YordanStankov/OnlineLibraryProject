@@ -52,7 +52,7 @@ namespace FInalProject.Services
             var newBook = new Book();
             MapBook(newBook, model, correctAuthor);
 
-            await _bookRepository.AddBookAsync(newBook);
+             _bookRepository.AddBook(newBook);
 
             if (model.SelectedGenreIds != null)
             {
@@ -68,7 +68,8 @@ namespace FInalProject.Services
                 }
                 await _bookGenreRepository.AddListOfNewBookGenresAsync(newBookGenres);
             }
-            await _authorRepository.AddToAuhtorBookListAsync(correctAuthor, newBook);
+             _authorRepository.AddToAuhtorBookList(correctAuthor, newBook);
+            await _bookRepository.SaveChangesAsync();
             return newBook.Id;
         }
 
