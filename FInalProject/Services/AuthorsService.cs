@@ -17,13 +17,11 @@ namespace FInalProject.Services
     }
     public class AuthorsService : IAuthorsService
     {
-        private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
         private readonly IAuthorRepository _authorRepository;
         private readonly IFavouriteAuthorRepository _favouriteAuthorRepository;
-        public AuthorsService(ApplicationDbContext context, UserManager<User> userManager, IAuthorRepository authorRepository, IFavouriteAuthorRepository favouriteAuthorRepository)
+        public AuthorsService(UserManager<User> userManager, IAuthorRepository authorRepository, IFavouriteAuthorRepository favouriteAuthorRepository)
         {
-            _context = context;
             _userManager = userManager;
             _authorRepository = authorRepository;
             _favouriteAuthorRepository = favouriteAuthorRepository;
@@ -74,13 +72,7 @@ namespace FInalProject.Services
             var currUserId = _userManager.GetUserId(User);
             if (currUserId == null) return empty;
 
-            var author = await _context.Authors
-                .AsNoTracking()
-                .Include(a => a.Books)
-                    .ThenInclude(b => b.BookGenres)
-                        .ThenInclude(bg => bg.Genre)
-                .Include(a => a.FavouriteAuthors)
-                .FirstOrDefaultAsync(a => a.Id == authorId);
+            var author = await _authorRepository.GetAuthorWithBooksByIdAsync(authorId);
 
             if (author is null) return empty;
 
@@ -119,15 +111,7 @@ namespace FInalProject.Services
                 results.Message = $"Empty search";
                 return results;
             }
-                results.authorsFound = await _context.Authors
-                    .Where(a => a.Name.ToLower().Contains(results.SearchQuery.ToLower()))
-                    .Select(a => new AuthorListViewModel
-                {
-                    AuthorId = a.Id,
-                    AuthorPortrait = a.Portrait,
-                    AuthorName = a.Name,
-                    Favourites = a.FavouriteAuthors.Count()
-                }).ToListAsync();
+                results.authorsFound = await _authorRepository.RenderAuthorSearchResutlsAsync(searchString);
             if (!results.authorsFound.Any())
             {
                 results.Message = $"No authors found with search: {results.SearchQuery}";

@@ -10,6 +10,8 @@ namespace FInalProject.Repositories.Interfaces
         void AddToAuhtorBookList(Author author, Book book);
         void UpdateAuthor(Author author);
         Task<List<AuthorListViewModel>> RenderAuthorListAsync();
+        Task<Author> GetAuthorWithBooksByIdAsync(int authorId);
+        Task<List<AuthorListViewModel>> RenderAuthorSearchResutlsAsync(string searchQuery);
         Task SaveChangesAsync();
     }
 }

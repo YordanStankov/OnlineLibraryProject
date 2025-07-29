@@ -31,6 +31,19 @@ namespace FInalProject.Repositories.DataAcces
             return await _context.Authors.AsNoTracking().FirstOrDefaultAsync(a => a.Name == name);
         }
 
+        public async Task<Author> GetAuthorWithBooksByIdAsync(int authorId)
+        {
+            Author author = new Author();
+            author = await _context.Authors
+                .AsNoTracking()
+                .Include(a => a.Books)
+                    .ThenInclude(b => b.BookGenres)
+                        .ThenInclude(bg => bg.Genre)
+                .Include(a => a.FavouriteAuthors)
+                .FirstOrDefaultAsync(a => a.Id == authorId);
+            return author;
+        }
+
         public async Task<List<AuthorListViewModel>> RenderAuthorListAsync()
         {
             List<AuthorListViewModel> listOfAuthors = new List<AuthorListViewModel>();  
@@ -43,6 +56,22 @@ namespace FInalProject.Repositories.DataAcces
                 Favourites = a.FavouriteAuthors.Count()
             }).ToListAsync();
             return listOfAuthors;
+        }
+
+        public async Task<List<AuthorListViewModel>> RenderAuthorSearchResutlsAsync(string searchQuery)
+        {
+            string loweredQuery = searchQuery.ToLower(); 
+            List<AuthorListViewModel> authorList = new List<AuthorListViewModel>();
+            authorList = await _context.Authors
+                    .Where(a => a.Name.ToLower().Contains(loweredQuery))
+                    .Select(a => new AuthorListViewModel
+                    {
+                        AuthorId = a.Id,
+                        AuthorPortrait = a.Portrait,
+                        AuthorName = a.Name,
+                        Favourites = a.FavouriteAuthors.Count()
+                    }).ToListAsync();
+            return authorList;
         }
 
         public async Task SaveChangesAsync()
