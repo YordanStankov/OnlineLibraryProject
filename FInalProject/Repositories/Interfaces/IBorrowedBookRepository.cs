@@ -6,9 +6,11 @@ namespace FInalProject.Repositories.Interfaces
     {
         Task<bool> GetSingleBorrowedBookAsync(string userId, int bookId);
         void AddBorrowedBook(BorrowedBook newBorrow);
-        Task SaveChangesAsync();    
+        Task SaveChangesAsync();
+        Task TSaveChangesAsync(CancellationToken cancellationToken);
         void RemoveBorrowedBook(BorrowedBook removedBorrow);
         Task<BorrowedBook> ReturnBorrowedBookToReturnAsync(int bookId, string userId);
         Task<bool> UserHasOverdueBooksAsync(string userId);
+        Task<List<BorrowedBook>> GetOverdueBooksListAsync(CancellationToken cancellationToken, DateTimeOffset currentTime);
     }
 }

@@ -1,7 +1,7 @@
-﻿using FInalProject.Data;
-using FInalProject.Data.Models;
+﻿using FInalProject.Data.Models;
 using FInalProject.EmailTemplates;
-using Microsoft.EntityFrameworkCore;
+using FInalProject.Repositories.Interfaces;
+
 
 namespace FInalProject.Services
 {
@@ -22,16 +22,12 @@ namespace FInalProject.Services
                 try
                 {
                     using var scope = _serviceProvider.CreateScope();
-                    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                    var borrowedBookRepository = scope.ServiceProvider.GetRequiredService<IBorrowedBookRepository>();
                     var emailService = scope.ServiceProvider.GetRequiredService<IEmailService>();
                     var logger = scope.ServiceProvider.GetRequiredService<ILogger<BorrowedBooksService>>();
 
                     var now = DateTimeOffset.UtcNow;
-                    var overdue = await dbContext.BorrowedBooks
-                        .Include(bb => bb.Book)
-                        .Include(bb => bb.User)
-                        .Where(bb => bb.UntillReturn < now && !bb.StrikeGiven)
-                        .ToListAsync(stoppingToken);
+                    var overdue = await borrowedBookRepository.GetOverdueBooksListAsync(stoppingToken ,now);
 
                     foreach (var bb in overdue)
                     {
@@ -52,7 +48,7 @@ namespace FInalProject.Services
                         user.Strikes++;
                     }
 
-                    await dbContext.SaveChangesAsync(stoppingToken);
+                    await borrowedBookRepository.TSaveChangesAsync(stoppingToken);
                 }
                 catch (Exception ex)
                 {

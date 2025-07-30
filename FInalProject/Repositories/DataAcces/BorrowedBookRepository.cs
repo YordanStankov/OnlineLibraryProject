@@ -39,6 +39,10 @@ namespace FInalProject.Repositories.DataAcces
         {
             await _context.SaveChangesAsync();
         }
+        public async Task TSaveChangesAsync(CancellationToken cancellationToken)
+        {
+            await _context.SaveChangesAsync(cancellationToken);
+        }
 
         public async Task<BorrowedBook> ReturnBorrowedBookToReturnAsync(int bookId, string userId)
         {
@@ -47,6 +51,16 @@ namespace FInalProject.Repositories.DataAcces
                 .Include(bb => bb.Book)
                 .FirstOrDefaultAsync(bb => bb.BookId == bookId && bb.UserId == userId);
             return borrowed;
+        }
+
+        public async Task<List<BorrowedBook>> GetOverdueBooksListAsync(CancellationToken cancellationToken, DateTimeOffset currentTime)
+        {
+           var books = await _context.BorrowedBooks
+                         .Include(bb => bb.Book)
+                         .Include(bb => bb.User)
+                         .Where(bb => bb.UntillReturn < currentTime && !bb.StrikeGiven)
+                         .ToListAsync(cancellationToken);
+            return books;
         }
 
         

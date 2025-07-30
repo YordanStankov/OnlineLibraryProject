@@ -1,8 +1,6 @@
-﻿using FInalProject.Data;
-using FInalProject.Data.Models;
+﻿using FInalProject.Data.Models;
+using FInalProject.Repositories.Interfaces;
 using FInalProject.ViewModels;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace FInalProject.Services
 {
@@ -20,21 +18,21 @@ namespace FInalProject.Services
     public class GenreService : IGenreService
     {
         private readonly ILogger<GenreService> _logger;
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<User> _userManager;
+   
+        private readonly IGenreRepository _genreRepository;
 
-        public GenreService(ApplicationDbContext context, UserManager<User> userManager, ILogger<GenreService> logger)
+        public GenreService(ILogger<GenreService> logger,IGenreRepository genreRepository)
         {
-            _context = context;
-            _userManager = userManager;
+            
             _logger = logger;
+            _genreRepository = genreRepository;
         }
 
         //Adding and deleting genres
         public async Task<bool> AddGenreAsync(string Name)
         {
             _logger.LogInformation("ADDING GENRE METHOD");
-            var existingGenre = await _context.Genres.FirstOrDefaultAsync(g => g.Name == Name);
+            var existingGenre = await _genreRepository.GetGenreByNameAsync(Name);
             if (existingGenre == null)
             {
                 _logger.LogInformation("ADDING NEW GENRE");
@@ -42,8 +40,8 @@ namespace FInalProject.Services
                 {
                     Name = Name
                 };
-                await _context.Genres.AddAsync(genre);
-                await _context.SaveChangesAsync();
+                await _genreRepository.AddGenreAsync(genre);
+                await _genreRepository.SaveChangesAsync();
                 _logger.LogInformation("ADDED THE GENRE");
                 return true;
             }
@@ -53,11 +51,11 @@ namespace FInalProject.Services
         public async Task<bool> DeleteGenreAsync(int doomedGenreId)
         {
             _logger.LogInformation("DELETE GENRE METHOD");
-            var doomedGenre = await _context.Genres.FirstOrDefaultAsync(g => g.Id == doomedGenreId);
+            var doomedGenre = await _genreRepository.GetGenreByIdAsync(doomedGenreId);
             if (doomedGenre != null)
             {
-                _context.Remove(doomedGenre);
-                await _context.SaveChangesAsync();
+                _genreRepository.RemoveGenre(doomedGenre);
+                await _genreRepository.SaveChangesAsync();
                 _logger.LogInformation("REMOVED THE GENRE");
                 return true;
             }
@@ -68,7 +66,7 @@ namespace FInalProject.Services
         public async Task<List<Genre>> GetGenreListAsync()
         {
             _logger.LogInformation("GETING ALL GENRES METHOD");
-            var genreList = await _context.Genres.AsNoTracking().ToListAsync();
+            var genreList = await _genreRepository.GetAllGenresAsync();
             return genreList;
         }
 
@@ -76,22 +74,10 @@ namespace FInalProject.Services
         {
             BooksFromGenreViewModel GenreBooks = new BooksFromGenreViewModel();
 
-            var genre = await _context.Genres.FirstOrDefaultAsync(g => g.Id == genreId);
+            var genre = await _genreRepository.GetGenreByIdAsync(genreId);
             GenreBooks.Genre = genre?.Name ?? "Null";
 
-            GenreBooks.BooksMatchingGenre = await _context.BookGenres
-                .AsNoTracking()
-                .Where(bg => bg.GenreId == genreId && bg.Book.AmountInStock > 0)
-                .Select(bg => new BookListViewModel()
-                {
-                    Id = bg.Book.Id,
-                    AuthorName = bg.Book.Author.Name,
-                    CoverImage = bg.Book.CoverImage,
-                    Pages = bg.Book.Pages,
-                    Name = bg.Book.Name,
-                    DateWritten = bg.Book.DateWritten,
-                    Genres = new List<string> { bg.Genre.Name }
-                }).ToListAsync();
+            GenreBooks.BooksMatchingGenre = await _genreRepository.RenderSpecificGenreBookListAsync(genreId);
 
             if (GenreBooks.BooksMatchingGenre == null || !GenreBooks.BooksMatchingGenre.Any())
             {
@@ -108,22 +94,20 @@ namespace FInalProject.Services
         //Genre editing
         public async Task<GenreEditViewModel> ProvideGenreForPartialAsync(int genreEditId)
         {
-            var selectedGenre = await _context.Genres.FirstOrDefaultAsync(g => g.Id == genreEditId);
-            return new GenreEditViewModel
-            {
-                Id = selectedGenre.Id,
-                Name = selectedGenre.Name
-            };
+            var viewModel = await _genreRepository.ReturnSingleGenreToEditAsync(genreEditId);
+            if (viewModel == null)
+                throw new Exception("GenreEditViewModel is null. Check GenreService");
+            return viewModel;
         }
 
         public async Task<bool> SaveChangesToGenreAsync(GenreEditViewModel model)
         {
-            var genreNeedsEdit = await _context.Genres.FirstOrDefaultAsync(g => g.Id == model.Id);
+            var genreNeedsEdit = await _genreRepository.GetGenreByIdAsync(model.Id);
             if(genreNeedsEdit != null)
             {
                 genreNeedsEdit.Name = model.Name;
                 _logger.LogInformation("CHANGED THE NAME OF THE GENRE WOOOOOOOOOOOO");
-                await _context.SaveChangesAsync();
+                await _genreRepository.SaveChangesAsync();
                 return true;
             }
             _logger.LogError("COULDNT FIND GENRE WHEN SAVING THE CHANGES TO IT");

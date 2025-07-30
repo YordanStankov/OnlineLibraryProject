@@ -18,13 +18,13 @@ namespace FInalProject.Services
         private readonly ILogger<HomeService> _logger;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly ApplicationDbContext _context;
+    
 
-        public HomeService( UserManager<User> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext context, ILogger<HomeService> logger)
+        public HomeService( UserManager<User> userManager, RoleManager<IdentityRole> roleManager, ILogger<HomeService> logger)
         {
             _userManager = userManager;
             _roleManager = roleManager;
-            _context = context;
+           
             _logger = logger;
         }
         public async Task<bool> AssignRoleAsync(ClaimsPrincipal User)
