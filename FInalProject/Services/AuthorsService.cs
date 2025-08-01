@@ -1,10 +1,11 @@
-﻿using FInalProject.ViewModels;
-using FInalProject.Data;
-using Microsoft.EntityFrameworkCore;
-using FInalProject.Data.Models;
+﻿using FInalProject.Data.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using FInalProject.Repositories.Interfaces;
+using FInalProject.ViewModels.Author.AuthorOperations;
+using FInalProject.ViewModels.Author.AuthorFiltering;
+using FInalProject.ViewModels.Author;
+using FInalProject.ViewModels.Book;
 namespace FInalProject.Services
 {
     public interface IAuthorsService

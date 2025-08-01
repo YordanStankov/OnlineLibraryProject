@@ -1,4 +1,4 @@
-﻿namespace FInalProject.ViewModels
+﻿namespace FInalProject.ViewModels.Admin.User
 {
     public class UserListViewModel
     {

@@ -1,5 +1,4 @@
-﻿
-namespace FInalProject.ViewModels
+﻿namespace FInalProject.ViewModels.Book.BookFiltering
 {
     public class BooksFromCategoryViewModel
     {

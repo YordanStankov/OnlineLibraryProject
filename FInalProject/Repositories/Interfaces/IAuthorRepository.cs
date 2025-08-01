@@ -1,5 +1,5 @@
 ﻿using FInalProject.Data.Models;
-using FInalProject.ViewModels;
+using FInalProject.ViewModels.Author;
 
 namespace FInalProject.Repositories.Interfaces
 {

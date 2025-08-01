@@ -1,8 +1,6 @@
 ﻿using FInalProject.Data.Models;
-using Microsoft.AspNetCore.Routing.Constraints;
-using System.ComponentModel.DataAnnotations;
 
-namespace FInalProject.ViewModels
+namespace FInalProject.ViewModels.Book
 {
     public class BookListViewModel
     {

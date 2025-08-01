@@ -1,8 +1,11 @@
 ﻿using FInalProject.Data.Models;
 using FInalProject.EmailTemplates;
-using FInalProject.Repositories.DataAcces;
 using FInalProject.Repositories.Interfaces;
 using FInalProject.ViewModels;
+using FInalProject.ViewModels.Book;
+using FInalProject.ViewModels.Book.BookFiltering;
+using FInalProject.ViewModels.Book.BookOperations;
+using FInalProject.ViewModels.Comment.CommentOperations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;

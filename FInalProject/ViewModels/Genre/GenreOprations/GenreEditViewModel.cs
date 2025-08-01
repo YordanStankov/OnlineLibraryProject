@@ -1,7 +1,7 @@
 ﻿using FInalProject.Data.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace FInalProject.ViewModels
+namespace FInalProject.ViewModels.Genre.GenreOprations
 {
     public class GenreEditViewModel
     {

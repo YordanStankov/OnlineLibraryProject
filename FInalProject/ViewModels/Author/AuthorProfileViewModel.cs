@@ -1,6 +1,7 @@
 ﻿using FInalProject.Data.Models;
-using FInalProject.ViewModels;
-namespace FInalProject.ViewModels
+using FInalProject.ViewModels.Book;
+
+namespace FInalProject.ViewModels.Author
 {
     public class AuthorProfileViewModel
     {

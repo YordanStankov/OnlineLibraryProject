@@ -1,4 +1,4 @@
-﻿namespace FInalProject.ViewModels
+﻿namespace FInalProject.ViewModels.Admin.Book
 {
     public class AdminBookListViewModel
     {

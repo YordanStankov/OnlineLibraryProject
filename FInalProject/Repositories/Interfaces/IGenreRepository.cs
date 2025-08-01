@@ -1,5 +1,6 @@
 ﻿using FInalProject.Data.Models;
-using FInalProject.ViewModels;
+using FInalProject.ViewModels.Book;
+using FInalProject.ViewModels.Genre.GenreOprations;
 
 namespace FInalProject.Repositories.Interfaces
 {

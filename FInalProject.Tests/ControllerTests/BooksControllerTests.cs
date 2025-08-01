@@ -2,7 +2,9 @@
 using FInalProject.Data;
 using FInalProject.Data.Models;
 using FInalProject.Services;
-using FInalProject.ViewModels;
+using FInalProject.ViewModels.Book;
+using FInalProject.ViewModels.Book.BookFiltering;
+using FInalProject.ViewModels.Book.BookOperations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

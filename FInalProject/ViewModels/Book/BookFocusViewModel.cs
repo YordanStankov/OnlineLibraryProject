@@ -1,5 +1,6 @@
 ﻿using FInalProject.Data.Models;
-namespace FInalProject.ViewModels
+using FInalProject.ViewModels.Comment;
+namespace FInalProject.ViewModels.Book
 {
     public class BookFocusViewModel
     {
@@ -15,7 +16,7 @@ namespace FInalProject.ViewModels
         public Category Category { get; set; }
 
         public bool Borrowed { get; set; }
-        public ICollection<Genre> genres { get; set; }
+        public ICollection<FInalProject.Data.Models.Genre> genres { get; set; }
         public ICollection<CommentViewModel>? comments { get; set; }
         public ICollection<Favourite>? Favourites { get; set; }
 

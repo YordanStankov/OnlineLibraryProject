@@ -1,6 +1,7 @@
 ﻿using FInalProject.Data.Models;
 using FInalProject.Repositories.Interfaces;
-using FInalProject.ViewModels;
+using FInalProject.ViewModels.Book.BookFiltering;
+using FInalProject.ViewModels.Genre.GenreOprations;
 
 namespace FInalProject.Services
 {

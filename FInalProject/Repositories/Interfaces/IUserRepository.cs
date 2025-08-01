@@ -1,5 +1,5 @@
 ﻿using FInalProject.Data.Models;
-using FInalProject.ViewModels;
+using FInalProject.ViewModels.Admin.User;
 namespace FInalProject.Repositories.Interfaces
 {
     public interface IUserRepository

@@ -1,6 +1,7 @@
 ﻿using FInalProject.Data.Models;
-using FInalProject.ViewModels;
 using FInalProject.Repositories.Interfaces;
+using FInalProject.ViewModels.Admin.Book;
+using FInalProject.ViewModels.Admin.User;
 
 
 namespace FInalProject.Services

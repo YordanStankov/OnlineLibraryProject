@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using FInalProject.Data.Models;
-using FInalProject.ViewModels;
 using FInalProject.Data;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
@@ -11,6 +10,9 @@ using FInalProject.Services;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.Runtime.CompilerServices;
+using FInalProject.ViewModels.Book;
+using FInalProject.ViewModels.Comment.CommentOperations;
+using FInalProject.ViewModels;
 
 namespace FInalProject.Controllers
 {

@@ -1,8 +1,12 @@
 ﻿using FInalProject.Data;
 using FInalProject.Data.Models;
 using FInalProject.Repositories.Interfaces;
-using FInalProject.ViewModels;
+using FInalProject.ViewModels.Comment;
+using FInalProject.ViewModels.Admin.Book;
+using FInalProject.ViewModels.Book;
+using FInalProject.ViewModels.Book.BookOperations;
 using Microsoft.EntityFrameworkCore;
+using FInalProject.ViewModels;
 
 namespace FInalProject.Repositories.DataAcces
 {

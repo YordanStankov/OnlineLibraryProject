@@ -1,6 +1,7 @@
 ﻿using FInalProject.Data.Models;
 using FInalProject.Services;
-using FInalProject.ViewModels;
+using FInalProject.ViewModels.Author;
+using FInalProject.ViewModels.Author.AuthorOperations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;

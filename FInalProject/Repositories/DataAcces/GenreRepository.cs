@@ -1,7 +1,8 @@
 ﻿using FInalProject.Data;
 using FInalProject.Data.Models;
 using FInalProject.Repositories.Interfaces;
-using FInalProject.ViewModels;
+using FInalProject.ViewModels.Book;
+using FInalProject.ViewModels.Genre.GenreOprations;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 

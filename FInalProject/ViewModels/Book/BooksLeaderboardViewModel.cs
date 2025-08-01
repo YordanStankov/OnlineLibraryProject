@@ -1,5 +1,5 @@
-﻿using FInalProject.Data.Models;
-namespace FInalProject.ViewModels
+﻿using FInalProject.Data.Models; 
+namespace FInalProject.ViewModels.Book
 {
     public class BooksLeaderboardViewModel
     {

@@ -1,5 +1,8 @@
-﻿using FInalProject.ViewModels;
-using FInalProject.Data.Models;
+﻿using FInalProject.Data.Models;
+using FInalProject.ViewModels.Book.BookOperations;
+using FInalProject.ViewModels.Admin.Book;
+using FInalProject.ViewModels.Book;
+using FInalProject.ViewModels;
 namespace FInalProject.Repositories.Interfaces
 {
     public interface IBookRepository

@@ -1,4 +1,7 @@
-﻿namespace FInalProject.ViewModels
+﻿using FInalProject.ViewModels.Admin.Book;
+using FInalProject.ViewModels.Admin.User;
+
+namespace FInalProject.ViewModels.Admin
 {
     public class AdminPanelViewModel
     {

@@ -1,7 +1,7 @@
 ﻿using FInalProject.Data;
 using FInalProject.Data.Models;
 using FInalProject.Repositories.Interfaces;
-using FInalProject.ViewModels;
+using FInalProject.ViewModels.Author;
 using Microsoft.EntityFrameworkCore;
 
 namespace FInalProject.Repositories.DataAcces

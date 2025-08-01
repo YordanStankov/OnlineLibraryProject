@@ -1,6 +1,5 @@
 ﻿using FInalProject.Data.Models;
-using FInalProject.ViewModels;
-namespace FInalProject.ViewModels
+namespace FInalProject.ViewModels.Author
 {
     public class AuthorListViewModel
     {

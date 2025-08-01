@@ -1,10 +1,6 @@
-﻿using System.Diagnostics;
-using System.Security.Claims;
-using FInalProject.Controllers;
-using FInalProject.Data;
+﻿using System.Security.Claims;
 using FInalProject.Data.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
 
 namespace FInalProject.Services
 {
@@ -17,14 +13,11 @@ namespace FInalProject.Services
     {
         private readonly ILogger<HomeService> _logger;
         private readonly UserManager<User> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
     
 
-        public HomeService( UserManager<User> userManager, RoleManager<IdentityRole> roleManager, ILogger<HomeService> logger)
+        public HomeService( UserManager<User> userManager, ILogger<HomeService> logger)
         {
-            _userManager = userManager;
-            _roleManager = roleManager;
-           
+            _userManager = userManager;           
             _logger = logger;
         }
         public async Task<bool> AssignRoleAsync(ClaimsPrincipal User)

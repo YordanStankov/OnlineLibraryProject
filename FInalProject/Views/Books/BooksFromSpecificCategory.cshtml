@@ -1,4 +1,5 @@
-﻿@model BooksFromCategoryViewModel
+﻿@using FInalProject.ViewModels.Book.BookFiltering
+@model BooksFromCategoryViewModel
 @{
     ViewBag.Title = $"Books from category: {Model.Category}";
     var filtering = new FilteringViewModel

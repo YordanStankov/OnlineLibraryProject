@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using FInalProject.ViewModels;
 using FInalProject.Services;
+using FInalProject.ViewModels.Book.BookFiltering;
+using FInalProject.ViewModels;
 
 namespace FInalProject.Controllers
 {

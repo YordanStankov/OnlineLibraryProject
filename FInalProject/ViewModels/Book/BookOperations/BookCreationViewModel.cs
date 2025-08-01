@@ -27,7 +27,7 @@ namespace FInalProject.ViewModels
         public int AmountInStock { get; set; }
         public Category Category { get; set; }
         public int? editor { get; set; }
-        public ICollection<Genre>? GenreOptions { get; set; } 
+        public ICollection<FInalProject.Data.Models.Genre>? GenreOptions { get; set; } 
         public ICollection<int>? SelectedGenreIds { get; set; } 
     }
 }

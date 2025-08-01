@@ -1,4 +1,4 @@
-﻿namespace FInalProject.ViewModels
+﻿namespace FInalProject.ViewModels.Book.BookOperations
 {
     public class ReturnBookViewModel
     {

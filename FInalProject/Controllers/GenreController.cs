@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using FInalProject.ViewModels;
 using FInalProject.Data.Models;
 using FInalProject.Data;
 using Microsoft.AspNetCore.Identity;
@@ -7,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using FInalProject.Services;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json;
+using FInalProject.ViewModels.Book.BookFiltering;
+using FInalProject.ViewModels.Genre.GenreOprations;
 
 namespace FInalProject.Controllers
 {

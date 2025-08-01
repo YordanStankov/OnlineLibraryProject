@@ -1,4 +1,5 @@
-﻿@model BookFocusViewModel
+﻿@using FInalProject.ViewModels.Book;
+@model BookFocusViewModel
 
 @{
     ViewBag.Title = "Book Focus";
@@ -118,7 +119,7 @@
         <h3 class="text-gold mb-3">Comment Section</h3>
         <hr class="border-gold" />
 
-        @await Html.PartialAsync("_CreateComment", new FInalProject.ViewModels.CreateCommentViewModel
+        @await Html.PartialAsync("_CreateComment", new FInalProject.ViewModels.Comment.CommentOperations.CreateCommentViewModel
    {
        BookId = Model.BookId
    })
