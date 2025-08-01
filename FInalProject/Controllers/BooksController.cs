@@ -8,18 +8,20 @@ namespace FInalProject.Controllers
     public class BooksController : Controller
     {
         private readonly IBooksService _booksService;
-        private readonly IBookOprationsService _bookOperationsService;
-        public BooksController(IBooksService bookService, IBookOprationsService bookOperationsService)
+        private readonly IBookCRUDService _bookCRUDService;
+        private readonly IBookFilteringService _bookFilteringService;
+        public BooksController(IBooksService bookService, IBookCRUDService bookCRUDService, IBookFilteringService bookFilteringService)
         {
             _booksService = bookService;
-            _bookOperationsService = bookOperationsService;
+            _bookCRUDService = bookCRUDService;
+            _bookFilteringService = bookFilteringService;
         }
 
         [HttpGet]
         public async Task<IActionResult> AllBooks(FilteringViewModel filtering)
         {
             var books = await _booksService.GetAllBooksAsync();
-            var bookies = await _bookOperationsService.ApplyFiltering(books, filtering);
+            var bookies = await _bookFilteringService.ApplyFiltering(books, filtering);
                 return View(bookies);
         }
 
@@ -29,7 +31,7 @@ namespace FInalProject.Controllers
             var results = await _booksService.GetAllBooksFromSpecificCategoryAsync(modifier);
             if(results.BooksFromCategory != null)
             {
-                results.BooksFromCategory = await _bookOperationsService.ApplyFiltering(results.BooksFromCategory, filtering);
+                results.BooksFromCategory = await _bookFilteringService.ApplyFiltering(results.BooksFromCategory, filtering);
             }
             
             return View(results);
@@ -46,7 +48,7 @@ namespace FInalProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateABook(BookCreationViewModel model)
         {
-            int bookId = await _booksService.CreateBookAsync(model);
+            int bookId = await _bookCRUDService.CreateBookAsync(model);
             return RedirectToAction("BookFocus", "Books", new { Id = bookId });
         }
 
@@ -92,10 +94,10 @@ namespace FInalProject.Controllers
         [HttpGet]
         public async Task<IActionResult> SearchResults(string searchedString ,FilteringViewModel filtering)
         {
-            var results = await _bookOperationsService.ReturnSearchResultsAync(searchedString);
+            var results = await _bookFilteringService.ReturnSearchResultsAync(searchedString);
             if (results?.BooksMatchingQuery != null)
             {
-                results.BooksMatchingQuery = await _bookOperationsService.ApplyFiltering(results.BooksMatchingQuery, filtering);
+                results.BooksMatchingQuery = await _bookFilteringService.ApplyFiltering(results.BooksMatchingQuery, filtering);
             }
             return View(results);
         }

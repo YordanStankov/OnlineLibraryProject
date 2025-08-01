@@ -14,11 +14,11 @@ namespace FInalProject.Controllers
     public class GenreController : Controller
     {
         private readonly IGenreService _genreService;
-        private readonly IBookOprationsService _bookOperationsService;
-        public GenreController(IGenreService genreService, IBookOprationsService bookOprationsService)
+        private readonly IBookFilteringService _bookFilteringService;
+        public GenreController(IGenreService genreService, IBookFilteringService bookFilteringService)
         {
             _genreService = genreService;
-            _bookOperationsService = bookOprationsService;
+            _bookFilteringService = bookFilteringService;
         }
 
         [HttpPost]
@@ -44,7 +44,7 @@ namespace FInalProject.Controllers
         public async Task<IActionResult> SpecificGenreList(int genreId, FilteringViewModel filtering)
         {
             var result = await _genreService.GetAllBooksOfCertainGenre(genreId);
-            result.BooksMatchingGenre = await _bookOperationsService.ApplyFiltering(result.BooksMatchingGenre, filtering);
+            result.BooksMatchingGenre = await _bookFilteringService.ApplyFiltering(result.BooksMatchingGenre, filtering);
                 return View(result);
         }
         [HttpPost]

@@ -17,7 +17,6 @@ namespace FInalProject.Services
         Task<BookFocusViewModel> GetBookFocusAsync(int id, ClaimsPrincipal User);
         Task<BookCreationViewModel> GetBookCreationViewModelAsync();
         Task<bool> UserRoleCheckAsync(ClaimsPrincipal user);
-        Task<int> CreateBookAsync(BookCreationViewModel model);
         Task<List<BooksLeaderboardViewModel>> ReturnLeaderboardResultsAsync();
         Task<bool> CheckIfUserCantBorrowAsync(ClaimsPrincipal User);
     }
@@ -25,20 +24,17 @@ namespace FInalProject.Services
     {
         public readonly ILogger<BooksService> _logger;
         private readonly UserManager<User> _userManager;
-        private readonly IAuthorRepository _authorRepository;
         private readonly IBookRepository _bookRepository;
         private readonly IGenreRepository _genreRepository;
         private readonly IBorrowedBookRepository _borrowedBookRepository;
-        private readonly IBookGenreRepository _bookGenreRepository;
+        
 
-        public BooksService(UserManager<User> userManager, ILogger<BooksService> logger, IBookRepository bookRepository, IGenreRepository genreRepository, IAuthorRepository authorRepository, IBookGenreRepository bookGenreRepository, IBorrowedBookRepository borrowedBookRepository )
+        public BooksService(UserManager<User> userManager, ILogger<BooksService> logger, IBookRepository bookRepository, IGenreRepository genreRepository, IBorrowedBookRepository borrowedBookRepository )
         {
             _userManager = userManager;
             _logger = logger;
             _bookRepository = bookRepository;
             _genreRepository = genreRepository;
-            _authorRepository = authorRepository;
-            _bookGenreRepository = bookGenreRepository;
             _borrowedBookRepository = borrowedBookRepository;
         }
 
@@ -47,34 +43,7 @@ namespace FInalProject.Services
             _logger.LogInformation("GETTING ALL BOOKS");
            return await _bookRepository.RenderBookListAsync();
         }
-        public async Task<int> CreateBookAsync(BookCreationViewModel model)
-        {
-            _logger.LogDebug("LOG DEBUG CREATING BOOK ASYNC");
-            var existingAuthor = await _authorRepository.GetAuthorByNameAsync(model.AuthorName);
-            var correctAuthor = existingAuthor ?? new Author { Name = model.AuthorName };
-            var newBook = new Book();
-            MapBook(newBook, model, correctAuthor);
-
-             _bookRepository.AddBook(newBook);
-
-            if (model.SelectedGenreIds != null)
-            {
-                List<BookGenre> newBookGenres = new List<BookGenre>();
-                foreach (var genreId in model.SelectedGenreIds)
-                {
-                    var bookGenre = new BookGenre
-                    {
-                        BookId = newBook.Id,
-                        GenreId = genreId
-                    };
-                    newBookGenres.Add(bookGenre);
-                }
-                await _bookGenreRepository.AddListOfNewBookGenresAsync(newBookGenres);
-            }
-             _authorRepository.AddToAuhtorBookList(correctAuthor, newBook);
-            await _bookRepository.SaveChangesAsync();
-            return newBook.Id;
-        }
+        
 
         
         public async Task<BookCreationViewModel> GetBookCreationViewModelAsync()
@@ -169,18 +138,5 @@ namespace FInalProject.Services
             }
             return true;
         }
-        private void MapBook(Book book, BookCreationViewModel model, Author correctAuthor)
-        {
-            book.Name = model.Name;
-            book.ReadingTime = model.ReadingTime;
-            book.Pages = model.Pages;
-            book.Author = correctAuthor;
-            book.DateWritten = model.DateWritten;
-            book.AmountInStock = model.AmountInStock;
-            book.Category = model.Category;
-            book.CategoryString = model.Category.ToString();
-            book.CoverImage = model.CoverImage;
-            book.Description = model.Description;
-        } 
     }
 }

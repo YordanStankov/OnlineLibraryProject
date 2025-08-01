@@ -1,11 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using FInalProject;
 using FInalProject.Services;
 using FInalProject.Data;
 using FInalProject.Data.Seeding;
 using FInalProject.Data.Models;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Google;
 using FInalProject.Repositories.Interfaces;
 using FInalProject.Repositories.DataAcces;
@@ -40,11 +38,16 @@ namespace FInalProject
             //Registering the services
             builder.Services.AddScoped<IBooksService, BooksService>();
             builder.Services.AddScoped<IHomeService, HomeService>();
-            builder.Services.AddScoped<IBookOprationsService, BookOprationsService>();
             builder.Services.AddScoped<IGenreService, GenreService>();
             builder.Services.AddScoped<IAuthorsService, AuthorsService>();
             builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddScoped<IAdminService, AdminService>();
+            builder.Services.AddScoped<IBookCRUDService, BookCRUDService>();
+            builder.Services.AddScoped<IBookFilteringService, BookFilteringService>();
+            builder.Services.AddScoped<IBookHandlingService, BookHandlingService>();
+            builder.Services.AddScoped<ICommentService, CommentService>();
+            builder.Services.AddScoped<IFavouriteService, FavouriteService>();
+
 
             //Repository pattern implementation
             builder.Services.AddScoped<IUserRepository, UserRepository>();

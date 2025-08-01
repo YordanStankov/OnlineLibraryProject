@@ -1,15 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using FInalProject.Data.Models;
-using FInalProject.Data;
-using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.EntityFrameworkCore;
-using SQLitePCL;
 using FInalProject.Services;
-using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
-using System.Runtime.CompilerServices;
 using FInalProject.ViewModels.Book;
 using FInalProject.ViewModels.Comment.CommentOperations;
 using FInalProject.ViewModels;
@@ -18,18 +8,24 @@ namespace FInalProject.Controllers
 {
     public class BookOperationsController : Controller
     {
-        private readonly IBookOprationsService _bookOprationsService;
+        private readonly IBookCRUDService _bookCRUDService;
+        private readonly IBookHandlingService _bookHandlingService;
+        private readonly ICommentService _commentService;
+        private readonly IFavouriteService _favouriteService;
 
-        public BookOperationsController(IBookOprationsService bookOprationsService)
+        public BookOperationsController( IBookCRUDService bookCRUDService, IBookHandlingService bookHandlingService, ICommentService commentService, IFavouriteService favouriteService)
         {
-            _bookOprationsService = bookOprationsService;
+            _bookCRUDService = bookCRUDService;
+            _bookHandlingService = bookHandlingService;
+            _commentService = commentService;
+            _favouriteService = favouriteService;
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<JsonResult> DeleteBook(int doomedId)
         {
-            bool succes = await _bookOprationsService.DeleteBookAsync(doomedId);
+            bool succes = await _bookCRUDService.DeleteBookAsync(doomedId);
             if(succes == true)
             {
                 return Json(new { succes = true, redirectUrl = Url.Action("AllBooks", "Books") });
@@ -41,7 +37,7 @@ namespace FInalProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateComment(CreateCommentViewModel comment)
         {
-            int response = await _bookOprationsService.CreateCommentAsync(comment, User);
+            int response = await _commentService.CreateCommentAsync(comment, User);
             if(response == -1)
             {
                 return Unauthorized();
@@ -52,7 +48,7 @@ namespace FInalProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(BookCreationViewModel model)
         {
-            var result = await _bookOprationsService.EditBookAsync(model);
+            var result = await _bookCRUDService.EditBookAsync(model);
             if(result != true)
             {
                 ModelState.AddModelError("", "Failed to update book");
@@ -63,7 +59,7 @@ namespace FInalProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> BorrowBook(int borrowedId)
         {
-            var response = await _bookOprationsService.BorrowBookAsync(borrowedId, User);
+            var response = await _bookHandlingService.BorrowBookAsync(borrowedId, User);
             if(response == true)
             {
                 return RedirectToAction("BookFocus", "Books", new { id = borrowedId });
@@ -75,7 +71,7 @@ namespace FInalProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Rating (int amount, int bookId)
         {
-            await _bookOprationsService.UpdateFavouritesAsync(amount, bookId, User);
+            await _favouriteService.UpdateFavouritesAsync(amount, bookId, User);
             return RedirectToAction("BookFocus", "Books", new { id = bookId });
         }
     }
