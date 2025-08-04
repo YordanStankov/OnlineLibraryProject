@@ -1,8 +1,8 @@
 ﻿using FInalProject.Controllers;
 using FInalProject.Data;
 using FInalProject.Data.Models;
-using FInalProject.Services;
-using FInalProject.ViewModels.Genre.GenreOprations;
+using FInalProject.Application.Services;
+using FInalProject.Application.ViewModels.Genre.GenreOprations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;

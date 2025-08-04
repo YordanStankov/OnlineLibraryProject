@@ -1,7 +1,7 @@
 using FInalProject.Data;
 using FInalProject.Data.Models;
-using FInalProject.Services;
-using FInalProject.ViewModels.Book.BookOperations;
+using FInalProject.Application.Services;
+using FInalProject.Application.ViewModels.Book.BookOperations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;

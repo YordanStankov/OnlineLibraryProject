@@ -1,4 +1,4 @@
-﻿@using FInalProject.ViewModels.Book;
+﻿@using FInalProject.Application.ViewModels.Book;
 @model BookFocusViewModel
 
 @{
@@ -119,7 +119,7 @@
         <h3 class="text-gold mb-3">Comment Section</h3>
         <hr class="border-gold" />
 
-        @await Html.PartialAsync("_CreateComment", new FInalProject.ViewModels.Comment.CommentOperations.CreateCommentViewModel
+        @await Html.PartialAsync("_CreateComment", new FInalProject.Application.ViewModels.Comment.CommentOperations.CreateCommentViewModel
    {
        BookId = Model.BookId
    })

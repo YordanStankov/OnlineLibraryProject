@@ -1,8 +1,8 @@
 ﻿using FInalProject.Controllers;
 using FInalProject.Data;
 using FInalProject.Data.Models;
-using FInalProject.Services;
-using FInalProject.ViewModels.Admin;
+using FInalProject.Application.Services;
+using FInalProject.Application.ViewModels.Admin;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

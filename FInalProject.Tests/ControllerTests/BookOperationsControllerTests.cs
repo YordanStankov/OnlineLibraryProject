@@ -1,6 +1,6 @@
 ﻿using FInalProject.Controllers;
-using FInalProject.Services;
-using FInalProject.ViewModels;
+using FInalProject.Application.Services;
+using FInalProject.Application.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;

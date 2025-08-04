@@ -1,10 +1,7 @@
 using FInalProject.Data.Models;
-using FInalProject.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using FInalProject.Data;
-using Microsoft.AspNetCore.Identity;
-using FInalProject.Services;
+using FInalProject.Application.Services;
 
 namespace FInalProject.Controllers
 {

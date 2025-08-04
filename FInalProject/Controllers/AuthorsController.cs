@@ -1,11 +1,8 @@
-﻿using FInalProject.Data.Models;
-using FInalProject.Services;
-using FInalProject.ViewModels.Author;
-using FInalProject.ViewModels.Author.AuthorOperations;
-using Microsoft.AspNetCore.Identity;
+﻿using FInalProject.Application.Services;
+using FInalProject.Application.ViewModels.Author;
+using FInalProject.Application.ViewModels.Author.AuthorOperations;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Runtime.CompilerServices;
 
 namespace FInalProject.Controllers
 {

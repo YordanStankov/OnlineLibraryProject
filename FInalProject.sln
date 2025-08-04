@@ -4,12 +4,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FInalProject", "FInalProject\FInalProject.csproj", "{46720B41-7762-43E2-A393-AAF337A55088}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F6B55C3D-E195-4106-AB07-E68D60C40F20} = {F6B55C3D-E195-4106-AB07-E68D60C40F20}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FInalProject.Data", "FInalProject.Data\FInalProject.Data.csproj", "{7005CE16-C711-405F-89DA-DD1896BBFACD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FInalProject.Tests", "FInalProject.Tests\FInalProject.Tests.csproj", "{AE526B04-64D8-4B99-8551-5A8354DFD9A0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FInalProject.Application", "FInalProject.Application\FInalProject.Application.csproj", "{F6B55C3D-E195-4106-AB07-E68D60C40F20}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7005CE16-C711-405F-89DA-DD1896BBFACD} = {7005CE16-C711-405F-89DA-DD1896BBFACD}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

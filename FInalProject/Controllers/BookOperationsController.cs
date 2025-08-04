@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using FInalProject.Services;
-using FInalProject.ViewModels.Book;
-using FInalProject.ViewModels.Comment.CommentOperations;
-using FInalProject.ViewModels;
+using FInalProject.Application.Services;
+using FInalProject.Application.ViewModels.Book;
+using FInalProject.Application.ViewModels.Comment.CommentOperations;
 
 namespace FInalProject.Controllers
 {

@@ -1,7 +1,7 @@
 ﻿using FInalProject.Controllers;
 using FInalProject.Data;
 using FInalProject.Data.Models;
-using FInalProject.Services;
+using FInalProject.Application.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -15,8 +15,8 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Moq;
-using FInalProject.ViewModels.Author.AuthorFiltering;
-using FInalProject.ViewModels.Author;
+using FInalProject.Application.ViewModels.Author.AuthorFiltering;
+using FInalProject.Application.ViewModels.Author;
 
 namespace FInalProject.Tests.ControllerTests
 {

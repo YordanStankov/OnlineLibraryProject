@@ -1,5 +1,5 @@
-﻿using FInalProject.Services;
-using FInalProject.ViewModels.Admin;
+﻿using FInalProject.Application.Services;
+using FInalProject.Application.ViewModels.Admin;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FInalProject.Controllers

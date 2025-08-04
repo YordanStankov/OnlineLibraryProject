@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using FInalProject.Services;
+using FInalProject.Application.Services;
 using FInalProject.Data;
 using FInalProject.Data.Seeding;
 using FInalProject.Data.Models;
 using Microsoft.AspNetCore.Authentication.Google;
-using FInalProject.Repositories.Interfaces;
-using FInalProject.Repositories.DataAcces;
+using FInalProject.Application.Interfaces;
+using FInalProject.Repositories;
 
 
 namespace FInalProject

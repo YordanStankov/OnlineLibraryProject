@@ -1,7 +1,7 @@
 ﻿using FInalProject.Data;
 using FInalProject.Data.Models;
-using FInalProject.Services;
-using FInalProject.ViewModels;
+using FInalProject.Application.Services;
+using FInalProject.Application.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

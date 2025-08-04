@@ -1,10 +1,10 @@
 ﻿using FInalProject.Controllers;
 using FInalProject.Data;
 using FInalProject.Data.Models;
-using FInalProject.Services;
-using FInalProject.ViewModels.Book;
-using FInalProject.ViewModels.Book.BookFiltering;
-using FInalProject.ViewModels.Book.BookOperations;
+using FInalProject.Application.Services;
+using FInalProject.Application.ViewModels.Book;
+using FInalProject.Application.ViewModels.Book.BookFiltering;
+using FInalProject.Application.ViewModels.Book.BookOperations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
