@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using System;
 using System.Threading.Tasks;
+using FInalProject.Infrastructure;
 
 namespace FInalProject.Tests.ControllerTests
 {

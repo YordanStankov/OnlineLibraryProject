@@ -19,8 +19,14 @@ namespace FInalProject.Application.Services
 
         public async Task<string> LoadEmailTemplateAsync(string templateName, Dictionary<string, string> placeholders)
         {
-            var templatePath = Path.Combine(Directory.GetCurrentDirectory(), "EmailTemplates", templateName);
+            var basePath = AppContext.BaseDirectory;
+            var templatePath = Path.Combine(basePath, "EmailTemplates", templateName);
+
+            if (!File.Exists(templatePath))
+                throw new FileNotFoundException($"Email template '{templateName}' not found at path: {templatePath}");
+
             var content = await File.ReadAllTextAsync(templatePath);
+
             foreach (var placeholder in placeholders)
             {
                 content = content.Replace($"{{{{{placeholder.Key}}}}}", placeholder.Value);

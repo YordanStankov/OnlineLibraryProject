@@ -1,7 +1,7 @@
-using FInalProject.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using FInalProject.Application.Services;
+using FInalProject.Application.ViewModels.Error;
 
 namespace FInalProject.Controllers
 {

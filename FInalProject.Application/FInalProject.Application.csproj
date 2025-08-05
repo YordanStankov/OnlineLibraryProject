@@ -9,6 +9,28 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="EmailTemplates\BorrowConfirmation.html" />
+    <None Remove="EmailTemplates\ReturnConfirmation.html" />
+    <None Remove="EmailTemplates\RevokedBorrowing.html" />
+    <None Remove="EmailTemplates\StrikeForHoarding.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="EmailTemplates\BorrowConfirmation.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EmailTemplates\ReturnConfirmation.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EmailTemplates\RevokedBorrowing.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EmailTemplates\StrikeForHoarding.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MailKit" Version="4.11.0" />
   </ItemGroup>
 

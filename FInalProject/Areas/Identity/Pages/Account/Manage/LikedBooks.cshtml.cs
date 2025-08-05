@@ -1,9 +1,9 @@
-using FInalProject.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using FInalProject.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using FInalProject.Infrastructure;
 
 namespace FInalProject.Areas.Identity.Pages.Account.Manage
 {

@@ -11,12 +11,11 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Moq;
 using FInalProject.Application.ViewModels.Author.AuthorFiltering;
 using FInalProject.Application.ViewModels.Author;
+using FInalProject.Infrastructure;
 
 namespace FInalProject.Tests.ControllerTests
 {
