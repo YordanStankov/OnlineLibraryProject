@@ -8,10 +8,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using FInalProject.Data.Models;
-using Microsoft.Extensions.Logging;
+using FInalProject.Domain.Models;
 
-namespace FInalProject.Areas.Identity.Pages.Account.Manage
+namespace FInalProject.Web.Areas.Identity.Pages.Account.Manage
 {
     public class ChangePasswordModel : PageModel
     {

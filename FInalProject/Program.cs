@@ -2,14 +2,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using FInalProject.Application.Services;
 using FInalProject.Infrastructure.Seeding;
-using FInalProject.Data.Models;
+using FInalProject.Domain.Models;
 using Microsoft.AspNetCore.Authentication.Google;
 using FInalProject.Application.Interfaces;
 using FInalProject.Infrastructure.Repositories;
 using FInalProject.Infrastructure;
 
 
-namespace FInalProject
+namespace FInalProject.Web
 {
     public class Program
     {

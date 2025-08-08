@@ -3,7 +3,7 @@ using FInalProject.Application.Services;
 using FInalProject.Application.ViewModels.Book;
 using FInalProject.Application.ViewModels.Comment.CommentOperations;
 
-namespace FInalProject.Controllers
+namespace FInalProject.Web.Controllers
 {
     public class BookOperationsController : Controller
     {

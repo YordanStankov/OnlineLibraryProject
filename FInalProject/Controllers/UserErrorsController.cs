@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace FInalProject.Controllers
+namespace FInalProject.Web.Controllers
 {
     [Route("UserErrors/NotFound404")]
     public class UserErrorsController : Controller

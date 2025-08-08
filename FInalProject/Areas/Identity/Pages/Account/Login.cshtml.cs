@@ -13,10 +13,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using FInalProject.Data.Models;
+using FInalProject.Domain.Models;
 using Microsoft.Extensions.Logging;
 
-namespace FInalProject.Areas.Identity.Pages.Account
+namespace FInalProject.Web.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {

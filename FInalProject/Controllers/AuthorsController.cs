@@ -4,7 +4,7 @@ using FInalProject.Application.ViewModels.Author.AuthorOperations;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
-namespace FInalProject.Controllers
+namespace FInalProject.Web.Controllers
 {
     public class AuthorsController : Controller
     {

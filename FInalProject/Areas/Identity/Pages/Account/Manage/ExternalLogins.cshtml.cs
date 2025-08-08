@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using FInalProject.Data.Models;
+using FInalProject.Domain.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace FInalProject.Areas.Identity.Pages.Account.Manage
+namespace FInalProject.Web.Areas.Identity.Pages.Account.Manage
 {
     public class ExternalLoginsModel : PageModel
     {

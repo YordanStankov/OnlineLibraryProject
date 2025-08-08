@@ -3,7 +3,7 @@ using System.Diagnostics;
 using FInalProject.Application.Services;
 using FInalProject.Application.ViewModels.Error;
 
-namespace FInalProject.Controllers
+namespace FInalProject.Web.Controllers
 {
     public class HomeController : Controller
     {

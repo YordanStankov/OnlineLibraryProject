@@ -1,4 +1,4 @@
-using FInalProject.Data.Models;
+using FInalProject.Domain.Models;
 using FInalProject.Application.Services;
 using FInalProject.Application.ViewModels.Book.BookOperations;
 using Microsoft.AspNetCore.Identity;
@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using FInalProject.Infrastructure;
-namespace FInalProject.Areas.Identity.Pages.Account.Manage
+namespace FInalProject.Web.Areas.Identity.Pages.Account.Manage
 {
     public class BorrowedBooksModel : PageModel
     {

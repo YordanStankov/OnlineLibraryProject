@@ -2,7 +2,7 @@
 using FInalProject.Application.ViewModels.Admin;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FInalProject.Controllers
+namespace FInalProject.Web.Controllers
 {
     public class AdminController : Controller
     {

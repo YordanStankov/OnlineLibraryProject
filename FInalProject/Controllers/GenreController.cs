@@ -3,7 +3,7 @@ using FInalProject.Application.Services;
 using FInalProject.Application.ViewModels.Book.BookFiltering;
 using FInalProject.Application.ViewModels.Genre.GenreOprations;
 
-namespace FInalProject.Controllers
+namespace FInalProject.Web.Controllers
 {
     public class GenreController : Controller
     {
