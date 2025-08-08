@@ -1,4 +1,4 @@
-﻿using FInalProject.Data.Models;
+﻿using FInalProject.Domain.Models;
 using FInalProject.Application.ViewModels.Comment;
 namespace FInalProject.Application.ViewModels.Book
 {
@@ -16,7 +16,7 @@ namespace FInalProject.Application.ViewModels.Book
         public Category Category { get; set; }
 
         public bool Borrowed { get; set; }
-        public ICollection<FInalProject.Data.Models.Genre> genres { get; set; }
+        public ICollection<Domain.Models.Genre> genres { get; set; }
         public ICollection<CommentViewModel>? comments { get; set; }
         public ICollection<Favourite>? Favourites { get; set; }
 

@@ -1,4 +1,4 @@
-﻿using FInalProject.Data.Models;
+﻿using FInalProject.Domain.Models;
 using System.ComponentModel.DataAnnotations;
 namespace FInalProject.Application.ViewModels.Book
 {
@@ -27,7 +27,7 @@ namespace FInalProject.Application.ViewModels.Book
         public int AmountInStock { get; set; }
         public Category Category { get; set; }
         public int? editor { get; set; }
-        public ICollection<FInalProject.Data.Models.Genre>? GenreOptions { get; set; } 
+        public ICollection<Domain.Models.Genre>? GenreOptions { get; set; } 
         public ICollection<int>? SelectedGenreIds { get; set; } 
     }
 }

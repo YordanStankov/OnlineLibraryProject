@@ -1,4 +1,4 @@
-﻿using FInalProject.Data.Models;
+﻿using FInalProject.Domain.Models;
 using FInalProject.Application.ViewModels.Admin.User;
 namespace FInalProject.Application.Interfaces
 {

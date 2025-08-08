@@ -1,4 +1,80 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿function DeleteBook(bookId) {
 
-// Write your JavaScript code.
+    if (confirm("Are you sure you want to delete this"))
+    {
+        const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+        fetch(`/BookOperations/DeleteBook?doomedId=${bookId}`, {
+
+            method: "POST",
+            headers: {
+                "RequestVerificationToken": token
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.succes) {
+                    alert("Book has been deleted");
+                    window.location.href = data.redirectUrl;
+                }
+                else {
+                    alert("Womp womp didn't delete" + data.message)
+                }
+            })
+            .catch(error => console.error("Error: ", error))
+        }
+    }
+
+document.addEventListener("DOMContentLoaded", function () {
+    let modal = document.getElementById("editGenreModal");
+
+    if (modal) { // Only run if the modal exists
+        function loadEditGenre(genreId) {
+            modal.style.display = "block";
+
+            // Load the partial inside the modal dynamically
+            fetch(`/Genre/EditGenre?genreEditId=${genreId}`)
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById("modalBody").innerHTML = html;
+                })
+                .catch(error => console.error("Error loading genre edit:", error));
+        }
+
+        function closeModal() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+
+        // Handle form submission via AJAX
+        document.addEventListener("submit", function (event) {
+            if (event.target.id === "editGenreForm") {
+                event.preventDefault(); // Prevent default full-page refresh
+
+                let form = event.target;
+                let formData = new FormData(form);
+
+                fetch(form.action, {
+                    method: "POST",
+                    body: formData
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            closeModal(); // Close the modal after successful submission
+                            location.reload(); // Refresh the page to show the updated genre list
+                        }
+                    })
+                    .catch(error => console.error("Error submitting genre edit:", error));
+            }
+        });
+
+        // Expose functions globally so they can be used in Razor views
+        window.loadEditGenre = loadEditGenre;
+        window.closeModal = closeModal;
+    }
+});
+

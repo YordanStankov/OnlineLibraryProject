@@ -1,24 +1,30 @@
-using FInalProject.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using FInalProject.Application.Services;
+using FInalProject.Application.ViewModels.Error;
 
 namespace FInalProject.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IHomeService _homeService;
+        public HomeController(IHomeService homeService)
         {
-            _logger = logger;
+            _homeService = homeService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var assigned = await _homeService.AssignRoleAsync(User);
+            return View();
+        } 
+
+        public async Task<IActionResult> Privacy()
+        {
+          
             return View();
         }
-
-        public IActionResult Privacy()
+        public async Task<IActionResult> BorrowingPolicy()
         {
             return View();
         }

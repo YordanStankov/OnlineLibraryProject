@@ -1,4 +1,4 @@
-﻿namespace FInalProject.Data.Models
+﻿namespace FInalProject.Domain.Models
 {
     public enum Category
     {

@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FInalProject\FInalProject.csproj" />
+    <ProjectReference Include="..\FInalProject\FInalProject.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>

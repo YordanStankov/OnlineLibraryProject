@@ -1,4 +1,4 @@
-﻿using FInalProject.Data.Models;
+﻿using FInalProject.Domain.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using FInalProject.Application.Interfaces;

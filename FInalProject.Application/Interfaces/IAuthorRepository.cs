@@ -1,5 +1,5 @@
-﻿using FInalProject.Data.Models;
-using FInalProject.Application.ViewModels.Author;
+﻿using FInalProject.Application.ViewModels.Author;
+using FInalProject.Domain.Models;
 
 namespace FInalProject.Application.Interfaces
 {

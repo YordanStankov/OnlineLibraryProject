@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace FInalProject.Data.Models
+namespace FInalProject.Domain.Models
 {
     public class User : IdentityUser
     {

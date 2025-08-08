@@ -35,7 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FInalProject.Data\FInalProject.Data.csproj" />
+    <ProjectReference Include="..\FInalProject.Data\FInalProject.Domain.csproj" />
   </ItemGroup>
 
 </Project>

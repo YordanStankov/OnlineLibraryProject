@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace FInalProject.Data.Models
+namespace FInalProject.Domain.Models
 {
     public class Book
     {

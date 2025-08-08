@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
-using FInalProject.Data.Models;
+using FInalProject.Domain.Models;
 
 namespace FInalProject.Infrastructure.Seeding
 {

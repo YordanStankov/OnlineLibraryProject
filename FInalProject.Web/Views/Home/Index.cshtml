@@ -1,8 +1,46 @@
-﻿@{
+﻿@using FInalProject.Domain.Models;
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="container text-center mt-5">
+        <h1 class="text-light fw-bold mb-4">Explore Our Library</h1>
+        <p class="text-light">Discover a variety of books, magazines, and comics curated just for you.</p>
+    </div>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            @foreach (var category in new[]
+           {
+        new { Name = "Magazines", Modifier = 1 },
+        new { Name = "Newspapers", Modifier = 2 },
+        new { Name = "Comics", Modifier = 3 },
+        new { Name = "Educational Books", Modifier = 4 },
+        new { Name = "Books", Modifier = 5 }
+        })
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card category-card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">@category.Name</h5>
+                            <a href="@Url.Action("BooksFromSpecificCategory", "Books", new { modifier = category.Modifier })"
+                               class="btn browse-btn">Browse</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <div class="d-flex justify-content-center align-items-center vh-100">
+        <h2 class="text-light text-center">Login or Register to Access the Library</h2>
+    </div>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Index.css"/>
+}
