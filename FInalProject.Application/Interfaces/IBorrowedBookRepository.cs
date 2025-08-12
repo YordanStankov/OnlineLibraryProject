@@ -1,10 +1,13 @@
-﻿using FInalProject.Domain.Models;
+﻿using FInalProject.Application.ViewModels.Book;
+using FInalProject.Domain.Models;
+using System.Security.Claims;
 
 namespace FInalProject.Application.Interfaces
 {
     public interface IBorrowedBookRepository
     {
         Task<bool> GetSingleBorrowedBookAsync(string userId, int bookId);
+        Task<List<BorrowedBookListViewModel>> ReturnBorrowedBookListAsync(string userId);
         void AddBorrowedBook(BorrowedBook newBorrow);
         Task SaveChangesAsync();
         Task TSaveChangesAsync(CancellationToken cancellationToken);
@@ -12,5 +15,6 @@ namespace FInalProject.Application.Interfaces
         Task<BorrowedBook> ReturnBorrowedBookToReturnAsync(int bookId, string userId);
         Task<bool> UserHasOverdueBooksAsync(string userId);
         Task<List<BorrowedBook>> GetOverdueBooksListAsync(CancellationToken cancellationToken, DateTimeOffset currentTime);
+        Task ReturnOneBookToStockAsync(int bookId);
     }
 }

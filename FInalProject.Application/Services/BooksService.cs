@@ -5,6 +5,7 @@ using FInalProject.Application.ViewModels.Book.BookFiltering;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System.Security.Claims;
+using NuGet.Packaging.Signing;
 
 namespace FInalProject.Application.Services
 {
@@ -13,6 +14,7 @@ namespace FInalProject.Application.Services
         Task<BooksFromCategoryViewModel> GetAllBooksFromSpecificCategoryAsync(int modifier);
         Task<BookCreationViewModel> getBookInfoAsync(int editId);
         Task<List<BookListViewModel>> GetAllBooksAsync();
+        Task<List<BorrowedBookListViewModel>> ReturnBorrowedBookListAsync(ClaimsPrincipal user);
         Task<BookFocusViewModel> GetBookFocusAsync(int id, ClaimsPrincipal User);
         Task<BookCreationViewModel> GetBookCreationViewModelAsync();
         Task<bool> UserRoleCheckAsync(ClaimsPrincipal user);
@@ -51,7 +53,7 @@ namespace FInalProject.Application.Services
 
             return new BookCreationViewModel
             {
-                GenreOptions = await _genreRepository.GetAllGenresAsync()
+                GenreOptions = await _genreRepository.GetListOfGenresAsync()
             };
         }
 
@@ -136,6 +138,17 @@ namespace FInalProject.Application.Services
                 return false;
             }
             return true;
+        }
+
+        public async Task<List<BorrowedBookListViewModel>> ReturnBorrowedBookListAsync(ClaimsPrincipal user)
+        {
+            var CurrUser = await _userManager.GetUserAsync(user);
+            if(CurrUser == null)
+            {
+                throw new Exception("User is null when returning borrowedBooksViewModel");
+            }
+            var books = await _borrowedBookRepository.ReturnBorrowedBookListAsync(CurrUser.Id);
+            return books;
         }
     }
 }

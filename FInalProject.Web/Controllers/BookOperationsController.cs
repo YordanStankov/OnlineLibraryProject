@@ -64,7 +64,6 @@ namespace FInalProject.Web.Controllers
                 return RedirectToAction("BookFocus", "Books", new { id = borrowedId });
             }
                 return RedirectToAction("AllBooks", "Books");
-
         }
         [HttpPost]
         [ValidateAntiForgeryToken]

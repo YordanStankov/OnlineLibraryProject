@@ -3,6 +3,7 @@ using FInalProject.Application.Interfaces;
 using FInalProject.Application.ViewModels.Book;
 using FInalProject.Application.ViewModels.Genre.GenreOprations;
 using Microsoft.EntityFrameworkCore;
+using FInalProject.Application.ViewModels.Genre;
 
 namespace FInalProject.Infrastructure.Repositories
 {
@@ -34,9 +35,18 @@ namespace FInalProject.Infrastructure.Repositories
             _context.Genres.Update(genre);
         }
 
-        public async Task<List<Genre>> GetAllGenresAsync()
+        public async Task<List<GenreListViewModel>> GetAllGenresAsync()
         {
-            return await _context.Genres.AsNoTracking().ToListAsync();
+            List<GenreListViewModel> genreList = new List<GenreListViewModel>();
+            genreList = await _context.Genres
+                .AsNoTracking()
+                .Select(g => new GenreListViewModel
+                {
+                    Id = g.Id,
+                    Name = g.Name,
+                }).ToListAsync();
+            return genreList;
+
         }
 
         public async Task<Genre> GetGenreByIdAsync(int id)
@@ -83,6 +93,11 @@ namespace FInalProject.Infrastructure.Repositories
                 Name = g.Name
             }).FirstOrDefaultAsync(g => g.Id == id);
             return genre;
+        }
+
+        public async Task<List<Genre>> GetListOfGenresAsync()
+        {
+            return await _context.Genres.AsNoTracking().ToListAsync();
         }
     }
 }

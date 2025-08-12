@@ -3,6 +3,7 @@ using FInalProject.Application.Interfaces;
 using FInalProject.Application.ViewModels.Book.BookFiltering;
 using FInalProject.Application.ViewModels.Genre.GenreOprations;
 using Microsoft.Extensions.Logging;
+using FInalProject.Application.ViewModels.Genre;
 
 namespace FInalProject.Application.Services
 {
@@ -11,7 +12,7 @@ namespace FInalProject.Application.Services
         Task<bool> DeleteGenreAsync(int doomedGenreId);
         Task<bool> AddGenreAsync(string Name);
         Task<BooksFromGenreViewModel> GetAllBooksOfCertainGenre(int genreId);
-        Task<List<Genre>> GetGenreListAsync();
+        Task<List<GenreListViewModel>> GetGenreListAsync();
         Task<GenreEditViewModel> ProvideGenreForPartialAsync(int genreEditId);
         Task<bool> SaveChangesToGenreAsync(GenreEditViewModel model);
     }
@@ -65,7 +66,7 @@ namespace FInalProject.Application.Services
         }
 
         //Providing lists of genres
-        public async Task<List<Genre>> GetGenreListAsync()
+        public async Task<List<GenreListViewModel>> GetGenreListAsync()
         {
             _logger.LogInformation("GETING ALL GENRES METHOD");
             var genreList = await _genreRepository.GetAllGenresAsync();

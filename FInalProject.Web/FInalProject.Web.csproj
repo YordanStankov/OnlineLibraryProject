@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
-	  <RootNamespace>FInalProject</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>d04d9795-6b34-4a0f-9dba-95631d571920</UserSecretsId>
 	  <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
@@ -39,6 +38,12 @@
     <ProjectReference Include="..\FInalProject.Application\FInalProject.Application.csproj" />
     <ProjectReference Include="..\FInalProject.Data\FInalProject.Domain.csproj" />
     <ProjectReference Include="..\FInalProject.Infrastructure\FInalProject.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\css\AddGenrePartial.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

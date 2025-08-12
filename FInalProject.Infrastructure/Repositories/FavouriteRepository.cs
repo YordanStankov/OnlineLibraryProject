@@ -1,6 +1,7 @@
 ﻿using FInalProject.Domain.Models;
 using FInalProject.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using FInalProject.Application.ViewModels.Book;
 
 namespace FInalProject.Infrastructure.Repositories
 {
@@ -24,6 +25,21 @@ namespace FInalProject.Infrastructure.Repositories
             favourite = await _context.Favourites
                 .FirstOrDefaultAsync(r => r.BookId == bookId && r.UserId == userId);
             return favourite;
+        }
+
+        public async Task<List<LikedBookListViewModel>> ReturnLikedBookListAsync(string userId)
+        {
+            List<LikedBookListViewModel> likedBookList = new List<LikedBookListViewModel>();
+            likedBookList = await _context.Favourites
+                .Where(r => r.UserId == userId)
+                .Select(r => new LikedBookListViewModel
+                {
+                    CoverImage = r.Book.CoverImage,
+                    Id = r.BookId,
+                    Name = r.Book.Name
+                }
+                ).ToListAsync();
+            return likedBookList;
         }
 
         public async Task SaveChangesAsync()

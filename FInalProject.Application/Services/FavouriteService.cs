@@ -2,12 +2,14 @@
 using FInalProject.Application.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using FInalProject.Application.ViewModels.Book;
 
 namespace FInalProject.Application.Services
 {
     public interface IFavouriteService
     {
         Task UpdateFavouritesAsync(int amount, int bookId, ClaimsPrincipal user);
+        Task<List<LikedBookListViewModel>> ReturnLikedBookListAsync(ClaimsPrincipal user);
     }
     public class FavouriteService : IFavouriteService
     {
@@ -18,6 +20,18 @@ namespace FInalProject.Application.Services
             _favouriteRepository = favouriteRepository;
             _userManager = userManager;
         }
+
+        public async Task<List<LikedBookListViewModel>> ReturnLikedBookListAsync(ClaimsPrincipal user)
+        {
+            var CurrUser = await _userManager.GetUserAsync(user);
+            if (CurrUser == null)
+                throw new Exception("User is null when ReturingLikedBookList in FavouriteService");
+            var books = await _favouriteRepository.ReturnLikedBookListAsync(CurrUser.Id);
+            return books;
+
+
+        }
+
         public async Task UpdateFavouritesAsync(int amount, int bookId, ClaimsPrincipal user)
         {
             if (user != null)

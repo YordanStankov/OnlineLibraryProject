@@ -1,4 +1,5 @@
-﻿using FInalProject.Domain.Models;
+﻿using FInalProject.Application.ViewModels.Book;
+using FInalProject.Domain.Models;
 
 namespace FInalProject.Application.Interfaces
 {
@@ -8,6 +9,7 @@ namespace FInalProject.Application.Interfaces
         Task AddFavouriteAsync(Favourite favourite);
         Task SaveChangesAsync();
         Task<Favourite> ReturnFavouriteEntityToUpdateAsync(int bookId, string userId);
+        Task<List<LikedBookListViewModel>> ReturnLikedBookListAsync(string userId);
 
     }
 }

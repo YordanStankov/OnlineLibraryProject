@@ -1,13 +1,15 @@
 ﻿using FInalProject.Domain.Models;
 using FInalProject.Application.ViewModels.Genre.GenreOprations;
 using FInalProject.Application.ViewModels.Book;
+using FInalProject.Application.ViewModels.Genre;
 
 namespace FInalProject.Application.Interfaces
 {
     public interface IGenreRepository
     {
-        Task<List<Genre>> GetAllGenresAsync();
+        Task<List<GenreListViewModel>> GetAllGenresAsync();
         Task UpdateGenreAsync(Genre genre);
+        Task<List<Genre>> GetListOfGenresAsync();
         Task<Genre> GetGenreByNameAsync(string name);
         Task SaveChangesAsync();
         Task AddGenreAsync(Genre genre);

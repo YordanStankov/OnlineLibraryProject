@@ -43,20 +43,13 @@ namespace FInalProject.Application.Services
                     DateTaken = DateTime.Now,
                     UntillReturn = DateTime.Now.AddDays(14),
                     UserId = borrowingUser.Id,
-                    Book = book,
                     BookId = book.Id,
-                    User = borrowingUser
                 };
                 _borrowedBookRepository.AddBorrowedBook(borrowedBook);
                 await _borrowedBookRepository.SaveChangesAsync();
-
                 var email = borrowingUser.Email ?? string.Empty;
-                Dictionary<string, string> placeees = new Dictionary<string, string>
-                    {
-                        {"UserName", email },
-                        {"BookTitle", book.Name },
-                        {"ReturnDate", string.Format("{0:dd MMM yyyy}", borrowedBook.UntillReturn) }
-                    };
+                var placeees = await CreateDictionaryForEmail(email, book.Name, borrowedBook);
+                
                 var emailBody = await _emailService.LoadEmailTemplateAsync(TemplateNames.BorrowingConfirmationEmail, placeees);
                 await _emailService.SendEmailFromServiceAsync(email, "Book return", emailBody);
                 return true;
@@ -73,12 +66,11 @@ namespace FInalProject.Application.Services
             }
 
             var bookToBeReturned = await _borrowedBookRepository.ReturnBorrowedBookToReturnAsync(model.BookId, model.UserId);
-
             if (bookToBeReturned == null)
             {
                 return false;
             }
-
+            await _borrowedBookRepository.ReturnOneBookToStockAsync(bookToBeReturned.BookId);
             if (bookToBeReturned.StrikeGiven)
             {
                 returningUser.Strikes -= 1;
@@ -108,6 +100,16 @@ namespace FInalProject.Application.Services
             };
             var emailBody = await _emailService.LoadEmailTemplateAsync(TemplateNames.ReturnConfirmationEmail, placeholders);
             await _emailService.SendEmailFromServiceAsync(email, "Book Return", emailBody);
+        }
+        private async Task<Dictionary<string, string>> CreateDictionaryForEmail(string email, string bookName, BorrowedBook borrowedBook)
+        {
+            Dictionary<string, string> placeees = new Dictionary<string, string>
+                    {
+                        {"UserName", email },
+                        {"BookTitle", bookName },
+                        {"ReturnDate", string.Format("{0:dd MMM yyyy}", borrowedBook.UntillReturn) }
+                    };
+            return placeees;
         }
     }
 }
