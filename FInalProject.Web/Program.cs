@@ -47,7 +47,7 @@ namespace FInalProject.Web
             builder.Services.AddScoped<IBookHandlingService, BookHandlingService>();
             builder.Services.AddScoped<ICommentService, CommentService>();
             builder.Services.AddScoped<IFavouriteService, FavouriteService>();
-
+            builder.Services.AddScoped<IUserService, UserService>();
 
             //Repository pattern implementation
             builder.Services.AddScoped<IUserRepository, UserRepository>();
