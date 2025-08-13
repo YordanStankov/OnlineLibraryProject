@@ -1,8 +1,5 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using FInalProject.Domain.Models;
-using FInalProject.Infrastructure;
 using FInalProject.Application.Services;
 using FInalProject.Application.ViewModels.Book;
 

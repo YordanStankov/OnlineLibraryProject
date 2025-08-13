@@ -10,8 +10,7 @@ namespace FInalProject.Web.Areas.Identity.Pages.Account.Manage
     {
         private readonly IUserService _userService;
 
-        public PersonalDataModel(
-            IUserService userService)
+        public PersonalDataModel(IUserService userService)
         {
             _userService = userService;
         }
