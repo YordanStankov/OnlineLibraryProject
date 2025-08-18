@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using FInalProject.Domain.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using FInalProject.Application.Services;
 
 namespace FInalProject.Web.Areas.Identity.Pages.Account.Manage
 {
@@ -15,15 +16,18 @@ namespace FInalProject.Web.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IUserStore<User> _userStore;
+        private readonly IUserService _userService;
 
         public ExternalLoginsModel(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
-            IUserStore<User> userStore)
+            IUserStore<User> userStore,
+            IUserService userService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _userStore = userStore;
+            _userService = userService;
         }
 
         /// <summary>
@@ -53,24 +57,15 @@ namespace FInalProject.Web.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGetAsync()
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await _userService.GetChangePasswordAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Unable to load user with ID '{user.Id}'.");
             }
 
-            CurrentLogins = await _userManager.GetLoginsAsync(user);
-            OtherLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync())
-                .Where(auth => CurrentLogins.All(ul => auth.Name != ul.LoginProvider))
-                .ToList();
-
-            string passwordHash = null;
-            if (_userStore is IUserPasswordStore<User> userPasswordStore)
-            {
-                passwordHash = await userPasswordStore.GetPasswordHashAsync(user, HttpContext.RequestAborted);
-            }
-
-            ShowRemoveButton = passwordHash != null || CurrentLogins.Count > 1;
+            CurrentLogins = await _userService.GetLoginsAsync(user.Id);
+            OtherLogins = await _userService.GetOtherLoginsAsync(CurrentLogins);
+            ShowRemoveButton = await _userService.CanRemoveLoginAsync(user.Id, CurrentLogins.Count, HttpContext.RequestAborted);
             return Page();
         }
 

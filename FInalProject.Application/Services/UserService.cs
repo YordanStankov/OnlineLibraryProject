@@ -1,6 +1,7 @@
 ﻿
 using FInalProject.Application.Interfaces;
 using FInalProject.Application.ViewModels.User.UserOperations;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 
@@ -13,6 +14,9 @@ namespace FInalProject.Application.Services
         Task<bool> UserHasPasswordAsync(ClaimsPrincipal user);
         Task RefreshSignInAsync(string userId);
         Task<IdentityResult> ChangePasswordAsync(string userId, string oldPassword, string newPassword);
+        Task<IList<UserLoginInfo>> GetLoginsAsync(string userId);
+        Task<bool> CanRemoveLoginAsync(string userId, int currentLoginsCount, CancellationToken cancellationToken);
+        Task<IList<AuthenticationScheme>> GetOtherLoginsAsync(IList<UserLoginInfo> userLoginInfo);
     }
     public class UserService : IUserService
     {
@@ -22,6 +26,13 @@ namespace FInalProject.Application.Services
             _userRepository = userRepository; 
         }
 
+        public async Task<bool> CanRemoveLoginAsync(string userId, int currentLoginsCount, CancellationToken cancellationToken)
+        {
+            var passwordHash = await _userRepository.GetPasswordHashAsync(userId, cancellationToken);
+            return passwordHash != null || currentLoginsCount > 1;
+        }
+
+       
         public async Task<IdentityResult> ChangePasswordAsync(string userId, string oldPassword, string newPassword)
         {
             ChangePasswordOperationViewModel model = new ChangePasswordOperationViewModel
@@ -40,6 +51,18 @@ namespace FInalProject.Application.Services
             if (CurrUser == null)
                 throw new Exception("User is null in GetChangePasswordASync method in UserService");
             return CurrUser;
+        }
+
+        public async Task<IList<UserLoginInfo>> GetLoginsAsync(string userId)
+        {
+            var list = await _userRepository.GetLoginsAsync(userId);
+            return list;
+        }
+
+        public async Task<IList<AuthenticationScheme>> GetOtherLoginsAsync(IList<UserLoginInfo> userLoginInfo)
+        {
+            var info = await _userRepository.GetOtherLoginsAsync(userLoginInfo);
+            return info;
         }
 
         public async Task<PersonalDataViewModel> GetPersonalDataAsync(ClaimsPrincipal user)
