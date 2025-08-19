@@ -19,6 +19,11 @@ namespace FInalProject.Application.Interfaces
         Task<IList<UserLoginInfo>> GetLoginsAsync(string userId);
         Task<IList<AuthenticationScheme>> GetOtherLoginsAsync(IList<UserLoginInfo> userLoginInfo);
         Task UpdateUserAsync(User user);
+        Task<IdentityResult> AddLoginAsync(ClaimsPrincipal user, ExternalLoginInfo loginInfo); 
+        AuthenticationProperties ConfigureExternalAuthenticationProperties(string provider, string redirectUrl, ClaimsPrincipal user);
+        Task<ExternalLoginInfo> GetExternalLoginInfoAsync(string userId);
+        Task<IdentityResult> RemoveLoginAsync(ExternalLoginsViewModel model);
+        Task<ExternalLoginsViewModel> GetExternalLoginsAsync(ClaimsPrincipal user, string loginProvider, string providerKey);
         Task<List<UserListViewModel>> RenderUsersInViewModelAsync();
     }
 }

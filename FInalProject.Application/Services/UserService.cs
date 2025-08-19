@@ -13,7 +13,12 @@ namespace FInalProject.Application.Services
         Task<ChangePasswordViewModel> GetChangePasswordAsync(ClaimsPrincipal user);
         Task<bool> UserHasPasswordAsync(ClaimsPrincipal user);
         Task RefreshSignInAsync(string userId);
+        Task<ExternalLoginInfo> GetExternalLoginInfoAsync(string userId);
+        Task<IdentityResult> RemoveLoginAsync(ExternalLoginsViewModel model);
+        AuthenticationProperties ConfigureExternalAuthenticationProperties(string provider, string redirectUrl, ClaimsPrincipal user);
+        Task<ExternalLoginsViewModel> GetExternalLoginsAsync(ClaimsPrincipal user, string loginProvider, string providerKey);
         Task<IdentityResult> ChangePasswordAsync(string userId, string oldPassword, string newPassword);
+        Task<IdentityResult> AddLoginAsync(ClaimsPrincipal user, ExternalLoginInfo loginInfo);
         Task<IList<UserLoginInfo>> GetLoginsAsync(string userId);
         Task<bool> CanRemoveLoginAsync(string userId, int currentLoginsCount, CancellationToken cancellationToken);
         Task<IList<AuthenticationScheme>> GetOtherLoginsAsync(IList<UserLoginInfo> userLoginInfo);
@@ -24,6 +29,12 @@ namespace FInalProject.Application.Services
         public UserService(IUserRepository userRepository) 
         { 
             _userRepository = userRepository; 
+        }
+
+        public async Task<IdentityResult> AddLoginAsync(ClaimsPrincipal user, ExternalLoginInfo loginInfo)
+        {
+            IdentityResult result = await _userRepository.AddLoginAsync(user, loginInfo);
+            return result;
         }
 
         public async Task<bool> CanRemoveLoginAsync(string userId, int currentLoginsCount, CancellationToken cancellationToken)
@@ -45,12 +56,30 @@ namespace FInalProject.Application.Services
             return result;
         }
 
+        public AuthenticationProperties ConfigureExternalAuthenticationProperties(string provider, string redirectUrl, ClaimsPrincipal user)
+        {
+            AuthenticationProperties properites = _userRepository.ConfigureExternalAuthenticationProperties(provider, redirectUrl, user);
+            return properites;
+        }
+
         public async Task<ChangePasswordViewModel> GetChangePasswordAsync(ClaimsPrincipal user)
         {
             var CurrUser = await _userRepository.GetChangePasswordAsync(user);
             if (CurrUser == null)
                 throw new Exception("User is null in GetChangePasswordASync method in UserService");
             return CurrUser;
+        }
+
+        public async Task<ExternalLoginInfo> GetExternalLoginInfoAsync(string userId)
+        {
+            ExternalLoginInfo info = await _userRepository.GetExternalLoginInfoAsync(userId);
+            return info;
+        }
+
+        public async Task<ExternalLoginsViewModel> GetExternalLoginsAsync(ClaimsPrincipal user, string loginProvider, string providerKey)
+        {
+            var model = await _userRepository.GetExternalLoginsAsync(user, loginProvider, providerKey);
+            return model;
         }
 
         public async Task<IList<UserLoginInfo>> GetLoginsAsync(string userId)
@@ -77,6 +106,12 @@ namespace FInalProject.Application.Services
         {
             await _userRepository.RefreshSignInAsync(userId);
         }
+
+        public async Task<IdentityResult> RemoveLoginAsync(ExternalLoginsViewModel model)
+        {
+            IdentityResult result = await _userRepository.RemoveLoginAsync(model);
+            return result;
+        } 
 
         public async Task<bool> UserHasPasswordAsync(ClaimsPrincipal user)
         {

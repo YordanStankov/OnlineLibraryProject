@@ -5,7 +5,6 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using FInalProject.Domain.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using FInalProject.Application.Services;
 
@@ -13,20 +12,10 @@ namespace FInalProject.Web.Areas.Identity.Pages.Account.Manage
 {
     public class ExternalLoginsModel : PageModel
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
-        private readonly IUserStore<User> _userStore;
         private readonly IUserService _userService;
 
-        public ExternalLoginsModel(
-            UserManager<User> userManager,
-            SignInManager<User> signInManager,
-            IUserStore<User> userStore,
-            IUserService userService)
+        public ExternalLoginsModel(IUserService userService)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _userStore = userStore;
             _userService = userService;
         }
 
@@ -71,20 +60,20 @@ namespace FInalProject.Web.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostRemoveLoginAsync(string loginProvider, string providerKey)
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await _userService.GetExternalLoginsAsync(User, loginProvider, providerKey);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Unable to load user with ID '{user.userId}'.");
             }
 
-            var result = await _userManager.RemoveLoginAsync(user, loginProvider, providerKey);
+            var result = await _userService.RemoveLoginAsync(user);
             if (!result.Succeeded)
             {
                 StatusMessage = "The external login was not removed.";
                 return RedirectToPage();
             }
 
-            await _signInManager.RefreshSignInAsync(user);
+            await _userService.RefreshSignInAsync(user.userId);
             StatusMessage = "The external login was removed.";
             return RedirectToPage();
         }
@@ -96,26 +85,26 @@ namespace FInalProject.Web.Areas.Identity.Pages.Account.Manage
 
             // Request a redirect to the external login provider to link a login for the current user
             var redirectUrl = Url.Page("./ExternalLogins", pageHandler: "LinkLoginCallback");
-            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl, _userManager.GetUserId(User));
+            var properties = _userService.ConfigureExternalAuthenticationProperties(provider, redirectUrl, User);
             return new ChallengeResult(provider, properties);
         }
 
         public async Task<IActionResult> OnGetLinkLoginCallbackAsync()
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await _userService.GetChangePasswordAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Unable to load user with ID '{user.Id}'.");
             }
 
-            var userId = await _userManager.GetUserIdAsync(user);
-            var info = await _signInManager.GetExternalLoginInfoAsync(userId);
+            var userId = user.Id;
+            var info = await _userService.GetExternalLoginInfoAsync(userId);
             if (info == null)
             {
                 throw new InvalidOperationException($"Unexpected error occurred loading external login info.");
             }
 
-            var result = await _userManager.AddLoginAsync(user, info);
+            var result = await _userService.AddLoginAsync(User, info);
             if (!result.Succeeded)
             {
                 StatusMessage = "The external login was not added. External logins can only be associated with one account.";
