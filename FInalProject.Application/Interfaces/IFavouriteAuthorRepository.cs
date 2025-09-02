@@ -1,4 +1,5 @@
-﻿using FInalProject.Domain.Models;
+﻿using FInalProject.Application.DTOs.AuthorDTOs;
+using FInalProject.Domain.Models;
 
 namespace FInalProject.Application.Interfaces
 {
@@ -7,6 +8,8 @@ namespace FInalProject.Application.Interfaces
         Task AddFavouriteAuthorAsync(FavouriteAuthor favourite);
         void RemoveFavouriteAuthor(FavouriteAuthor favourite);
         Task<FavouriteAuthor> GetFavouriteAuthorAsync(int authorId, string userId);
-        Task SaveChangesAsync();    
+        Task SaveChangesAsync();   
+        Task<bool> AddNewFavouriteAuthorAsync(FavouriteAuthorDTO dto);
+
     }
 }

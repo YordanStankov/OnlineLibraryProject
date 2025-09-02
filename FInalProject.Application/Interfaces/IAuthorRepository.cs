@@ -15,6 +15,6 @@ namespace FInalProject.Application.Interfaces
         Task<List<AuthorListViewModel>> RenderAuthorSearchResutlsAsync(string searchQuery);
         Task AddPortraitToAuthorAsync(AddAuthorPortraitDTO dto);
         Task SaveChangesAsync();
-        Task<AddAuthorPortraitDTO> GetDTOForPortraitAsync(int authorId);
+        Task<AuthorProfileViewModel> RenderAuthorProfileASync(FavouriteAuthorDTO dto);
     }
 }
