@@ -1,8 +1,6 @@
-﻿using FInalProject.Domain.Models    ;
-using FInalProject.Application.Interfaces;
+﻿using FInalProject.Application.Interfaces;
 using FInalProject.Application.ViewModels.Admin.Book;
 using FInalProject.Application.ViewModels.Admin.User;
-
 
 namespace FInalProject.Application.Services
 {
@@ -25,14 +23,11 @@ namespace FInalProject.Application.Services
 
         public async Task<bool> BanUser(string banId)
         {
-            var user = await _userRepository.GetUserByIdAsync(banId);
-            if(user == null)
+            var reuslt = await _userRepository.BanUserAsync(banId);
+            if(reuslt == false)
             {
                 return false;
             }
-            user.CantBorrow = true;
-            user.Strikes = 3;
-            await _userRepository.UpdateUserAsync(user);
             return true;
         }
 
@@ -49,14 +44,11 @@ namespace FInalProject.Application.Services
 
         public async Task<bool> UnbanUser(string unbanId)
         {
-            var User = await _userRepository.GetUserByIdAsync(unbanId);
-            if (User == null)
+            var result = await _userRepository.UnbanUserAsync(unbanId);
+            if (result == false)
             {
                 return false;
             }
-            User.CantBorrow = false;
-            User.Strikes = 0;
-            await _userRepository.UpdateUserAsync(User);
             return true;
         }
     }

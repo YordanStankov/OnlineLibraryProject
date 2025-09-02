@@ -2,6 +2,7 @@
 using FInalProject.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using FInalProject.Application.ViewModels.Author;
+using FInalProject.Application.DTOs.AuthorDTOs;
 
 namespace FInalProject.Infrastructure.Repositories
 {
@@ -12,6 +13,16 @@ namespace FInalProject.Infrastructure.Repositories
         public AuthorRepository(ApplicationDbContext context)
         {
            _context = context;
+        }
+
+        public async Task AddPortraitToAuthorAsync(AddAuthorPortraitDTO dto)
+        {
+            var user = await _context.Authors.FirstOrDefaultAsync(a => a.Id == dto.Id);
+            if(user == null)
+                throw new Exception("Author not found in AddPortraitToAuthorAsync in AuthorRepository");
+            user.Portrait = dto.Portrait;
+            _context.Authors.Update(user);
+            await _context.SaveChangesAsync();
         }
 
         public  void AddToAuhtorBookList(Author author, Book book)
@@ -41,6 +52,17 @@ namespace FInalProject.Infrastructure.Repositories
                 .Include(a => a.FavouriteAuthors)
                 .FirstOrDefaultAsync(a => a.Id == authorId);
             return author;
+        }
+
+        public Task<AddAuthorPortraitDTO> GetDTOForPortraitAsync(int authorId)
+        {
+            var dto = _context.Authors
+                .Where(a => a.Id == authorId)
+                .Select(a => new AddAuthorPortraitDTO(a.Portrait, a.Id))
+                .FirstOrDefaultAsync();
+            if(dto == null)
+                throw new Exception("Author not found in GetDTOForPortraitAsync in AuthorRepository");
+            return dto;
         }
 
         public async Task<List<AuthorListViewModel>> RenderAuthorListAsync()

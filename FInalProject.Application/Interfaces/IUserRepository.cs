@@ -25,5 +25,7 @@ namespace FInalProject.Application.Interfaces
         Task<IdentityResult> RemoveLoginAsync(ExternalLoginsViewModel model);
         Task<ExternalLoginsViewModel> GetExternalLoginsAsync(ClaimsPrincipal user, string loginProvider, string providerKey);
         Task<List<UserListViewModel>> RenderUsersInViewModelAsync();
+        Task<bool> BanUserAsync(string banId);
+        Task<bool> UnbanUserAsync(string unbanId);
     }
 }

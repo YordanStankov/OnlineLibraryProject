@@ -30,11 +30,9 @@ namespace FInalProject.Application.Services
 
         public async Task<bool> AddPortraitToAuthorAsync(AddAuthorPortraitViewModel model)
         {
-            var author = await _authorRepository.GetAuthorByIdAsync(model.Id);
+            var author = await _authorRepository.GetDTOForPortraitAsync(model.Id);
             if (author == null) return false;
-            author.Portrait = model.Picture;
-            _authorRepository.UpdateAuthor(author);
-            await _authorRepository.SaveChangesAsync();
+            await _authorRepository.AddPortraitToAuthorAsync(author);
             return true;
         }
 
