@@ -1,5 +1,6 @@
 ﻿using FInalProject.Application.DTOs.AuthorDTOs;
 using FInalProject.Domain.Models;
+using System.Security.Claims;
 
 namespace FInalProject.Application.Interfaces
 {

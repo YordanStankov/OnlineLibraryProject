@@ -4,6 +4,7 @@ using FInalProject.Application.ViewModels.Book;
 using FInalProject.Application.ViewModels.Genre.GenreOprations;
 using Microsoft.EntityFrameworkCore;
 using FInalProject.Application.ViewModels.Genre;
+using FInalProject.Application.ViewModels.Book.BookFiltering;
 
 namespace FInalProject.Infrastructure.Repositories
 {
@@ -14,25 +15,6 @@ namespace FInalProject.Infrastructure.Repositories
         public GenreRepository(ApplicationDbContext context)
         {
             _context = context;
-        }
-
-        public async Task AddGenreAsync(Genre genre)
-        {
-            await _context.Genres.AddAsync(genre);
-        }
-        public void RemoveGenre(Genre genre)
-        {
-            _context.Genres.Remove(genre);
-        }
-
-        public async Task SaveChangesAsync()
-        {
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateGenreAsync(Genre genre)
-        {
-            _context.Genres.Update(genre);
         }
 
         public async Task<List<GenreListViewModel>> GetAllGenresAsync()
@@ -49,21 +31,16 @@ namespace FInalProject.Infrastructure.Repositories
 
         }
 
-        public async Task<Genre> GetGenreByIdAsync(int id)
+        public async Task<bool> DeleteGenreAsync(int genreId)
         {
-            Genre doomedGenre = null;
-            doomedGenre = await _context.Genres.FirstOrDefaultAsync(g => g.Id == id);
-            return doomedGenre;
-        }
+            var genre = await GetGenreByIdAsync(genreId);
+            if (genre == null) 
+                return false;
 
-        public async Task<Genre> GetGenreByNameAsync(string name)
-        {
-            string loweredName = name.ToLower();
-            Genre genre = null;
-            genre = await _context.Genres
-                .AsNoTracking()
-                .FirstOrDefaultAsync(g => g.Name.ToLower() == loweredName);
-            return genre; 
+            _context.Genres.Remove(genre);
+            await _context.SaveChangesAsync();
+            return true;
+
         }
 
         public async Task<List<BookListViewModel>> RenderSpecificGenreBookListAsync(int genreId)
@@ -98,6 +75,79 @@ namespace FInalProject.Infrastructure.Repositories
         public async Task<List<Genre>> GetListOfGenresAsync()
         {
             return await _context.Genres.AsNoTracking().ToListAsync();
+        }
+
+        public async Task<bool> AddGenreAsync(string name)
+        {
+            var existingGenre = await _context.Genres
+                .AsNoTracking()
+                .AnyAsync(g => g.Name == name);
+            if (existingGenre == false)
+            {
+                Genre genre = new Genre
+                {
+                    Name = name
+                };
+                await _context.Genres.AddAsync(genre);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
+        
+        private async Task<Genre> GetGenreByIdAsync(int id)
+        {
+            var genre = await _context.Genres.FirstOrDefaultAsync(g => g.Id == id);
+            if (genre == null)
+                return null;
+            return genre;
+        }
+
+        private async Task<Genre> GetGenreByNameAsync(string name)
+        {
+            string loweredName = name.ToLower();
+            var genre = await _context.Genres
+                .AsNoTracking()
+                .FirstOrDefaultAsync(g => g.Name.ToLower() == loweredName);
+            if(genre == null)
+                return null;    
+            return genre;
+        }
+
+        public Task<BooksFromGenreViewModel> GetAllBooksOfCertainGenreAsync(int genreId)
+        {
+            var books =  _context.Genres
+                .AsNoTracking()
+                .Where(g => g.Id == genreId)
+                .Select(g => new BooksFromGenreViewModel
+                {
+                    Genre = g.Name,
+                    BooksMatchingGenre = g.BookGenres
+                        .Where(bg => bg.Book.AmountInStock > 0)
+                        .Select(bg => new BookListViewModel
+                        {
+                            Id = bg.Book.Id,
+                            AuthorName = bg.Book.Author.Name,
+                            CoverImage = bg.Book.CoverImage,
+                            Pages = bg.Book.Pages,
+                            Name = bg.Book.Name,
+                            DateWritten = bg.Book.DateWritten,
+                            Genres = bg.Book.BookGenres.Select(bgg => bgg.Genre.Name).ToList()
+                        }).ToList()
+                }).FirstOrDefaultAsync();
+            return books;
+        }
+
+        public async Task<bool> SaveChangesToGenreAsync(GenreEditViewModel model)
+        {
+            var genreNeedsEdit = await GetGenreByIdAsync(model.Id);
+            if (genreNeedsEdit != null)
+            {
+                genreNeedsEdit.Name = model.Name;
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
     }
 }

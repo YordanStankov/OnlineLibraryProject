@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Identity;
 using FInalProject.Application.Interfaces;
 using FInalProject.Application.ViewModels.Author.AuthorOperations;
 using FInalProject.Application.ViewModels.Author.AuthorFiltering;
