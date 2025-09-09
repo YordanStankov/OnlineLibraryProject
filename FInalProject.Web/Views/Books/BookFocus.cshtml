@@ -42,7 +42,7 @@
                         </form>
 
                         <span class="fw-bold text-gold align-middle">
-                            @(Model.Favourites?.Sum(x => x.Amount) ?? 0)
+                            @(Model.Rating)
                         </span>
 
                         <form asp-controller="BookOperations" asp-action="Rating" method="post" class="d-inline">

@@ -5,7 +5,6 @@ using FInalProject.Application.ViewModels.Book.BookFiltering;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System.Security.Claims;
-using NuGet.Packaging.Signing;
 
 namespace FInalProject.Application.Services
 {
@@ -53,7 +52,7 @@ namespace FInalProject.Application.Services
 
             return new BookCreationViewModel
             {
-                GenreOptions = await _genreRepository.GetListOfGenresAsync()
+                GenreOptions = await _genreRepository.GetAllGenresAsync()
             };
         }
 

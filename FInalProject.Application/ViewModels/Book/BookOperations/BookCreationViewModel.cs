@@ -1,4 +1,4 @@
-﻿using FInalProject.Domain.Models;
+﻿using FInalProject.Application.ViewModels.Genre;
 using System.ComponentModel.DataAnnotations;
 namespace FInalProject.Application.ViewModels.Book
 {
@@ -25,9 +25,9 @@ namespace FInalProject.Application.ViewModels.Book
         [StringLength(1000, MinimumLength = 5, ErrorMessage = "Description must be between 5 and 1000 words")]
         public string Description { get; set; }
         public int AmountInStock { get; set; }
-        public Category Category { get; set; }
+        public string Category { get; set; }
         public int? editor { get; set; }
-        public ICollection<Domain.Models.Genre>? GenreOptions { get; set; } 
+        public ICollection<GenreListViewModel>? GenreOptions { get; set; } 
         public ICollection<int>? SelectedGenreIds { get; set; } 
     }
 }

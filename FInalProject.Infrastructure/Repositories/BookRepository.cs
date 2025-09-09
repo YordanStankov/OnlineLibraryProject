@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using FInalProject.Application.ViewModels.Book;
 using FInalProject.Application.ViewModels.Admin.Book;
 using FInalProject.Application.ViewModels.Comment;
+using FInalProject.Application.ViewModels.Genre;
 
 namespace FInalProject.Infrastructure.Repositories
 {
@@ -45,19 +46,23 @@ namespace FInalProject.Infrastructure.Repositories
                   BookId = b.Id,
                   BookName = b.Name,
                   BookPages = b.Pages,
-                  Category = b.Category,
+                  Category = b.CategoryString,
                   DateWritten = b.DateWritten,
                   BookAuthorName = b.Author.Name,
                   AmountInStock = b.AmountInStock,
                   BookReadingTime = b.ReadingTime,
                   Description = b.Description,
-                  genres = b.BookGenres.Select(bg => bg.Genre).ToList(),
+                  genres = b.BookGenres.Select(bg => new GenreListViewModel
+                  {
+                      Id = bg.Genre.Id,
+                      Name = bg.Genre.Name
+                  }).ToList(),
                   comments = b.Comments.Select(c => new CommentViewModel
                   {
                       UserName = c.User.UserName ?? "Unknown User",
                       Description = c.CommentContent ?? string.Empty
                   }).ToList(),
-                  Favourites = b.Favourites,
+                  Rating = b.Favourites.Sum(f => f.Amount),
                   Borrowed = false
               }).FirstOrDefaultAsync();
               
@@ -67,7 +72,11 @@ namespace FInalProject.Infrastructure.Repositories
 
         public async Task<BookCreationViewModel> GetSingleBookForEditAsync(int editId)
         {
-            List<Genre> genreOpts = await _context.Genres.AsNoTracking().ToListAsync(); 
+            List<GenreListViewModel> genreOpts = await _context.Genres.Select(g => new GenreListViewModel
+            {
+                Id = g.Id,
+                Name = g.Name
+            }).ToListAsync(); 
             return await _context.Books
                 .AsNoTracking()
                 .Include(b => b.Author)
@@ -78,7 +87,7 @@ namespace FInalProject.Infrastructure.Repositories
                 {
                     Id = book.Id,
                     Name = book.Name,
-                    Category = book.Category,
+                    Category = book.Category.ToString(),
                     AuthorName = book.Author.Name,
                     DateWritten = book.DateWritten,
                     AmountInStock = book.AmountInStock,

@@ -1,5 +1,6 @@
 ﻿using FInalProject.Domain.Models;
 using FInalProject.Application.ViewModels.Comment;
+using FInalProject.Application.ViewModels.Genre;
 namespace FInalProject.Application.ViewModels.Book
 {
     public class BookFocusViewModel
@@ -13,12 +14,11 @@ namespace FInalProject.Application.ViewModels.Book
         public int AmountInStock { get; set; }
         public string Description { get; set; }
         public DateTime DateWritten { get; set; }
-        public Category Category { get; set; }
-
+        public string Category { get; set; }
         public bool Borrowed { get; set; }
-        public ICollection<Domain.Models.Genre> genres { get; set; }
+        public ICollection<GenreListViewModel> genres { get; set; }
         public ICollection<CommentViewModel>? comments { get; set; }
-        public ICollection<Favourite>? Favourites { get; set; }
+        public int Rating { get; set; } = 0;
 
-    }
+        }
 }

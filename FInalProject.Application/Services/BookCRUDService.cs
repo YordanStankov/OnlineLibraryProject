@@ -72,6 +72,7 @@ namespace FInalProject.Application.Services
             MapBook(newBook, model, correctAuthor);
 
             _bookRepository.AddBook(newBook);
+            await _bookRepository.SaveChangesAsync(); 
 
             if (model.SelectedGenreIds != null)
             {
@@ -87,7 +88,7 @@ namespace FInalProject.Application.Services
                 }
                 await _bookGenreRepository.AddListOfNewBookGenresAsync(newBookGenres);
             }
-            _authorRepository.AddToAuhtorBookList(correctAuthor, newBook);
+            _authorRepository.AddToAuhtorBookList(newBook.Author, newBook);
             await _bookRepository.SaveChangesAsync();
             return newBook.Id;
         }
@@ -104,7 +105,19 @@ namespace FInalProject.Application.Services
             book.Author = correctAuthor;
             book.DateWritten = model.DateWritten;
             book.AmountInStock = model.AmountInStock;
-            book.Category = model.Category;
+
+            if (Enum.TryParse<Category>(model.Category, out var categoryEnum))
+            {
+                book.Category = categoryEnum;
+                book.CategoryString = categoryEnum.ToString();
+            }
+            else
+            {
+                // Fallback or handle error
+                book.Category = Category.All;
+                book.CategoryString = Category.All.ToString();
+            }
+
             book.CategoryString = model.Category.ToString();
             book.CoverImage = model.CoverImage;
             book.Description = model.Description;
@@ -115,7 +128,17 @@ namespace FInalProject.Application.Services
             bookToEdit.DateWritten = model.DateWritten;
             bookToEdit.AmountInStock = model.AmountInStock;
             bookToEdit.Pages = model.Pages;
-            bookToEdit.Category = model.Category;
+            if (Enum.TryParse<Category>(model.Category, out var categoryEnum))
+            {
+                bookToEdit.Category = categoryEnum;
+                bookToEdit.CategoryString = categoryEnum.ToString();
+            }
+            else
+            {
+                // Fallback or handle error
+                bookToEdit.Category = Category.All;
+                bookToEdit.CategoryString = Category.All.ToString();
+            }
             bookToEdit.CategoryString = model.Category.ToString();
             bookToEdit.Description = model.Description;
             bookToEdit.CoverImage = model.CoverImage;

@@ -1,6 +1,5 @@
 ﻿using FInalProject.Application.ViewModels.Book;
 using FInalProject.Domain.Models;
-using System.Security.Claims;
 
 namespace FInalProject.Application.Interfaces
 {
