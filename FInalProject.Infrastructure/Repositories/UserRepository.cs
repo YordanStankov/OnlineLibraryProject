@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using FInalProject.Application.ViewModels.User.UserOperations;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
-using System.Threading.Tasks;
 
 namespace FInalProject.Infrastructure.Repositories
 {
@@ -35,18 +34,6 @@ namespace FInalProject.Infrastructure.Repositories
                 throw new Exception("User is null in AddLoginAsync in UserRepository");
             IdentityResult result = await _userManager.AddLoginAsync(CurrUser, loginInfo);
             return result;
-        }
-
-        public async Task<bool> BanUserAsync(string banId)
-        {
-            var user = await _userManager.FindByIdAsync(banId);
-            if (user == null)
-                return false;
-            user.CantBorrow = true;
-            user.Strikes = 3;
-            await _userManager.UpdateAsync(user);
-            return true;
-
         }
 
         public async Task<IdentityResult> ChangePasswordAsync(ChangePasswordOperationViewModel model)
@@ -173,19 +160,6 @@ namespace FInalProject.Infrastructure.Repositories
                 Strikes = u.Strikes ?? 0,
                 CantBorrow = u.CantBorrow
             }).ToListAsync();
-        }
-
-        public async Task<bool> UnbanUserAsync(string unbanId)
-        {
-            var User = await _userManager.FindByIdAsync(unbanId);
-            if (User == null)
-            {
-                return false;
-            }
-            User.CantBorrow = false;
-            User.Strikes = 0;
-            await _userManager.UpdateAsync(User);
-            return true;
         }
 
         public async Task UpdateUserAsync(User user)

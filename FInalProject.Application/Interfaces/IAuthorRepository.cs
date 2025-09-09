@@ -1,5 +1,4 @@
-﻿using FInalProject.Application.DTOs.AuthorDTOs;
-using FInalProject.Application.ViewModels.Author;
+﻿using FInalProject.Application.ViewModels.Author;
 using FInalProject.Domain.Models;
 
 namespace FInalProject.Application.Interfaces
@@ -13,8 +12,6 @@ namespace FInalProject.Application.Interfaces
         Task<List<AuthorListViewModel>> RenderAuthorListAsync();
         Task<Author> GetAuthorWithBooksByIdAsync(int authorId);
         Task<List<AuthorListViewModel>> RenderAuthorSearchResutlsAsync(string searchQuery);
-        Task AddPortraitToAuthorAsync(AddAuthorPortraitDTO dto);
         Task SaveChangesAsync();
-        Task<AuthorProfileViewModel> RenderAuthorProfileASync(FavouriteAuthorDTO dto);
     }
 }

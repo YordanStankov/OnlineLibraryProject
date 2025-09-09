@@ -1,31 +1,17 @@
-﻿using FInalProject.Application.DTOs.AuthorDTOs;
+﻿using FInalProject.Domain.Models;
 using FInalProject.Application.Interfaces;
-using FInalProject.Application.ViewModels.Author;
-using FInalProject.Application.ViewModels.Book;
-using FInalProject.Domain.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using FInalProject.Application.ViewModels.Author;
 
 namespace FInalProject.Infrastructure.Repositories
 {
     public class AuthorRepository : IAuthorRepository
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<User> _userManager;
 
-        public AuthorRepository(ApplicationDbContext context, UserManager<User> userManager)
+        public AuthorRepository(ApplicationDbContext context)
         {
            _context = context;
-           _userManager = userManager;
-        }
-        public async Task AddPortraitToAuthorAsync(AddAuthorPortraitDTO dto)
-        {
-            var author = await _context.Authors.FirstOrDefaultAsync(a => a.Id == dto.Id);
-            if(author == null)
-                throw new Exception("Author not found in AddPortraitToAuthorAsync in AuthorRepository");
-            author.Portrait = dto.Portrait;
-            _context.Authors.Update(author);
-            await _context.SaveChangesAsync();
         }
 
         public  void AddToAuhtorBookList(Author author, Book book)
@@ -69,41 +55,6 @@ namespace FInalProject.Infrastructure.Repositories
                 Favourites = a.FavouriteAuthors.Count()
             }).ToListAsync();
             return listOfAuthors;
-        }
-
-        public async Task<AuthorProfileViewModel> RenderAuthorProfileASync(FavouriteAuthorDTO dto)
-        {
-            var empty = new AuthorProfileViewModel();
-            var currUserId = _userManager.GetUserId(dto.UserClaim);
-            if (currUserId == null) return empty;
-
-            var author = await GetAuthorWithBooksByIdAsync(dto.Id);
-
-            if (author is null) return empty;
-
-            var fave = author.FavouriteAuthors.Any(fa => fa.AuthorId == dto.Id && fa.UserId == currUserId);
-
-            return new AuthorProfileViewModel
-            {
-                isAuthorFavourited = fave,
-                AuthorId = author.Id,
-                AuthorName = author.Name,
-                AuthorPortrait = author.Portrait,
-                AuthorsBooks = author.Books!.Select(n => new BookListViewModel
-                {
-                    Id = n.Id,
-                    Name = n.Name!,
-                    Pages = n.Pages,
-                    Category = n.Category,
-                    AuthorName = n.Author?.Name ?? "Unknown",
-                    CoverImage = n.CoverImage!,
-                    Genres = n.BookGenres?
-                                .Where(bg => bg.Genre != null)
-                                .Select(bg => bg.Genre!.Name!)
-                                .ToList() ?? new List<string>()
-                }).ToList(),
-                FavouritesCount = author.FavouriteAuthors?.Count() ?? 0
-            };
         }
 
         public async Task<List<AuthorListViewModel>> RenderAuthorSearchResutlsAsync(string searchQuery)
