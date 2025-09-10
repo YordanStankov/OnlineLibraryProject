@@ -1,5 +1,4 @@
-﻿using FInalProject.Domain.Models;
-using FInalProject.Application.ViewModels.Comment;
+﻿using FInalProject.Application.ViewModels.Comment;
 using FInalProject.Application.ViewModels.Genre;
 namespace FInalProject.Application.ViewModels.Book
 {

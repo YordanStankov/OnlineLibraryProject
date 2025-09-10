@@ -49,9 +49,7 @@ namespace FInalProject.Application.Services
                 {
                     FavouriteAuthor newFave = new FavouriteAuthor
                     {
-                        User = currUser,
                         UserId = currUser.Id,
-                        Author = author,
                         AuthorId = authorId
                     };
                 await _favouriteAuthorRepository.AddFavouriteAuthorAsync(newFave);
@@ -90,7 +88,7 @@ namespace FInalProject.Application.Services
                     Id = n.Id,
                     Name = n.Name!,
                     Pages = n.Pages,
-                    Category = n.Category,
+                    Category = n.Category.ToString(),
                     AuthorName = n.Author?.Name ?? "Unknown",
                     CoverImage = n.CoverImage!,
                     Genres = n.BookGenres?

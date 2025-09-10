@@ -9,7 +9,6 @@ namespace FInalProject.Application.ViewModels.Author
         public string AuthorName { get; set; }
         public bool isAuthorFavourited { get; set; }
         public string? AuthorPortrait { get; set; }
-        public ICollection<FavouriteAuthor>? FavouriteAuthors { get; set; }
         public int FavouritesCount { get; set; }
         public ICollection<BookListViewModel> AuthorsBooks { get; set; }
     }

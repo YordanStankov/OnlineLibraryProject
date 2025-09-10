@@ -1,5 +1,4 @@
-﻿using FInalProject.Domain.Models; 
-namespace FInalProject.Application.ViewModels.Book
+﻿namespace FInalProject.Application.ViewModels.Book
 {
     public class BooksLeaderboardViewModel
     {

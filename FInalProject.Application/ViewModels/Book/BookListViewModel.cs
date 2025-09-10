@@ -10,7 +10,7 @@ namespace FInalProject.Application.ViewModels.Book
         public double? Pages { get; set; }
         public string CoverImage { get; set; }
         public DateTime DateWritten { get; set; }
-        public Category? Category { get; set; }
+        public string? Category { get; set; }
         public List<string>? Genres { get; set; } 
 
 
