@@ -1,7 +1,6 @@
 ﻿using FInalProject.Domain.Models;
 using FInalProject.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using FInalProject.Application.ViewModels.Author;
 
 namespace FInalProject.Infrastructure.Repositories
 {
@@ -14,7 +13,12 @@ namespace FInalProject.Infrastructure.Repositories
            _context = context;
         }
 
-        public  void AddToAuhtorBookList(Author author, Book book)
+        public async Task AddAuthorAsync(Author author)
+        {
+            await _context.Authors.AddAsync(author);
+        }
+
+        public  void AddToAuthorBookList(Author author, Book book)
         {
             if(author != null && book != null) 
              author.Books.Add(book);
@@ -22,12 +26,12 @@ namespace FInalProject.Infrastructure.Repositories
 
         public async Task<Author> GetAuthorByIdAsync(int authorId)
         {
-            return await _context.Authors.AsNoTracking().FirstOrDefaultAsync(a => a.Id == authorId);
+            return await _context.Authors.FirstOrDefaultAsync(a => a.Id == authorId);
         }
 
         public async Task<Author> GetAuthorByNameAsync(string name)
         {
-            return await _context.Authors.AsNoTracking().FirstOrDefaultAsync(a => a.Name == name);
+            return await _context.Authors.FirstOrDefaultAsync(a => a.Name == name);
         }
 
         public async Task<Author> GetAuthorWithBooksByIdAsync(int authorId)
@@ -43,34 +47,18 @@ namespace FInalProject.Infrastructure.Repositories
             return author;
         }
 
-        public async Task<List<AuthorListViewModel>> RenderAuthorListAsync()
+        public async Task<List<Author>> ReturnAuthorListAsync()
         {
-            List<AuthorListViewModel> listOfAuthors = new List<AuthorListViewModel>();  
-
-            listOfAuthors = await _context.Authors.Select(a => new AuthorListViewModel
-            {
-                AuthorId = a.Id,
-                AuthorPortrait = a.Portrait,
-                AuthorName = a.Name,
-                Favourites = a.FavouriteAuthors.Count()
-            }).ToListAsync();
-            return listOfAuthors;
+            return await _context.Authors.AsNoTracking().ToListAsync();
+            
         }
 
-        public async Task<List<AuthorListViewModel>> RenderAuthorSearchResutlsAsync(string searchQuery)
+        public async Task<List<Author>> ReturnSearchedAuthorListAsync(string searchQuery)
         {
             string loweredQuery = searchQuery.ToLower(); 
-            List<AuthorListViewModel> authorList = new List<AuthorListViewModel>();
-            authorList = await _context.Authors
-                    .Where(a => a.Name.ToLower().Contains(loweredQuery))
-                    .Select(a => new AuthorListViewModel
-                    {
-                        AuthorId = a.Id,
-                        AuthorPortrait = a.Portrait,
-                        AuthorName = a.Name,
-                        Favourites = a.FavouriteAuthors.Count()
-                    }).ToListAsync();
-            return authorList;
+            return await _context.Authors
+                .Where(a => a.Name.ToLower().Contains(loweredQuery))
+                .ToListAsync();
         }
 
         public async Task SaveChangesAsync()

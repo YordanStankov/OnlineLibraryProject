@@ -1,5 +1,4 @@
-﻿using FInalProject.Application.ViewModels.Author;
-using FInalProject.Domain.Models;
+﻿using FInalProject.Domain.Models;
 
 namespace FInalProject.Application.Interfaces
 {
@@ -7,11 +6,12 @@ namespace FInalProject.Application.Interfaces
     {
         Task<Author> GetAuthorByIdAsync(int authorId);
         Task<Author> GetAuthorByNameAsync(string name);
-        void AddToAuhtorBookList(Author author, Book book);
+        void AddToAuthorBookList(Author author, Book book);
         void UpdateAuthor(Author author);
-        Task<List<AuthorListViewModel>> RenderAuthorListAsync();
+        Task AddAuthorAsync(Author author);
+        Task<List<Author>> ReturnAuthorListAsync();
         Task<Author> GetAuthorWithBooksByIdAsync(int authorId);
-        Task<List<AuthorListViewModel>> RenderAuthorSearchResutlsAsync(string searchQuery);
+        Task<List<Author>> ReturnSearchedAuthorListAsync(string searchQuery);
         Task SaveChangesAsync();
     }
 }

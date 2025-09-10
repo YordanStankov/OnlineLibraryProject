@@ -68,6 +68,12 @@ namespace FInalProject.Application.Services
         {
             var existingAuthor = await _authorRepository.GetAuthorByNameAsync(model.AuthorName);
             var correctAuthor = existingAuthor ?? new Author { Name = model.AuthorName };
+            if(existingAuthor == null)
+            {
+                await _authorRepository.AddAuthorAsync(correctAuthor);
+                await _authorRepository.SaveChangesAsync();
+            }
+
             var newBook = new Book();
             MapBook(newBook, model, correctAuthor);
 
@@ -88,7 +94,7 @@ namespace FInalProject.Application.Services
                 }
                 await _bookGenreRepository.AddListOfNewBookGenresAsync(newBookGenres);
             }
-            _authorRepository.AddToAuhtorBookList(newBook.Author, newBook);
+            _authorRepository.AddToAuthorBookList(newBook.Author, newBook);
             await _bookRepository.SaveChangesAsync();
             return newBook.Id;
         }
