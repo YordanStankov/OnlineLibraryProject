@@ -46,12 +46,21 @@ namespace FInalProject.Application.Services
                 return results;
             }
 
-            var searchedBooks = await _bookRepository.RenderSearchedBookListAsync(results.SearchQuery);
+            var searchedBooks = await _bookRepository.ReturnSearchedBooksDTOAsync(results.SearchQuery);
 
             if (searchedBooks.Any())
             {
                 results.Message = $"Search results for: {results.SearchQuery}";
-                results.BooksMatchingQuery = searchedBooks;
+                results.BooksMatchingQuery = searchedBooks.Select(b => new BookListViewModel
+                {
+                    Id = b.Id,
+                    Name = b.Name,
+                    DateWritten = b.DateWritten,
+                    CoverImage = b.CoverImage,
+                    AuthorName = b.AuthorName,
+                    Category = b.Category,
+                    Genres = b.Genres
+                }).ToList();
                 return results;
             }
             else

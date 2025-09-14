@@ -41,10 +41,18 @@ namespace FInalProject.Application.Services
         public async Task<List<BookListViewModel>> GetAllBooksAsync()
         {
             _logger.LogInformation("GETTING ALL BOOKS");
-           return await _bookRepository.RenderBookListAsync();
+           var books = await _bookRepository.GetAllBooksDTOAsync();
+            return books.Select(b => new BookListViewModel
+            {
+                Id = b.Id,
+                Name = b.Name,
+                DateWritten = b.DateWritten,
+                CoverImage = b.CoverImage,
+                AuthorName = b.AuthorName,
+                Category = b.Category,
+                Genres = b.Genres
+            }).ToList();
         }
-        
-
         
         public async Task<BookCreationViewModel> GetBookCreationViewModelAsync()
         {
@@ -96,7 +104,17 @@ namespace FInalProject.Application.Services
             
             _logger.LogInformation("GETTING ALL BOOKS FROM A CERTAIN GENRE FILLING THE VIEW");
 
-            returnModel.BooksFromCategory = await _bookRepository.RenderBooksByCategoryAsync(modifier);
+            var books = await _bookRepository.ReturnBooksByCategoryDTOAsync(modifier);
+            returnModel.BooksFromCategory = books.Select(b => new BookListViewModel
+            {
+                Id = b.Id,
+                Name = b.Name,
+                DateWritten = b.DateWritten,
+                CoverImage = b.CoverImage,
+                AuthorName = b.AuthorName,
+                Category = b.Category,
+                Genres = b.Genres
+            }).ToList();
             returnModel.Category = returnModel.BooksFromCategory.Select(rm => rm.Category).FirstOrDefault()?.ToString();
 
             if (returnModel.BooksFromCategory.Count == 0)

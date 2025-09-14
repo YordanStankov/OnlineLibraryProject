@@ -1,4 +1,5 @@
-﻿using FInalProject.Domain.Models;
+﻿using FInalProject.Application.DTOs.Author;
+using FInalProject.Domain.Models;
 
 namespace FInalProject.Application.Interfaces
 {
@@ -9,9 +10,9 @@ namespace FInalProject.Application.Interfaces
         void AddToAuthorBookList(Author author, Book book);
         void UpdateAuthor(Author author);
         Task AddAuthorAsync(Author author);
-        Task<List<Author>> ReturnAuthorListAsync();
+        Task<List<AuthorListDTO>> ReturnAuthorListDTOAsync();
         Task<Author> GetAuthorWithBooksByIdAsync(int authorId);
-        Task<List<Author>> ReturnSearchedAuthorListAsync(string searchQuery);
+        Task<List<AuthorListDTO>> ReturnSearchedAuthorListDTOAsync(string searchQuery);
         Task SaveChangesAsync();
     }
 }

@@ -1,8 +1,7 @@
-﻿using FInalProject.Domain.Models;
-using FInalProject.Application.Interfaces;
+﻿using FInalProject.Application.Interfaces;
 using FInalProject.Application.ViewModels.Admin.Book;
 using FInalProject.Application.ViewModels.Admin.User;
-
+using FInalProject.Domain.Models;
 
 namespace FInalProject.Application.Services
 {
@@ -38,12 +37,28 @@ namespace FInalProject.Application.Services
 
         public async Task<List<AdminBookListViewModel>> RenderBookListAsync()
         {
-            return await _bookRepository.RenderAdminBookListAsync();
+            var books = await _bookRepository.GetAllAdminBooksDTOAsync();
+            return books.Select(b => new AdminBookListViewModel
+            {   
+                BookId = b.BookId,
+                BookName = b.BookName,
+                BooksBorrowed = b.BooksBorrowed,
+                BookStock = b.BookStock,
+                Category = b.Category,
+                genres = b.genres
+            }).ToList();
         }
 
         public async Task<List<UserListViewModel>> RenderUserListAsync()
         {
-            return await _userRepository.RenderUsersInViewModelAsync();
+            var users = await _userRepository.RenderUsersInViewModelAsync();
+            return users.Select(u => new UserListViewModel
+            {
+                UserId = u.UserId,
+                UserName = u.UserName,
+                Strikes = u.Strikes,
+                CantBorrow = u.CantBorrow
+            }).ToList();
         }
 
 

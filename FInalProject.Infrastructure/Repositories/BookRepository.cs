@@ -5,6 +5,8 @@ using FInalProject.Application.ViewModels.Book;
 using FInalProject.Application.ViewModels.Admin.Book;
 using FInalProject.Application.ViewModels.Comment;
 using FInalProject.Application.ViewModels.Genre;
+using FInalProject.Application.DTOs.Book;
+using FInalProject.Application.DTOs.Admin;
 
 namespace FInalProject.Infrastructure.Repositories
 {
@@ -99,19 +101,6 @@ namespace FInalProject.Infrastructure.Repositories
                 }).FirstOrDefaultAsync();
         }
 
-        public async Task<List<AdminBookListViewModel>> RenderAdminBookListAsync()
-        {
-            return await _context.Books.AsNoTracking().Select(b => new AdminBookListViewModel
-            {
-                BookId = b.Id,
-                BookName = b.Name,
-                BooksBorrowed = b.BorrowedBooks.Count(),
-                BookStock = b.AmountInStock,
-                Category = b.CategoryString,
-                genres = b.BookGenres.Select(bg => bg.Genre.Name).ToList() ?? new List<string>()
-            }).ToListAsync();
-        }
-
         public async Task<List<BookListViewModel>> RenderBookListAsync()
         {
             return await _context.Books
@@ -133,13 +122,13 @@ namespace FInalProject.Infrastructure.Repositories
                }).ToListAsync();
         }
 
-        public async Task<List<BookListViewModel>> RenderBooksByCategoryAsync(int modifier)
+        public async Task<List<BookListDTO>> ReturnBooksByCategoryDTOAsync(int modifier)
         {
             return await _context.Books
                 .AsNoTracking()
                 .Where(b => (int)b.Category == modifier && b.AmountInStock > 0)
                 .Take(20)
-                .Select(n => new BookListViewModel()
+                .Select(n => new BookListDTO()
                 {
                     Id = n.Id,
                     Name = n.Name,
@@ -211,10 +200,10 @@ namespace FInalProject.Infrastructure.Repositories
                 .FirstOrDefaultAsync(b => b.Id == bookId);
         }
 
-        public async Task<List<BookListViewModel>> RenderSearchedBookListAsync(string searchQuery)
+        public async Task<List<BookListDTO>> ReturnSearchedBooksDTOAsync(string searchQuery)
         {
             string loweredQuery = searchQuery.ToLower();
-            List<BookListViewModel> queriedBooks = new List<BookListViewModel>();
+            List<BookListDTO> queriedBooks = new List<BookListDTO>();
 
             var books = await _context.Books
                 .AsNoTracking()
@@ -228,21 +217,54 @@ namespace FInalProject.Infrastructure.Repositories
                 .ToListAsync();
 
             if (books.Any())
-            queriedBooks = books.Select(b => new BookListViewModel
-            {
-                Id = b.Id,
-                Name = b.Name,
-                Pages = b.Pages,
-                AuthorName = b.Author.Name,
-                Category = b.Category.ToString(),
-                CoverImage = b.CoverImage,
-                DateWritten = b.DateWritten,
-                Genres = b.BookGenres?.Select(bg => bg.Genre.Name).ToList()
-            }).ToList();
+                queriedBooks = books.Select(b => new BookListDTO
+                {
+                    Id = b.Id,
+                    Name = b.Name,
+                    Pages = b.Pages,
+                    AuthorName = b.Author.Name,
+                    Category = b.Category.ToString(),
+                    CoverImage = b.CoverImage,
+                    DateWritten = b.DateWritten,
+                    Genres = b.BookGenres?.Select(bg => bg.Genre.Name).ToList()
+                }).ToList();
 
-                return queriedBooks;
-        
+            return queriedBooks;
+        }
 
+        public Task<List<BookListDTO>> GetAllBooksDTOAsync()
+        {
+            var booksDTO = _context.Books
+                .AsNoTracking()
+                .Select(b => new BookListDTO
+                {
+                    Id = b.Id,
+                    Name = b.Name,
+                    AuthorName = b.Author.Name,
+                    Pages = b.Pages,
+                    CoverImage = b.CoverImage,
+                    DateWritten = b.DateWritten,
+                    Category = b.CategoryString,
+                    Genres = b.BookGenres.Select(bg => bg.Genre.Name).ToList()
+                }).ToListAsync();
+
+            return booksDTO;
+        }
+
+        public async Task<List<AdminBookListDTO>> GetAllAdminBooksDTOAsync()
+        {
+            var books = await _context.Books
+                .Select(b => new AdminBookListDTO
+                {
+                    BookId = b.Id,
+                    BookName = b.Name,
+                    BookStock = b.AmountInStock,
+                    genres = b.BookGenres.Select(bg => bg.Genre.Name).ToList(),
+                    Category = b.CategoryString,
+                    BooksBorrowed = b.BorrowedBooks.Count
+                })
+                .ToListAsync();
+                return books;
         }
     }
 }

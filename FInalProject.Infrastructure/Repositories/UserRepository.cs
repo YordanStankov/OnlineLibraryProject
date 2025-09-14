@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using FInalProject.Application.ViewModels.User.UserOperations;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
+using FInalProject.Application.DTOs.Admin;
 
 namespace FInalProject.Infrastructure.Repositories
 {
@@ -151,9 +152,9 @@ namespace FInalProject.Infrastructure.Repositories
             return result;
         }
 
-        public async Task<List<UserListViewModel>> RenderUsersInViewModelAsync()
+        public async Task<List<UserListDTO>> RenderUsersInViewModelAsync()
         {
-            return await _context.Users.Select(u => new UserListViewModel
+            return await _context.Users.Select(u => new UserListDTO
             {
                 UserId = u.Id,
                 UserName = u.UserName,

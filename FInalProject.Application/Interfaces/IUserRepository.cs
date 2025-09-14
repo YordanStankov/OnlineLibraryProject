@@ -1,4 +1,5 @@
-﻿using FInalProject.Application.ViewModels.Admin.User;
+﻿using FInalProject.Application.DTOs.Admin;
+using FInalProject.Application.ViewModels.Admin.User;
 using FInalProject.Application.ViewModels.User.UserOperations;
 using FInalProject.Domain.Models;
 using Microsoft.AspNetCore.Authentication;
@@ -24,6 +25,6 @@ namespace FInalProject.Application.Interfaces
         Task<ExternalLoginInfo> GetExternalLoginInfoAsync(string userId);
         Task<IdentityResult> RemoveLoginAsync(ExternalLoginsViewModel model);
         Task<ExternalLoginsViewModel> GetExternalLoginsAsync(ClaimsPrincipal user, string loginProvider, string providerKey);
-        Task<List<UserListViewModel>> RenderUsersInViewModelAsync();
+        Task<List<UserListDTO>> RenderUsersInViewModelAsync();
     }
 }

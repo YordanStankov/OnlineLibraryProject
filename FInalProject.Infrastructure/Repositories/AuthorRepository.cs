@@ -1,6 +1,7 @@
 ﻿using FInalProject.Domain.Models;
 using FInalProject.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using FInalProject.Application.DTOs.Author;
 
 namespace FInalProject.Infrastructure.Repositories
 {
@@ -47,17 +48,32 @@ namespace FInalProject.Infrastructure.Repositories
             return author;
         }
 
-        public async Task<List<Author>> ReturnAuthorListAsync()
+        public async Task<List<AuthorListDTO>> ReturnAuthorListDTOAsync()
         {
-            return await _context.Authors.AsNoTracking().ToListAsync();
-            
+            var authors = await _context.Authors
+                .AsNoTracking()
+                .Select(a => new AuthorListDTO
+                {
+                    AuthorId = a.Id,
+                    AuthorName = a.Name,
+                    AuthorPortrait = a.Portrait,
+                    Favourites = a.FavouriteAuthors.Count
+                }).ToListAsync();
+            return authors;
         }
 
-        public async Task<List<Author>> ReturnSearchedAuthorListAsync(string searchQuery)
+        public async Task<List<AuthorListDTO>> ReturnSearchedAuthorListDTOAsync(string searchQuery)
         {
             string loweredQuery = searchQuery.ToLower(); 
             return await _context.Authors
                 .Where(a => a.Name.ToLower().Contains(loweredQuery))
+                .Select(a => new AuthorListDTO
+                {
+                    AuthorId = a.Id,
+                    AuthorName = a.Name,
+                    AuthorPortrait = a.Portrait,
+                    Favourites = a.FavouriteAuthors.Count
+                })
                 .ToListAsync();
         }
 

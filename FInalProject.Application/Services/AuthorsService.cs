@@ -63,13 +63,13 @@ namespace FInalProject.Application.Services
 
         public async Task<List<AuthorListViewModel>> RenderAuthorListAsync()
         {
-            var authors = await _authorRepository.ReturnAuthorListAsync();
+            var authors = await _authorRepository.ReturnAuthorListDTOAsync();
             return authors.Select(a => new AuthorListViewModel
             {
-                AuthorId = a.Id,
-                AuthorPortrait = a.Portrait,
-                AuthorName = a.Name,
-                Favourites = a.FavouriteAuthors.Count()
+                AuthorId = a.AuthorId,
+                AuthorPortrait = a.AuthorPortrait,
+                AuthorName = a.AuthorName,
+                Favourites = a.Favourites
             }).ToList();
         }
         public async Task<AuthorProfileViewModel> RenderAuthorProfileAsync(int authorId, ClaimsPrincipal User)
@@ -117,14 +117,14 @@ namespace FInalProject.Application.Services
                 results.Message = $"Empty search";
                 return results;
             }
-            var authors = await _authorRepository.ReturnSearchedAuthorListAsync(searchString);
+            var authors = await _authorRepository.ReturnSearchedAuthorListDTOAsync(searchString);
            
             results.authorsFound = authors.Select(a => new AuthorListViewModel
             {
-                AuthorId = a.Id,
-                AuthorName = a.Name,
-                AuthorPortrait = a.Portrait,
-                Favourites = a.FavouriteAuthors?.Count() ?? 0
+                AuthorId = a.AuthorId,
+                AuthorName = a.AuthorName,
+                AuthorPortrait = a.AuthorPortrait,
+                Favourites = a.Favourites
             }).ToList();
             if (!results.authorsFound.Any())
             {
