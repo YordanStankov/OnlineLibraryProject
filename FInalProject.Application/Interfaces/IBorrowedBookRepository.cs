@@ -1,4 +1,4 @@
-﻿using FInalProject.Application.ViewModels.Book;
+﻿using FInalProject.Application.DTOs.BorrowedBook;
 using FInalProject.Domain.Models;
 
 namespace FInalProject.Application.Interfaces
@@ -6,7 +6,7 @@ namespace FInalProject.Application.Interfaces
     public interface IBorrowedBookRepository
     {
         Task<bool> GetSingleBorrowedBookAsync(string userId, int bookId);
-        Task<List<BorrowedBookListViewModel>> ReturnBorrowedBookListAsync(string userId);
+        Task<List<BorrowedBookListDTO>> ReturnBorrowedBookListDTOAsync(string userId);
         void AddBorrowedBook(BorrowedBook newBorrow);
         Task SaveChangesAsync();
         Task TSaveChangesAsync(CancellationToken cancellationToken);

@@ -14,7 +14,7 @@ namespace FInalProject.Application.Interfaces
         void UpdateBook(Book book);
         void AddBook(Book book);
         Task<List<BookListDTO>> ReturnBooksByCategoryDTOAsync(int modifier);
-        Task<List<BooksLeaderboardViewModel>> RenderBooksLeaderboardAsync();
+        Task<List<BooksLeaderboardDTO>> ReturnBooksLeaderboardDTOAsync();
         Task<Book> ReturnBookEntityToEditAsync(int bookId);
         Task<Book> ReturnBookEntityToBorrowAsync(int bookId);
         Task<Book> ReturnBookEntityToDeleteAsync(int bookId);

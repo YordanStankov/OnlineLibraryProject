@@ -1,4 +1,4 @@
-﻿using FInalProject.Application.ViewModels.Book;
+﻿using FInalProject.Application.DTOs.Book;
 using FInalProject.Domain.Models;
 
 namespace FInalProject.Application.Interfaces
@@ -9,7 +9,7 @@ namespace FInalProject.Application.Interfaces
         Task AddFavouriteAsync(Favourite favourite);
         Task SaveChangesAsync();
         Task<Favourite> ReturnFavouriteEntityToUpdateAsync(int bookId, string userId);
-        Task<List<LikedBookListViewModel>> ReturnLikedBookListAsync(string userId);
+        Task<List<LikedBookListDTO>> ReturnLikedBookListDTOAsync(string userId);
 
     }
 }

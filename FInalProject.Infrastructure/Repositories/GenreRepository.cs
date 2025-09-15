@@ -4,6 +4,7 @@ using FInalProject.Application.ViewModels.Book;
 using FInalProject.Application.ViewModels.Genre.GenreOprations;
 using Microsoft.EntityFrameworkCore;
 using FInalProject.Application.ViewModels.Genre;
+using FInalProject.Application.DTOs.Book;
 
 namespace FInalProject.Infrastructure.Repositories
 {
@@ -66,13 +67,13 @@ namespace FInalProject.Infrastructure.Repositories
             return genre; 
         }
 
-        public async Task<List<BookListViewModel>> RenderSpecificGenreBookListAsync(int genreId)
+        public async Task<List<BookListDTO>> GetSpecificGenreBookListDTOAsync(int genreId)
         {
-            List<BookListViewModel> list = new List<BookListViewModel>();
+            List<BookListDTO> list = new List<BookListDTO>();
             list = await  _context.BookGenres
                 .AsNoTracking()
                 .Where(bg => bg.GenreId == genreId && bg.Book.AmountInStock > 0)
-                .Select(bg => new BookListViewModel()
+                .Select(bg => new BookListDTO()
                 {
                     Id = bg.Book.Id,
                     AuthorName = bg.Book.Author.Name,

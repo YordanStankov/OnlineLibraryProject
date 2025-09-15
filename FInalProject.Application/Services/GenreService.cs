@@ -4,6 +4,7 @@ using FInalProject.Application.ViewModels.Book.BookFiltering;
 using FInalProject.Application.ViewModels.Genre.GenreOprations;
 using Microsoft.Extensions.Logging;
 using FInalProject.Application.ViewModels.Genre;
+using FInalProject.Application.ViewModels.Book;
 
 namespace FInalProject.Application.Services
 {
@@ -80,7 +81,17 @@ namespace FInalProject.Application.Services
             var genre = await _genreRepository.GetGenreByIdAsync(genreId);
             GenreBooks.Genre = genre?.Name ?? "Null";
 
-            GenreBooks.BooksMatchingGenre = await _genreRepository.RenderSpecificGenreBookListAsync(genreId);
+            var books = await _genreRepository.GetSpecificGenreBookListDTOAsync(genreId);
+            GenreBooks.BooksMatchingGenre = books.Select(b => new BookListViewModel
+            {
+                Id = b.Id,
+                Name = b.Name,
+                DateWritten = b.DateWritten,
+                CoverImage = b.CoverImage,
+                AuthorName = b.AuthorName,
+                Category = b.Category,
+                Genres = b.Genres
+            }).ToList();
 
             if (GenreBooks.BooksMatchingGenre == null || !GenreBooks.BooksMatchingGenre.Any())
             {

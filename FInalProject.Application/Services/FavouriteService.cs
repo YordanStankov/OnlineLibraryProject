@@ -26,9 +26,13 @@ namespace FInalProject.Application.Services
             var CurrUser = await _userManager.GetUserAsync(user);
             if (CurrUser == null)
                 throw new Exception("User is null when ReturingLikedBookList in FavouriteService");
-            var books = await _favouriteRepository.ReturnLikedBookListAsync(CurrUser.Id);
-            return books;
-
+            var books = await _favouriteRepository.ReturnLikedBookListDTOAsync(CurrUser.Id);
+            return books.Select(b => new LikedBookListViewModel
+            {
+                Id = b.Id,
+                CoverImage = b.CoverImage,
+                Name = b.Name
+            }).ToList();
 
         }
 

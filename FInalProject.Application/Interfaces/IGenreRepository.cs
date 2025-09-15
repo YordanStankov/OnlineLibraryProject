@@ -2,6 +2,7 @@
 using FInalProject.Application.ViewModels.Genre.GenreOprations;
 using FInalProject.Application.ViewModels.Book;
 using FInalProject.Application.ViewModels.Genre;
+using FInalProject.Application.DTOs.Book;
 
 namespace FInalProject.Application.Interfaces
 {
@@ -15,7 +16,7 @@ namespace FInalProject.Application.Interfaces
         Task AddGenreAsync(Genre genre);
         void RemoveGenre(Genre genre);
         Task<Genre> GetGenreByIdAsync(int id);
-        Task<List<BookListViewModel>> RenderSpecificGenreBookListAsync(int genreId);
+        Task<List<BookListDTO>> GetSpecificGenreBookListDTOAsync(int genreId);
         Task<GenreEditViewModel> ReturnSingleGenreToEditAsync(int id);
     }
 }

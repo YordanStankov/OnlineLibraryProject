@@ -1,6 +1,7 @@
-﻿namespace FInalProject.Application.ViewModels.Book
+﻿
+namespace FInalProject.Application.DTOs.Book
 {
-    public class BooksLeaderboardViewModel
+    public class BooksLeaderboardDTO
     {
         public int BookId { get; set; }
         public string BookName { get; set; }

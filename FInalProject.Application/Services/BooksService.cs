@@ -139,8 +139,16 @@ namespace FInalProject.Application.Services
 
         public async Task<List<BooksLeaderboardViewModel>> ReturnLeaderboardResultsAsync()
         {
-            return await _bookRepository.RenderBooksLeaderboardAsync();
-                
+            var books = await _bookRepository.ReturnBooksLeaderboardDTOAsync();
+            return books.Select(b => new BooksLeaderboardViewModel
+            {
+                BookId = b.BookId,
+                BookName = b.BookName,
+                AuthorName = b.AuthorName,
+                CategoryString = b.CategoryString,
+                CommunityRating = b.CommunityRating
+            }).ToList();
+
         }
 
         public async Task<bool> CheckIfUserCantBorrowAsync(ClaimsPrincipal User)
@@ -164,8 +172,15 @@ namespace FInalProject.Application.Services
             {
                 throw new Exception("User is null when returning borrowedBooksViewModel");
             }
-            var books = await _borrowedBookRepository.ReturnBorrowedBookListAsync(CurrUser.Id);
-            return books;
+            var books = await _borrowedBookRepository.ReturnBorrowedBookListDTOAsync(CurrUser.Id);
+            return books.Select(b => new BorrowedBookListViewModel
+            {
+                BookId = b.BookId,
+                UserId = b.UserId,
+                Name = b.Name,
+                UntillReturn = b.UntillReturn,
+                CoverImage = b.CoverImage
+            }).ToList();
         }
     }
 }

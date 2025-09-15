@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using FInalProject.Application.ViewModels.Book;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
+using FInalProject.Application.DTOs.BorrowedBook;
 
 namespace FInalProject.Infrastructure.Repositories
 {
@@ -71,14 +72,14 @@ namespace FInalProject.Infrastructure.Repositories
             book.AmountInStock++;
         }
 
-        public async Task<List<BorrowedBookListViewModel>> ReturnBorrowedBookListAsync(string userId)
+        public async Task<List<BorrowedBookListDTO>> ReturnBorrowedBookListDTOAsync(string userId)
         {
-           
-            List<BorrowedBookListViewModel> borrowedBooks = new List<BorrowedBookListViewModel>();
+
+            List<BorrowedBookListDTO> borrowedBooks = new List<BorrowedBookListDTO>();
             borrowedBooks = await _context
                     .BorrowedBooks
                     .Where(bb => bb.UserId == userId)
-                    .Select(bb => new BorrowedBookListViewModel
+                    .Select(bb => new BorrowedBookListDTO
                     {
                         CoverImage = bb.Book.CoverImage,
                         BookId = bb.BookId,

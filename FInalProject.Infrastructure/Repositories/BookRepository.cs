@@ -101,27 +101,6 @@ namespace FInalProject.Infrastructure.Repositories
                 }).FirstOrDefaultAsync();
         }
 
-        public async Task<List<BookListViewModel>> RenderBookListAsync()
-        {
-            return await _context.Books
-               .AsNoTracking()
-               .Include(a => a.Author)
-               .Include(bg => bg.BookGenres)
-               .ThenInclude(g => g.Genre)
-               .Where(b => b.AmountInStock > 0)
-               .Select(n => new BookListViewModel()
-               {
-                   Id = n.Id,
-                   Name = n.Name,
-                   Pages = n.Pages,
-                   Category = n.Category.ToString(),
-                   AuthorName = n.Author.Name,
-                   DateWritten = n.DateWritten,
-                   CoverImage = n.CoverImage,
-                   Genres = n.BookGenres.Select(bg => bg.Genre.Name).ToList(),
-               }).ToListAsync();
-        }
-
         public async Task<List<BookListDTO>> ReturnBooksByCategoryDTOAsync(int modifier)
         {
             return await _context.Books
@@ -141,19 +120,18 @@ namespace FInalProject.Infrastructure.Repositories
                 }).ToListAsync();
         }
 
-        public async Task<List<BooksLeaderboardViewModel>> RenderBooksLeaderboardAsync()
+        public async Task<List<BooksLeaderboardDTO>> ReturnBooksLeaderboardDTOAsync()
         {
             return await _context.Books
                 .OrderByDescending(b => b.Favourites.Sum(f => f.Amount))
-                .Select(b => new BooksLeaderboardViewModel
+                .Select(b => new BooksLeaderboardDTO
                 {
                     BookId = b.Id,
                     AuthorName = b.Author.Name,
                     BookName = b.Name,
                     CategoryString = b.CategoryString,
-                    PositiveReviews = b.Favourites.Sum(f => f.Amount)
-                })
-                .ToListAsync();
+                    CommunityRating = b.Favourites.Sum(f => f.Amount)
+                }).ToListAsync();
         }
 
         public void UpdateBook(Book book)
