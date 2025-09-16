@@ -1,7 +1,7 @@
-﻿using FInalProject.Domain.Models;
+﻿using FInalProject.Application.DTOs.Author;
 using FInalProject.Application.Interfaces;
+using FInalProject.Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using FInalProject.Application.DTOs.Author;
 
 namespace FInalProject.Infrastructure.Repositories
 {
@@ -11,7 +11,7 @@ namespace FInalProject.Infrastructure.Repositories
 
         public AuthorRepository(ApplicationDbContext context)
         {
-           _context = context;
+            _context = context;
         }
 
         public async Task AddAuthorAsync(Author author)
@@ -19,10 +19,10 @@ namespace FInalProject.Infrastructure.Repositories
             await _context.Authors.AddAsync(author);
         }
 
-        public  void AddToAuthorBookList(Author author, Book book)
+        public void AddToAuthorBookList(Author author, Book book)
         {
-            if(author != null && book != null) 
-             author.Books.Add(book);
+            if (author != null && book != null)
+                author.Books.Add(book);
         }
 
         public async Task<Author> GetAuthorByIdAsync(int authorId)
@@ -64,7 +64,7 @@ namespace FInalProject.Infrastructure.Repositories
 
         public async Task<List<AuthorListDTO>> ReturnSearchedAuthorListDTOAsync(string searchQuery)
         {
-            string loweredQuery = searchQuery.ToLower(); 
+            string loweredQuery = searchQuery.ToLower();
             return await _context.Authors
                 .Where(a => a.Name.ToLower().Contains(loweredQuery))
                 .Select(a => new AuthorListDTO
@@ -82,7 +82,7 @@ namespace FInalProject.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public  void UpdateAuthor(Author author)
+        public void UpdateAuthor(Author author)
         {
             _context.Authors.Update(author);
         }

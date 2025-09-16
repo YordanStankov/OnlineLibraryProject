@@ -1,12 +1,11 @@
-﻿using FInalProject.Domain.Models;
+﻿using FInalProject.Application.DTOs.Admin;
 using FInalProject.Application.Interfaces;
-using FInalProject.Application.ViewModels.Admin.User;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 using FInalProject.Application.ViewModels.User.UserOperations;
-using System.Security.Claims;
+using FInalProject.Domain.Models;
 using Microsoft.AspNetCore.Authentication;
-using FInalProject.Application.DTOs.Admin;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace FInalProject.Infrastructure.Repositories
 {
@@ -15,11 +14,11 @@ namespace FInalProject.Infrastructure.Repositories
         private readonly ApplicationDbContext _context;
         private readonly IUserStore<User> _userStore;
         private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;    
+        private readonly SignInManager<User> _signInManager;
 
-        public UserRepository (ApplicationDbContext context, 
-            UserManager<User> userManager, 
-            SignInManager<User> signInManager, 
+        public UserRepository(ApplicationDbContext context,
+            UserManager<User> userManager,
+            SignInManager<User> signInManager,
             IUserStore<User> userStore)
         {
             _context = context;
@@ -48,7 +47,7 @@ namespace FInalProject.Infrastructure.Repositories
 
         public AuthenticationProperties ConfigureExternalAuthenticationProperties(string provider, string redirectUrl, ClaimsPrincipal user)
         {
-            string? userId =  _userManager.GetUserId(user);
+            string? userId = _userManager.GetUserId(user);
             if (userId == null)
                 throw new Exception("User id is null in ConfigureExternalAuthenticatorPrperties in UserRepository");
             AuthenticationProperties properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl, userId);
@@ -64,7 +63,7 @@ namespace FInalProject.Infrastructure.Repositories
         {
             ChangePasswordViewModel result = new ChangePasswordViewModel();
             var CurrUser = await _userManager.GetUserAsync(user);
-            result.Id = CurrUser.Id; 
+            result.Id = CurrUser.Id;
             return result;
         }
 
@@ -165,8 +164,8 @@ namespace FInalProject.Infrastructure.Repositories
 
         public async Task UpdateUserAsync(User user)
         {
-             _context.Users.Update(user);
-            await _context.SaveChangesAsync();  
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<bool> UserHasPasswordAsync(ClaimsPrincipal user)
@@ -175,7 +174,7 @@ namespace FInalProject.Infrastructure.Repositories
             if (UserModel == null) throw new Exception("User is null in UserHasPasswordAsync in UserRepostiory");
             var hasPassword = await _userManager.HasPasswordAsync(UserModel);
             if (hasPassword == false) return false;
-            else 
+            else
                 return true;
         }
     }

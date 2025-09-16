@@ -70,8 +70,13 @@ namespace FInalProject.Application.Services
         public async Task<List<GenreListViewModel>> GetGenreListAsync()
         {
             _logger.LogInformation("GETING ALL GENRES METHOD");
-            var genreList = await _genreRepository.GetAllGenresAsync();
-            return genreList;
+            var genreList = await _genreRepository.GetAllGenresDTOAsync();
+            var ViewModels = genreList.Select(g => new GenreListViewModel
+            {
+                Id = g.Id,
+                Name = g.Name
+            }).ToList();
+            return ViewModels;
         }
 
         public async Task<BooksFromGenreViewModel> GetAllBooksOfCertainGenre(int genreId)
@@ -108,10 +113,15 @@ namespace FInalProject.Application.Services
         //Genre editing
         public async Task<GenreEditViewModel> ProvideGenreForPartialAsync(int genreEditId)
         {
-            var viewModel = await _genreRepository.ReturnSingleGenreToEditAsync(genreEditId);
+            var viewModel = await _genreRepository.ReturnSingleGenreDTOToEditAsync(genreEditId);
             if (viewModel == null)
                 throw new Exception("GenreEditViewModel is null. Check GenreService");
-            return viewModel;
+            var final = new GenreEditViewModel
+            {
+                Id = viewModel.Id,
+                Name = viewModel.Name
+            };
+            return final;
         }
 
         public async Task<bool> SaveChangesToGenreAsync(GenreEditViewModel model)

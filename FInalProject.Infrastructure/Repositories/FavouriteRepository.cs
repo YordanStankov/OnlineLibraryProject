@@ -1,8 +1,7 @@
-﻿using FInalProject.Domain.Models;
+﻿using FInalProject.Application.DTOs.Book;
 using FInalProject.Application.Interfaces;
+using FInalProject.Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using FInalProject.Application.ViewModels.Book;
-using FInalProject.Application.DTOs.Book;
 
 namespace FInalProject.Infrastructure.Repositories
 {
@@ -50,7 +49,7 @@ namespace FInalProject.Infrastructure.Repositories
 
         public void UpdateFavourite(Favourite rating)
         {
-             _context.Favourites.Update(rating);
+            _context.Favourites.Update(rating);
         }
     }
 }

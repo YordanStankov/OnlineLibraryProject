@@ -1,5 +1,5 @@
-﻿using FInalProject.Domain.Models;
-using FInalProject.Application.Interfaces;
+﻿using FInalProject.Application.Interfaces;
+using FInalProject.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace FInalProject.Infrastructure.Repositories
@@ -14,7 +14,7 @@ namespace FInalProject.Infrastructure.Repositories
         }
         public async Task AddFavouriteAuthorAsync(FavouriteAuthor favourite)
         {
-          await _context.FavouriteAuthors.AddAsync(favourite);   
+            await _context.FavouriteAuthors.AddAsync(favourite);
         }
 
         public async Task<FavouriteAuthor> GetFavouriteAuthorAsync(int authorId, string userId)
@@ -27,7 +27,7 @@ namespace FInalProject.Infrastructure.Repositories
 
         public void RemoveFavouriteAuthor(FavouriteAuthor favourite)
         {
-           _context.FavouriteAuthors.Remove(favourite);
+            _context.FavouriteAuthors.Remove(favourite);
         }
 
         public async Task SaveChangesAsync()

@@ -5,6 +5,7 @@ using FInalProject.Application.ViewModels.Book.BookFiltering;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System.Security.Claims;
+using FInalProject.Application.ViewModels.Genre;
 
 namespace FInalProject.Application.Services
 {
@@ -57,10 +58,14 @@ namespace FInalProject.Application.Services
         public async Task<BookCreationViewModel> GetBookCreationViewModelAsync()
         {
             _logger.LogInformation("FILLING THE VIEW WITH GENRE OPTIONS");
-
+            var genres = await _genreRepository.GetAllGenresDTOAsync();
             return new BookCreationViewModel
             {
-                GenreOptions = await _genreRepository.GetAllGenresAsync()
+                GenreOptions = (ICollection<GenreListViewModel>)genres.Select(g => new GenreListViewModel
+                {
+                    Id = g.Id,
+                    Name = g.Name
+                })
             };
         }
 
@@ -105,6 +110,7 @@ namespace FInalProject.Application.Services
 
         public async Task<BookCreationViewModel> getBookInfoAsync(int editId)
         {
+            var genres = await _genreRepository.GetAllGenresDTOAsync();
             var book = await _bookRepository.GetSingleBookDTOForEditAsync(editId);
             if (book is null)
                 return null;
@@ -123,7 +129,11 @@ namespace FInalProject.Application.Services
                     AmountInStock = book.AmountInStock,
                     Category = book.Category,
                     SelectedGenreIds = book.SelectedGenreIds,
-                    GenreOptions = await _genreRepository.GetAllGenresAsync()
+                    GenreOptions = genres.Select(g => new GenreListViewModel
+                    {
+                        Id = g.Id,
+                        Name = g.Name
+                    }).ToList()
                 };
                 return toBeReturned;
             }

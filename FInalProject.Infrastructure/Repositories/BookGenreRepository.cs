@@ -1,5 +1,5 @@
-﻿using FInalProject.Domain.Models;
-using FInalProject.Application.Interfaces;
+﻿using FInalProject.Application.Interfaces;
+using FInalProject.Domain.Models;
 
 namespace FInalProject.Infrastructure.Repositories
 {
@@ -14,7 +14,7 @@ namespace FInalProject.Infrastructure.Repositories
 
         public async Task AddListOfNewBookGenresAsync(List<BookGenre> bookGenres)
         {
-           await _context.AddRangeAsync(bookGenres);
+            await _context.AddRangeAsync(bookGenres);
         }
 
         public async Task AddNewBookGenreAsync(BookGenre bookGenre)

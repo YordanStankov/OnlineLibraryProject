@@ -1,19 +1,18 @@
-﻿using FInalProject.Domain.Models;
+﻿using FInalProject.Application.DTOs.Admin;
+using FInalProject.Application.DTOs.Book;
 using FInalProject.Application.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using FInalProject.Application.ViewModels.Admin.Book;
 using FInalProject.Application.ViewModels.Comment;
 using FInalProject.Application.ViewModels.Genre;
-using FInalProject.Application.DTOs.Book;
-using FInalProject.Application.DTOs.Admin;
+using FInalProject.Domain.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FInalProject.Infrastructure.Repositories
 {
     public class BookRepository : IBookRepository
     {
         private readonly ApplicationDbContext _context;
-        
-        
+
+
         public BookRepository(ApplicationDbContext context)
         {
             _context = context;
@@ -21,7 +20,7 @@ namespace FInalProject.Infrastructure.Repositories
 
         public void AddBook(Book book)
         {
-             _context.Books.Add(book);
+            _context.Books.Add(book);
         }
 
         public async Task<List<Book>> GetAllBooksAsync()
@@ -31,7 +30,7 @@ namespace FInalProject.Infrastructure.Repositories
 
         public async Task<BookFocusDTO> GetSingleBookDTOForFocusAsync(int bookId)
         {
-           
+
             return await _context.Books
                .AsNoTracking()
               .Where(b => b.Id == bookId)
@@ -68,7 +67,8 @@ namespace FInalProject.Infrastructure.Repositories
             {
                 Id = g.Id,
                 Name = g.Name
-            }).ToListAsync(); 
+            }).ToListAsync();
+
             return await _context.Books
                 .AsNoTracking()
                 .Include(b => b.Author)
@@ -126,12 +126,12 @@ namespace FInalProject.Infrastructure.Repositories
 
         public void UpdateBook(Book book)
         {
-             _context.Books.Update(book);
+            _context.Books.Update(book);
         }
         public void RemoveBook(Book book)
         {
             _context.Books.Remove(book);
-          
+
         }
 
         public async Task SaveChangesAsync()
@@ -232,7 +232,7 @@ namespace FInalProject.Infrastructure.Repositories
                     BooksBorrowed = b.BorrowedBooks.Count
                 })
                 .ToListAsync();
-                return books;
+            return books;
         }
     }
 }

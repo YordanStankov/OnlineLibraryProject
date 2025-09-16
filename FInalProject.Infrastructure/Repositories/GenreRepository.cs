@@ -1,10 +1,8 @@
-﻿using FInalProject.Domain.Models;
+﻿using FInalProject.Application.DTOs.Book;
+using FInalProject.Application.DTOs.Genre;
 using FInalProject.Application.Interfaces;
-using FInalProject.Application.ViewModels.Book;
-using FInalProject.Application.ViewModels.Genre.GenreOprations;
+using FInalProject.Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using FInalProject.Application.ViewModels.Genre;
-using FInalProject.Application.DTOs.Book;
 
 namespace FInalProject.Infrastructure.Repositories
 {
@@ -36,12 +34,12 @@ namespace FInalProject.Infrastructure.Repositories
             _context.Genres.Update(genre);
         }
 
-        public async Task<List<GenreListViewModel>> GetAllGenresAsync()
+        public async Task<List<GenreListDTO>> GetAllGenresDTOAsync()
         {
-            List<GenreListViewModel> genreList = new List<GenreListViewModel>();
+            List<GenreListDTO> genreList = new List<GenreListDTO>();
             genreList = await _context.Genres
                 .AsNoTracking()
-                .Select(g => new GenreListViewModel
+                .Select(g => new GenreListDTO
                 {
                     Id = g.Id,
                     Name = g.Name,
@@ -64,13 +62,13 @@ namespace FInalProject.Infrastructure.Repositories
             genre = await _context.Genres
                 .AsNoTracking()
                 .FirstOrDefaultAsync(g => g.Name.ToLower() == loweredName);
-            return genre; 
+            return genre;
         }
 
         public async Task<List<BookListDTO>> GetSpecificGenreBookListDTOAsync(int genreId)
         {
             List<BookListDTO> list = new List<BookListDTO>();
-            list = await  _context.BookGenres
+            list = await _context.BookGenres
                 .AsNoTracking()
                 .Where(bg => bg.GenreId == genreId && bg.Book.AmountInStock > 0)
                 .Select(bg => new BookListDTO()
@@ -86,9 +84,9 @@ namespace FInalProject.Infrastructure.Repositories
             return list;
         }
 
-        public async Task<GenreEditViewModel> ReturnSingleGenreToEditAsync(int id)
+        public async Task<GenreEditDTO> ReturnSingleGenreDTOToEditAsync(int id)
         {
-            var genre = await _context.Genres.Select(g => new GenreEditViewModel
+            var genre = await _context.Genres.Select(g => new GenreEditDTO
             {
                 Id = g.Id,
                 Name = g.Name

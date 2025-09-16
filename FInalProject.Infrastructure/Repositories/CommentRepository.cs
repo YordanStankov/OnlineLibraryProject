@@ -1,5 +1,5 @@
-﻿using FInalProject.Domain.Models;
-using FInalProject.Application.Interfaces;
+﻿using FInalProject.Application.Interfaces;
+using FInalProject.Domain.Models;
 
 namespace FInalProject.Infrastructure.Repositories
 {
