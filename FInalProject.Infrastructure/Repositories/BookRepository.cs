@@ -1,7 +1,6 @@
 ﻿using FInalProject.Domain.Models;
 using FInalProject.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using FInalProject.Application.ViewModels.Book;
 using FInalProject.Application.ViewModels.Admin.Book;
 using FInalProject.Application.ViewModels.Comment;
 using FInalProject.Application.ViewModels.Genre;
@@ -30,19 +29,13 @@ namespace FInalProject.Infrastructure.Repositories
             return await _context.Books.AsNoTracking().ToListAsync();
         }
 
-        public async Task<BookFocusViewModel> GetSingleBookForFocusAsync(int bookId)
+        public async Task<BookFocusDTO> GetSingleBookDTOForFocusAsync(int bookId)
         {
            
             return await _context.Books
                .AsNoTracking()
-              .Include(b => b.Favourites)
-              .Include(b => b.Author)
-              .Include(b => b.Comments)
-              .ThenInclude(c => c.User)
-              .Include(b => b.BookGenres)
-              .ThenInclude(b => b.Genre)
               .Where(b => b.Id == bookId)
-              .Select(b => new BookFocusViewModel
+              .Select(b => new BookFocusDTO
               {
                   BookCover = b.CoverImage,
                   BookId = b.Id,
@@ -67,12 +60,9 @@ namespace FInalProject.Infrastructure.Repositories
                   Rating = b.Favourites.Sum(f => f.Amount),
                   Borrowed = false
               }).FirstOrDefaultAsync();
-              
-              
-
         }
 
-        public async Task<BookCreationViewModel> GetSingleBookForEditAsync(int editId)
+        public async Task<BookCreationDTO> GetSingleBookDTOForEditAsync(int editId)
         {
             List<GenreListViewModel> genreOpts = await _context.Genres.Select(g => new GenreListViewModel
             {
@@ -85,7 +75,7 @@ namespace FInalProject.Infrastructure.Repositories
                 .Include(b => b.BookGenres)
                 .ThenInclude(b => b.Genre)
                 .Where(b => b.Id == editId)
-                .Select(book => new BookCreationViewModel
+                .Select(book => new BookCreationDTO
                 {
                     Id = book.Id,
                     Name = book.Name,

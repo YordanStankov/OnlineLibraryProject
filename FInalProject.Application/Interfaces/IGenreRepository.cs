@@ -1,6 +1,5 @@
 ﻿using FInalProject.Domain.Models;
 using FInalProject.Application.ViewModels.Genre.GenreOprations;
-using FInalProject.Application.ViewModels.Book;
 using FInalProject.Application.ViewModels.Genre;
 using FInalProject.Application.DTOs.Book;
 

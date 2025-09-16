@@ -1,8 +1,10 @@
-﻿using FInalProject.Application.ViewModels.Comment;
+﻿
+using FInalProject.Application.ViewModels.Comment;
 using FInalProject.Application.ViewModels.Genre;
-namespace FInalProject.Application.ViewModels.Book
+
+namespace FInalProject.Application.DTOs.Book
 {
-    public class BookFocusViewModel
+    public class BookFocusDTO
     {
         public int BookId { get; set; }
         public string BookName { get; set; }
@@ -18,6 +20,5 @@ namespace FInalProject.Application.ViewModels.Book
         public ICollection<GenreListViewModel> genres { get; set; }
         public ICollection<CommentViewModel>? comments { get; set; }
         public int Rating { get; set; }
-
-        }
+    }
 }

@@ -2,6 +2,7 @@
 using FInalProject.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using FInalProject.Application.ViewModels.Book;
+using FInalProject.Application.DTOs.Book;
 
 namespace FInalProject.Infrastructure.Repositories
 {
@@ -27,12 +28,12 @@ namespace FInalProject.Infrastructure.Repositories
             return favourite;
         }
 
-        public async Task<List<LikedBookListViewModel>> ReturnLikedBookListAsync(string userId)
+        public async Task<List<LikedBookListDTO>> ReturnLikedBookListDTOAsync(string userId)
         {
-            List<LikedBookListViewModel> likedBookList = new List<LikedBookListViewModel>();
+            List<LikedBookListDTO> likedBookList = new List<LikedBookListDTO>();
             likedBookList = await _context.Favourites
                 .Where(r => r.UserId == userId)
-                .Select(r => new LikedBookListViewModel
+                .Select(r => new LikedBookListDTO
                 {
                     CoverImage = r.Book.CoverImage,
                     Id = r.BookId,

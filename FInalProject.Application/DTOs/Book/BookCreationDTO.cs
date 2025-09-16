@@ -1,0 +1,41 @@
+﻿
+using FInalProject.Application.ViewModels.Book;
+using FInalProject.Application.ViewModels.Genre;
+using System.ComponentModel.DataAnnotations;
+
+namespace FInalProject.Application.DTOs.Book
+{
+    public class BookCreationDTO
+    {
+        public int Id { get; set; }
+        [Required]
+        [StringLength(100, MinimumLength = 3)]
+        public string Name { get; set; }
+
+        [Required]
+        [Range(1, 10000, ErrorMessage = "Pages must be between 1 and 10000 pages")]
+        public int Pages { get; set; }
+        public string AuthorName { get; set; }
+        [Required]
+        [Range(1, 1000, ErrorMessage = "Reading time must be between 1 and 1000 hours")]
+        public double ReadingTime { get; set; }
+        [Required]
+        public string CoverImage { get; set; }
+        [Required]
+        public DateTime DateWritten { get; set; }
+
+        [Required]
+        [StringLength(1000, MinimumLength = 5, ErrorMessage = "Description must be between 5 and 1000 words")]
+        public string Description { get; set; }
+        public int AmountInStock { get; set; }
+        public string Category { get; set; }
+        public int? editor { get; set; }
+        public ICollection<GenreListViewModel>? GenreOptions { get; set; }
+        public ICollection<int>? SelectedGenreIds { get; set; }
+
+        public static implicit operator BookCreationDTO(BookCreationViewModel v)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

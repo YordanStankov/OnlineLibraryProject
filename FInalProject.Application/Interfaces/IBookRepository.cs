@@ -9,8 +9,8 @@ namespace FInalProject.Application.Interfaces
         Task<List<Book>> GetAllBooksAsync();
         Task<List<BookListDTO>> GetAllBooksDTOAsync();
         Task<List<AdminBookListDTO>> GetAllAdminBooksDTOAsync();
-        Task<BookFocusViewModel> GetSingleBookForFocusAsync(int bookId);
-        Task<BookCreationViewModel> GetSingleBookForEditAsync(int editId);
+        Task<BookFocusDTO> GetSingleBookDTOForFocusAsync(int bookId);
+        Task<BookCreationDTO> GetSingleBookDTOForEditAsync(int editId);
         void UpdateBook(Book book);
         void AddBook(Book book);
         Task<List<BookListDTO>> ReturnBooksByCategoryDTOAsync(int modifier);

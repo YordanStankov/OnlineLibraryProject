@@ -73,13 +73,27 @@ namespace FInalProject.Application.Services
             {
                 return focusModel;
             }
-            var currBook = await _bookRepository.GetSingleBookForFocusAsync(id);
-
+            var currBook = await _bookRepository.GetSingleBookDTOForFocusAsync(id);
             if (currBook == null)
                 return focusModel;
             else
             {
-                focusModel = currBook;
+                focusModel = new BookFocusViewModel
+                {
+                    BookId = currBook.BookId,
+                    BookName = currBook.BookName,
+                    BookAuthorName = currBook.BookAuthorName,
+                    DateWritten = currBook.DateWritten,
+                    BookCover = currBook.BookCover,
+                    BookPages = currBook.BookPages,
+                    BookReadingTime = currBook.BookReadingTime,
+                    Description = currBook.Description,
+                    Category = currBook.Category,
+                    AmountInStock = currBook.AmountInStock,
+                    genres = currBook.genres,
+                    Rating = currBook.Rating,
+                    comments = currBook.comments
+                };
                 var borrow = await _borrowedBookRepository.GetSingleBorrowedBookAsync(curr, id);
                 if (borrow == false)
                     focusModel.Borrowed = false;
@@ -91,11 +105,28 @@ namespace FInalProject.Application.Services
 
         public async Task<BookCreationViewModel> getBookInfoAsync(int editId)
         {
-            var book = await _bookRepository.GetSingleBookForEditAsync(editId);
+            var book = await _bookRepository.GetSingleBookDTOForEditAsync(editId);
             if (book is null)
                 return null;
             else
-                return book;
+            {
+                var toBeReturned = new BookCreationViewModel
+                {
+                    Id = book.Id,
+                    Name = book.Name,
+                    AuthorName = book.AuthorName,
+                    DateWritten = book.DateWritten,
+                    Pages = book.Pages,
+                    CoverImage = book.CoverImage,
+                    ReadingTime = book.ReadingTime,
+                    Description = book.Description,
+                    AmountInStock = book.AmountInStock,
+                    Category = book.Category,
+                    SelectedGenreIds = book.SelectedGenreIds,
+                    GenreOptions = await _genreRepository.GetAllGenresAsync()
+                };
+                return toBeReturned;
+            }
         }
 
         public async Task<BooksFromCategoryViewModel> GetAllBooksFromSpecificCategoryAsync(int modifier)
