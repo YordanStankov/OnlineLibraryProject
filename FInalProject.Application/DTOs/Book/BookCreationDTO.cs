@@ -1,6 +1,5 @@
 ﻿
-using FInalProject.Application.ViewModels.Book;
-using FInalProject.Application.ViewModels.Genre;
+using FInalProject.Application.DTOs.Genre;
 using System.ComponentModel.DataAnnotations;
 
 namespace FInalProject.Application.DTOs.Book
@@ -30,12 +29,7 @@ namespace FInalProject.Application.DTOs.Book
         public int AmountInStock { get; set; }
         public string Category { get; set; }
         public int? editor { get; set; }
-        public ICollection<GenreListViewModel>? GenreOptions { get; set; }
+        public ICollection<GenreListDTO>? GenreOptions { get; set; }
         public ICollection<int>? SelectedGenreIds { get; set; }
-
-        public static implicit operator BookCreationDTO(BookCreationViewModel v)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

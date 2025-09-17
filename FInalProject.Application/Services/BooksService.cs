@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System.Security.Claims;
 using FInalProject.Application.ViewModels.Genre;
+using FInalProject.Application.ViewModels.Comment;
 
 namespace FInalProject.Application.Services
 {
@@ -95,9 +96,17 @@ namespace FInalProject.Application.Services
                     Description = currBook.Description,
                     Category = currBook.Category,
                     AmountInStock = currBook.AmountInStock,
-                    genres = currBook.genres,
+                    genres = currBook.genres.Select(g => new GenreListViewModel
+                    {
+                        Id = g.Id,
+                        Name = g.Name
+                    }).ToList(),
                     Rating = currBook.Rating,
-                    comments = currBook.comments
+                    comments = currBook.comments.Select(c => new CommentViewModel
+                    {
+                        UserName = c.UserName,
+                        Description = c.Description
+                    }).ToList()
                 };
                 var borrow = await _borrowedBookRepository.GetSingleBorrowedBookAsync(curr, id);
                 if (borrow == false)

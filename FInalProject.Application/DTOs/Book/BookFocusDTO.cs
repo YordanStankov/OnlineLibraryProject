@@ -1,4 +1,6 @@
 ﻿
+using FInalProject.Application.DTOs.Comment;
+using FInalProject.Application.DTOs.Genre;
 using FInalProject.Application.ViewModels.Comment;
 using FInalProject.Application.ViewModels.Genre;
 
@@ -17,8 +19,8 @@ namespace FInalProject.Application.DTOs.Book
         public DateTime DateWritten { get; set; }
         public string Category { get; set; }
         public bool Borrowed { get; set; }
-        public ICollection<GenreListViewModel> genres { get; set; }
-        public ICollection<CommentViewModel>? comments { get; set; }
+        public ICollection<GenreListDTO> genres { get; set; }
+        public ICollection<CommentDTO>? comments { get; set; }
         public int Rating { get; set; }
     }
 }

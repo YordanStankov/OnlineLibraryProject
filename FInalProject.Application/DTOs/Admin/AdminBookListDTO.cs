@@ -1,5 +1,4 @@
-﻿
-namespace FInalProject.Application.DTOs.Admin
+﻿namespace FInalProject.Application.DTOs.Admin
 {
     public class AdminBookListDTO
     {

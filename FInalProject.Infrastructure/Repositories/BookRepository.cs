@@ -1,6 +1,9 @@
 ﻿using FInalProject.Application.DTOs.Admin;
 using FInalProject.Application.DTOs.Book;
+using FInalProject.Application.DTOs.Comment;
+using FInalProject.Application.DTOs.Genre;
 using FInalProject.Application.Interfaces;
+using FInalProject.Application.Services;
 using FInalProject.Application.ViewModels.Comment;
 using FInalProject.Application.ViewModels.Genre;
 using FInalProject.Domain.Models;
@@ -46,12 +49,12 @@ namespace FInalProject.Infrastructure.Repositories
                   AmountInStock = b.AmountInStock,
                   BookReadingTime = b.ReadingTime,
                   Description = b.Description,
-                  genres = b.BookGenres.Select(bg => new GenreListViewModel
+                  genres = b.BookGenres.Select(bg => new GenreListDTO
                   {
                       Id = bg.Genre.Id,
                       Name = bg.Genre.Name
                   }).ToList(),
-                  comments = b.Comments.Select(c => new CommentViewModel
+                  comments = b.Comments.Select(c => new CommentDTO
                   {
                       UserName = c.User.UserName ?? "Unknown User",
                       Description = c.CommentContent ?? string.Empty
@@ -63,7 +66,7 @@ namespace FInalProject.Infrastructure.Repositories
 
         public async Task<BookCreationDTO> GetSingleBookDTOForEditAsync(int editId)
         {
-            List<GenreListViewModel> genreOpts = await _context.Genres.Select(g => new GenreListViewModel
+            List<GenreListDTO> genreOpts = await _context.Genres.Select(g => new GenreListDTO
             {
                 Id = g.Id,
                 Name = g.Name

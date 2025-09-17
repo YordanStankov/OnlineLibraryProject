@@ -1,5 +1,4 @@
 ﻿using FInalProject.Application.DTOs.Admin;
-using FInalProject.Application.ViewModels.Admin.User;
 using FInalProject.Application.ViewModels.User.UserOperations;
 using FInalProject.Domain.Models;
 using Microsoft.AspNetCore.Authentication;
